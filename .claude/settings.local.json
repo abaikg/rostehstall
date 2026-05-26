@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(powershell.exe -Command \"Get-Content 'C:\\\\Users\\\\WORK15\\\\Desktop\\\\rostehstall-main\\\\.next\\\\dev\\\\logs\\\\next-development.log' -Tail 12\")",
+      "Bash(powershell.exe -Command \"Get-Content 'C:\\\\Users\\\\WORK15\\\\Desktop\\\\rostehstall-main\\\\.next\\\\dev\\\\logs\\\\next-development.log' -Tail 5\")",
+      "Bash(powershell.exe -Command \"Get-Content 'C:\\\\Users\\\\WORK15\\\\Desktop\\\\rostehstall-main\\\\.next\\\\dev\\\\logs\\\\next-development.log' -Tail 4\")",
+      "Bash(powershell.exe -Command \"Get-Content 'C:\\\\Users\\\\WORK15\\\\Desktop\\\\rostehstall-main\\\\.next\\\\dev\\\\logs\\\\next-development.log' -Tail 3\")",
+      "Bash(powershell.exe -Command \"Stop-Process -Id 15756 -Force -ErrorAction SilentlyContinue; Start-Sleep 1; Write-Host 'Stopped'\")",
+      "Bash(npx tsc *)"
+    ]
+  }
+}

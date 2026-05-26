@@ -1,0 +1,403 @@
+export interface Spec { label: string; value: string }
+
+export interface Product {
+  id: number;
+  name: string;
+  category: string;
+  tags?: string[];
+  isNew?: boolean;
+  price?: string;
+  priceUnit?: string;
+  slug: string;
+  imgQuery: string;
+  image?: string; // uploaded image path e.g. /uploads/product-123.jpg
+  desc?: string;
+  specs?: Spec[];
+  features?: string[];
+  weightPerMeter?: number; // кг/м — для мини-калькулятора
+}
+
+export const products: Product[] = [
+  {
+    id: 1, name: "Труба профильная 40×40×2 мм", category: "Трубный прокат",
+    isNew: true, price: "68 500", priceUnit: "сом/т",
+    slug: "truba-profilnaya-40x40x2", imgQuery: "square steel tube metal profile",
+    desc: "Квадратная профильная труба из стали Ст3сп/Ст3пс. Широко применяется в металлоконструкциях, заборах, воротах, каркасах и опорных конструкциях. Поставляется мерными прутками 6 м и 12 м.",
+    specs: [
+      { label: "Сечение",        value: "40×40 мм" },
+      { label: "Толщина стенки", value: "2 мм" },
+      { label: "Длина",          value: "6 / 12 м" },
+      { label: "Марка стали",    value: "Ст3сп / Ст3пс" },
+      { label: "Стандарт",       value: "ГОСТ 8639-82" },
+      { label: "Производство",   value: "Россия / Казахстан" },
+    ],
+    features: ["Точные геометрические параметры", "Ровный срез", "Антикоррозийное покрытие по запросу"],
+    weightPerMeter: 2.42,
+  },
+  {
+    id: 2, name: "Труба профильная 60×40×3 мм", category: "Трубный прокат",
+    isNew: false, price: "68 500", priceUnit: "сом/т",
+    slug: "truba-profilnaya-60x40x3", imgQuery: "rectangular steel tube profile",
+    desc: "Прямоугольная профильная труба для несущих и вспомогательных конструкций. Удобна при устройстве ворот, навесов, каркасов теплиц и стеллажей.",
+    specs: [
+      { label: "Сечение",        value: "60×40 мм" },
+      { label: "Толщина стенки", value: "3 мм" },
+      { label: "Длина",          value: "6 / 12 м" },
+      { label: "Марка стали",    value: "Ст3сп" },
+      { label: "Стандарт",       value: "ГОСТ 8645-68" },
+      { label: "Производство",   value: "Россия" },
+    ],
+    features: ["Высокая жёсткость на изгиб", "Широкий сортамент", "Нарезка в размер"],
+    weightPerMeter: 4.39,
+  },
+  {
+    id: 3, name: "Бесшовные стальные трубы", category: "Трубный прокат",
+    isNew: false, price: "72 000", priceUnit: "сом/т",
+    slug: "besshovnye-stalnye-truby", imgQuery: "seamless steel pipe round",
+    desc: "Бесшовные трубы горячедеформированные для трубопроводов нефти, газа, пара и воды. Отсутствие шва исключает риск расслоения под давлением. Сертификаты ГОСТ в комплекте.",
+    specs: [
+      { label: "Диаметр",        value: "от 25 до 325 мм" },
+      { label: "Толщина стенки", value: "от 2.5 до 40 мм" },
+      { label: "Марка стали",    value: "Ст20 / Ст45 / 09Г2С" },
+      { label: "Стандарт",       value: "ГОСТ 8732-78" },
+      { label: "Длина",          value: "4–12 м (мерная, немерная)" },
+      { label: "Производство",   value: "Россия" },
+    ],
+    features: ["Без сварного шва", "Рабочее давление до 200 атм", "Термически обработанные"],
+    weightPerMeter: 9.87,
+  },
+  {
+    id: 4, name: "Бесшовные горячедеформированные трубы", category: "Трубный прокат",
+    isNew: false, price: "74 000", priceUnit: "сом/т",
+    slug: "besshovnye-goryachedef-truby", imgQuery: "hot rolled steel pipe industrial",
+    desc: "Горячедеформированные бесшовные трубы для высоконагруженных магистральных трубопроводов и котельного оборудования.",
+    specs: [
+      { label: "Диаметр",        value: "от 57 до 530 мм" },
+      { label: "Толщина стенки", value: "от 4 до 50 мм" },
+      { label: "Марка стали",    value: "Ст20 / 30ХГСА / 40Х" },
+      { label: "Стандарт",       value: "ГОСТ 8732-78" },
+      { label: "Температура",    value: "до +450°C" },
+      { label: "Производство",   value: "Россия / Украина" },
+    ],
+    features: ["Высокая теплостойкость", "Работа под давлением", "Подбор по чертежу"],
+    weightPerMeter: 18.5,
+  },
+  {
+    id: 5, name: "Асбестоцементные напорные трубы", category: "Трубный прокат",
+    tags: ["Хризотилцемент"],
+    isNew: false, price: "42 000", priceUnit: "сом/т",
+    slug: "asbestocementnye-napornye-truby", imgQuery: "cement pipe concrete tube",
+    desc: "Напорные хризотилцементные трубы для водоснабжения, канализации и дренажных систем. Химически стойкие, не подвержены коррозии, срок службы более 50 лет.",
+    specs: [
+      { label: "Диаметр",      value: "100–500 мм" },
+      { label: "Длина",        value: "3.95 м" },
+      { label: "Давление",     value: "до 0.9 МПа" },
+      { label: "Стандарт",     value: "ГОСТ 539-80" },
+      { label: "Материал",     value: "Хризотилцемент" },
+      { label: "Применение",   value: "Водоснабжение, дренаж" },
+    ],
+    features: ["Нет коррозии", "Срок службы 50+ лет", "Хим. стойкость"],
+    weightPerMeter: 32,
+  },
+  {
+    id: 6, name: "Хризотилцементные безнапорные трубы", category: "Трубный прокат",
+    tags: ["Хризотилцемент"],
+    isNew: false, price: "38 000", priceUnit: "сом/т",
+    slug: "hrizotil-beznapornye-truby", imgQuery: "fiber cement pipe construction",
+    desc: "Безнапорные трубы для самотёчной канализации, ливнёвки и кабельной канализации.",
+    specs: [
+      { label: "Диаметр",    value: "100–400 мм" },
+      { label: "Длина",      value: "3.95 м" },
+      { label: "Стандарт",   value: "ГОСТ 1839-80" },
+      { label: "Применение", value: "Самотёчная канализация" },
+    ],
+    features: ["Малый вес", "Лёгкий монтаж", "Безнапорное применение"],
+    weightPerMeter: 22,
+  },
+  {
+    id: 7, name: "Хризотилцементные напорные трубы", category: "Трубный прокат",
+    tags: ["Хризотилцемент"],
+    isNew: false, price: "40 000", priceUnit: "сом/т",
+    slug: "hrizotil-napornye-truby", imgQuery: "cement pipe pressure tube",
+    desc: "Напорные хризотилцементные трубы для систем орошения и водоснабжения под давлением.",
+    specs: [
+      { label: "Диаметр",    value: "100–400 мм" },
+      { label: "Давление",   value: "до 1.2 МПа" },
+      { label: "Стандарт",   value: "ГОСТ 539-80" },
+    ],
+    features: ["Напорное применение", "Хим. стойкость", "Долговечность"],
+    weightPerMeter: 28,
+  },
+
+  // ─ Цветной прокат ─
+  {
+    id: 8, name: "Бронзовая труба", category: "Цветной металлопрокат",
+    tags: ["Трубный прокат"],
+    isNew: false, price: "185 000", priceUnit: "сом/т",
+    slug: "bronzovaya-truba", imgQuery: "bronze tube pipe metal",
+    desc: "Бронзовые трубы для гидравлических и пневматических систем, теплообменников и химического оборудования. Устойчивы к морской воде и щелочам.",
+    specs: [
+      { label: "Диаметр",        value: "5–200 мм" },
+      { label: "Толщина стенки", value: "1–25 мм" },
+      { label: "Марка",          value: "БрОФ6.5-0.15 / БрАЖ9-4" },
+      { label: "Стандарт",       value: "ГОСТ 24301-93" },
+      { label: "Длина",          value: "1–6 м" },
+    ],
+    features: ["Антикоррозийные", "Высокая теплопроводность", "Работа с агрессивными средами"],
+    weightPerMeter: 3.5,
+  },
+  {
+    id: 9, name: "Медные трубы", category: "Цветной металлопрокат",
+    tags: ["Трубный прокат"],
+    isNew: true, price: "210 000", priceUnit: "сом/т",
+    slug: "mednye-truby", imgQuery: "copper pipe tube shiny",
+    desc: "Медные трубы для водо-, газо- и кондиционирующих систем. Бактерицидные свойства меди обеспечивают чистоту питьевой воды. Легко паяются и гнутся.",
+    specs: [
+      { label: "Диаметр",        value: "6–159 мм" },
+      { label: "Толщина стенки", value: "0.5–5 мм" },
+      { label: "Марка",          value: "М1 / М2" },
+      { label: "Стандарт",       value: "ГОСТ 617-2006" },
+      { label: "Состояние",      value: "Мягкое, твёрдое, полутвёрдое" },
+    ],
+    features: ["Бактерицидные свойства", "Гибкость", "Пайка и развальцовка"],
+    weightPerMeter: 0.94,
+  },
+  {
+    id: 10, name: "Свинцовая труба", category: "Цветной металлопрокат",
+    tags: ["Трубный прокат"],
+    isNew: false, price: "95 000", priceUnit: "сом/т",
+    slug: "svincovaya-truba", imgQuery: "lead pipe metal tube",
+    desc: "Свинцовые трубы для кабельных оболочек и химической промышленности. Высокая пластичность, химическая стойкость к серной кислоте и рассолам.",
+    specs: [
+      { label: "Диаметр",        value: "8–80 мм" },
+      { label: "Толщина стенки", value: "1.5–8 мм" },
+      { label: "Марка",          value: "С1 / С2 / С3" },
+      { label: "Стандарт",       value: "ГОСТ 167-69" },
+    ],
+    features: ["Хим. стойкость", "Высокая пластичность", "Виброгашение"],
+    weightPerMeter: 6.1,
+  },
+  {
+    id: 11, name: "Бесшовные титановые трубы", category: "Цветной металлопрокат",
+    tags: ["Трубный прокат"],
+    isNew: false, price: "320 000", priceUnit: "сом/т",
+    slug: "besshovnye-titanovye-truby", imgQuery: "titanium tube seamless metal",
+    desc: "Бесшовные трубы из титановых сплавов для авиационной, нефтехимической и медицинской промышленности. Сочетают минимальный вес с высокой прочностью.",
+    specs: [
+      { label: "Диаметр",        value: "10–250 мм" },
+      { label: "Толщина стенки", value: "1–25 мм" },
+      { label: "Марка",          value: "ВТ1-0 / ВТ6 / ПТ-7М" },
+      { label: "Стандарт",       value: "ГОСТ 22897-86" },
+      { label: "Раб. темп.",     value: "до +550°C" },
+    ],
+    features: ["Малый вес", "Коррозиестойкость", "Биосовместимость"],
+    weightPerMeter: 1.8,
+  },
+  {
+    id: 12, name: "Титановые трубы", category: "Цветной металлопрокат",
+    tags: ["Трубный прокат"],
+    isNew: false, price: "290 000", priceUnit: "сом/т",
+    slug: "titanovye-truby", imgQuery: "titanium pipe industrial metal",
+    desc: "Трубы из технически чистого титана и сплавов для химической, нефтегазовой и энергетической отраслей.",
+    specs: [
+      { label: "Диаметр",    value: "12–325 мм" },
+      { label: "Марка",      value: "ВТ1-0 / ВТ1-00" },
+      { label: "Стандарт",   value: "ГОСТ 27265-87" },
+    ],
+    features: ["Высокая прочность", "Нет коррозии", "Лёгкий вес"],
+    weightPerMeter: 2.2,
+  },
+  {
+    id: 13, name: "Ниобиевые трубы", category: "Цветной металлопрокат",
+    tags: ["Трубный прокат"],
+    isNew: false, price: "850 000", priceUnit: "сом/т",
+    slug: "niobievye-truby", imgQuery: "niobium metal pipe special",
+    desc: "Специальные трубы из ниобия для сверхпроводящих систем, ядерной энергетики и высокотемпературных химических реакторов.",
+    specs: [
+      { label: "Диаметр",    value: "6–100 мм" },
+      { label: "Марка",      value: "Нб / НбЦ-1" },
+      { label: "Чистота",    value: "99.5%+" },
+    ],
+    features: ["Сверхчистый материал", "Спецприменение", "Под заказ"],
+    weightPerMeter: 1.2,
+  },
+  {
+    id: 14, name: "Алюминиевые квадратные трубы", category: "Цветной металлопрокат",
+    tags: ["Трубный прокат"],
+    isNew: true, price: "125 000", priceUnit: "сом/т",
+    slug: "aluminievye-kvadratnye-truby", imgQuery: "aluminum square tube profile",
+    desc: "Квадратные алюминиевые трубы для декоративных и несущих конструкций, фасадных систем и мебели. Малый вес в сочетании с высокой жёсткостью.",
+    specs: [
+      { label: "Сечение",        value: "10×10 – 100×100 мм" },
+      { label: "Толщина стенки", value: "1–5 мм" },
+      { label: "Сплав",          value: "АД31 / 6063" },
+      { label: "Стандарт",       value: "ГОСТ 18475-82" },
+    ],
+    features: ["Малый вес", "Коррозиестойкость", "Лёгкая обработка"],
+    weightPerMeter: 0.78,
+  },
+  {
+    id: 15, name: "Алюминиевые прямоугольные трубы", category: "Цветной металлопрокат",
+    tags: ["Трубный прокат"],
+    isNew: false, price: "122 000", priceUnit: "сом/т",
+    slug: "aluminievye-pryamougol-truby", imgQuery: "aluminum rectangular tube metal",
+    desc: "Прямоугольный алюминиевый профиль для конструкций с направленной нагрузкой на изгиб.",
+    specs: [
+      { label: "Сечение",  value: "20×10 – 150×60 мм" },
+      { label: "Сплав",    value: "АД31 / 6060" },
+      { label: "Стандарт", value: "ГОСТ 18475-82" },
+    ],
+    features: ["Анодирование по запросу", "Малый вес", "Точный размер"],
+    weightPerMeter: 0.95,
+  },
+  {
+    id: 16, name: "Алюминиевые треугольные трубы", category: "Цветной металлопрокат",
+    tags: ["Трубный прокат"],
+    isNew: false, price: "130 000", priceUnit: "сом/т",
+    slug: "aluminievye-treugol-truby", imgQuery: "aluminum profile tube extruded",
+    desc: "Нестандартный треугольный алюминиевый профиль для дизайнерских и архитектурных решений.",
+    specs: [
+      { label: "Сечение",  value: "15–80 мм по стороне" },
+      { label: "Сплав",    value: "АД31 / 6063" },
+      { label: "Метод",    value: "Экструзия" },
+    ],
+    features: ["Нестандартный профиль", "Под заказ", "Анодирование"],
+    weightPerMeter: 0.7,
+  },
+
+  // ─ Нержавеющий прокат ─
+  {
+    id: 17, name: "Нержавеющие капиллярные трубки", category: "Нержавеющий прокат",
+    tags: ["Трубный прокат"],
+    isNew: false, price: "145 000", priceUnit: "сом/т",
+    slug: "nerzhav-kapillyarnye-trubki", imgQuery: "stainless steel capillary tube",
+    desc: "Капиллярные нержавеющие трубки для приборостроения, медицинского оборудования, хроматографии и дозирующих систем.",
+    specs: [
+      { label: "Внешний диаметр", value: "0.5–10 мм" },
+      { label: "Толщина стенки",  value: "0.1–2 мм" },
+      { label: "Марка",           value: "AISI 304 / AISI 316L" },
+      { label: "Стандарт",        value: "ГОСТ 9941-81" },
+    ],
+    features: ["Медицинский класс", "Точные допуски ±0.02 мм", "Полировка внутри"],
+    weightPerMeter: 0.08,
+  },
+
+  // ─ Чугунный прокат ─
+  {
+    id: 18, name: "Чугунные напорные трубы", category: "Чугунный прокат",
+    tags: ["Трубный прокат"],
+    isNew: false, price: "58 000", priceUnit: "сом/т",
+    slug: "chugunnyye-napornye-truby", imgQuery: "cast iron pipe pressure",
+    desc: "Чугунные трубы для напорных водопроводов и канализации. Высокая долговечность — срок службы более 100 лет.",
+    specs: [
+      { label: "Диаметр",    value: "65–1000 мм" },
+      { label: "Длина",      value: "5–6 м" },
+      { label: "Материал",   value: "Высокопрочный чугун ВЧ50" },
+      { label: "Стандарт",   value: "ГОСТ 9583-75" },
+      { label: "Давление",   value: "до 1.6 МПа" },
+    ],
+    features: ["Срок службы 100+ лет", "Стойкость к давлению", "Раструбное соединение"],
+    weightPerMeter: 45,
+  },
+
+  // ─ Сортовой прокат ─
+  {
+    id: 19, name: "Арматура А500С 12 мм", category: "Сортовой прокат",
+    isNew: true, price: "64 200", priceUnit: "сом/т",
+    slug: "armatura-a500s-12mm", imgQuery: "steel rebar reinforcement bar",
+    desc: "Горячекатаная стержневая арматура класса А500С диаметром 12 мм для армирования железобетонных конструкций. Повышенная свариваемость без ограничений.",
+    specs: [
+      { label: "Диаметр",      value: "12 мм" },
+      { label: "Класс",        value: "А500С (A-III)" },
+      { label: "Длина",        value: "11.7 / 12 м" },
+      { label: "Предел текуч.", value: "≥ 500 МПа" },
+      { label: "Марка стали",  value: "25Г2С / 35ГС" },
+      { label: "Стандарт",     value: "ГОСТ 52544-2006" },
+    ],
+    features: ["Свариваемая без ограничений", "Стойкость к динамическим нагрузкам", "Высокий предел текучести"],
+    weightPerMeter: 0.888,
+  },
+
+  // ─ Листовой прокат ─
+  {
+    id: 20, name: "Лист г/к 3 мм Ст3", category: "Листовой прокат",
+    isNew: false, price: "72 000", priceUnit: "сом/т",
+    slug: "list-gk-3mm-st3", imgQuery: "hot rolled steel sheet plate",
+    desc: "Горячекатаный стальной лист толщиной 3 мм из стали Ст3. Универсальный материал для металлоконструкций, штамповки, корпусов и ограждений.",
+    specs: [
+      { label: "Толщина",     value: "3 мм" },
+      { label: "Размер",      value: "1500×6000 мм" },
+      { label: "Марка стали", value: "Ст3сп / Ст3пс" },
+      { label: "Стандарт",    value: "ГОСТ 19903-90" },
+      { label: "Масса листа", value: "~212 кг" },
+    ],
+    features: ["Широкий сортамент толщин", "Резка в размер", "Нарезка полос"],
+    weightPerMeter: 23.6,
+  },
+
+  // ─ Фасонный прокат ─
+  {
+    id: 21, name: "Уголок стальной 50×50×5 мм", category: "Фасонный прокат",
+    isNew: false, price: "69 000", priceUnit: "сом/т",
+    slug: "ugolok-stalnoy-50x50x5", imgQuery: "steel angle iron structural",
+    desc: "Равнополочный стальной уголок 50×50×5 для несущих конструкций, стеллажей, ферм и закладных деталей. Повышенная жёсткость при минимальном весе.",
+    specs: [
+      { label: "Размер",      value: "50×50×5 мм" },
+      { label: "Длина",       value: "6 / 12 м" },
+      { label: "Марка стали", value: "Ст3сп" },
+      { label: "Стандарт",    value: "ГОСТ 8509-93" },
+      { label: "Момент инерц.", value: "11.0 см⁴" },
+    ],
+    features: ["Равнополочный", "Нарезка под углом", "Сварка, болтовое соединение"],
+    weightPerMeter: 3.77,
+  },
+  {
+    id: 22, name: "Швеллер 10П", category: "Фасонный прокат",
+    isNew: true, price: "75 400", priceUnit: "сом/т",
+    slug: "shveller-10p", imgQuery: "steel channel beam structural",
+    desc: "Горячекатаный параллельный швеллер №10 для перекрытий, балочных конструкций, опор и рам промышленного оборудования.",
+    specs: [
+      { label: "Номер",       value: "10П" },
+      { label: "Высота",      value: "100 мм" },
+      { label: "Полка",       value: "46 мм" },
+      { label: "Стенка",      value: "4.5 мм" },
+      { label: "Марка стали", value: "Ст3сп" },
+      { label: "Стандарт",    value: "ГОСТ 8240-97" },
+    ],
+    features: ["Параллельные грани полок", "Момент сопротивления 34.8 см³", "Нарезка в размер"],
+    weightPerMeter: 8.59,
+  },
+];
+
+export const CATEGORY_LIST: { name: string; icon: string }[] = [
+  { name: "Трубный прокат",                   icon: "pipe" },
+  { name: "Трубопроводная арматура",           icon: "valve" },
+  { name: "Цветной металлопрокат",             icon: "color-metal" },
+  { name: "Листовой прокат",                   icon: "sheet" },
+  { name: "Нержавеющий прокат",               icon: "stainless" },
+  { name: "Фасонный прокат",                   icon: "profile" },
+  { name: "Сортовой прокат",                   icon: "bars" },
+  { name: "Чугунный прокат",                   icon: "cast-iron" },
+  { name: "Специальные стали",                 icon: "special" },
+  { name: "Радиаторы отопления",               icon: "radiator" },
+  { name: "Металлургическое сырье",            icon: "raw" },
+  { name: "Насосы и насосное оборудование",    icon: "pump" },
+  { name: "Сплавы металлов",                   icon: "alloy" },
+  { name: "Провода и кабельная продукция",     icon: "cable" },
+  { name: "Металлические сетки",               icon: "mesh" },
+  { name: "Хризотилцемент",                    icon: "chrysotile" },
+  { name: "Технические газы и оборудование",   icon: "gas" },
+  { name: "Изоляция труб",                     icon: "insulation" },
+  { name: "Метизы",                            icon: "hardware" },
+  { name: "Крепежные элементы",                icon: "fastener" },
+  { name: "Сварочные материалы",               icon: "welding" },
+  { name: "Композитные материалы",             icon: "composite" },
+  { name: "Порошковые материалы",              icon: "powder" },
+  { name: "Генераторы",                        icon: "generator" },
+  { name: "Асбестоцемент",                     icon: "asbestos" },
+  { name: "Канаты",                            icon: "rope" },
+  { name: "Тросы",                             icon: "wire" },
+  { name: "Полимеры",                          icon: "polymer" },
+];
+
+export const productCategories = CATEGORY_LIST.map((c) => c.name);

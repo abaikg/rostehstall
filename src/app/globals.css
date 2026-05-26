@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Custom breakpoint for narrow phones */
+  --breakpoint-xs: 475px;
+
+  /* Minimalist Design System */
+  --color-background: var(--bg-color);
+  --color-foreground: var(--text-color);
+  
+  --color-brand-dark: #111827;      /* Gray 900 */
+  --color-brand-primary: #2563EB;   /* Blue 600 */
+  --color-brand-accent: #3B82F6;    /* Blue 500 */
+  --color-brand-muted: #6B7280;     /* Gray 500 */
+  --color-brand-bg: #F9FAFB;        /* Gray 50 */
+  --color-brand-border: #E5E7EB;    /* Gray 200 */
+  
+  --font-sans: var(--font-inter);
+}
+
+:root {
+  --bg-color: #F9FAFB;
+  --text-color: #111827;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up { animation: slide-up 0.2s ease-out; }
+
+@layer components {
+  /* ── Unified responsive container ── */
+  .container {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* ── Cards & surfaces ── */
+  .soft-card {
+    @apply bg-white border border-brand-border rounded-lg transition-colors duration-150 relative overflow-hidden;
+  }
+
+  /* ── Buttons ── */
+  .btn-primary {
+    @apply bg-brand-primary text-white font-semibold px-6 py-3 rounded-full transition-all duration-150 flex items-center justify-center gap-2 hover:bg-brand-primary/90 active:scale-[0.98] shadow-sm hover:shadow-md;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-brand-dark border border-brand-border px-6 py-3 rounded-full font-semibold transition-all duration-150 hover:bg-gray-50 active:scale-[0.98] flex items-center justify-center gap-2;
+  }
+
+  /* ── Typography ── */
+  .heading-xl {
+    @apply text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-brand-dark;
+  }
+
+  .heading-lg {
+    @apply text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-brand-dark;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold uppercase tracking-wider bg-gray-100 text-gray-800 border border-gray-200;
+  }
+
+  .body-text {
+    @apply text-brand-muted text-base sm:text-lg;
+  }
+
+  /* ── Section spacing system ── */
+  .section {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+
+  .section-sm {
+    @apply py-10 sm:py-14 lg:py-16;
+  }
+}
+
+/* Base custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F9FAFB;
+}
+::-webkit-scrollbar-thumb {
+  background: #D1D5DB;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9CA3AF;
+}
+
+/* Neutralize animations for performance (Opt-in to minimal fade) */
+.animate-reveal {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
