@@ -6,7 +6,7 @@ export const CONTACTS = {
   email: "info@rostehstal.kg",
   address: 'Бишкек, БЦ "Адмирал", пр. Манаса 41А, офис 18В',
   addressShort: "Бишкек, пр. Манаса 41А",
-  workHours: "Пн-Сб: 08:30 — 17:30",
+  workHours: "Пн-Пт: 09:00 — 18:00; Сб: 10:00 — 16:00",
   whatsapp: "wa.me/996777556570",
 };
 

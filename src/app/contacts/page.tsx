@@ -55,8 +55,61 @@ const Spinner = () => (
 );
 
 const TWO_GIS_URL = "https://2gis.kg/bishkek/geo/70000001088834598";
-const TWO_GIS_WIDGET_URL =
-  "https://widgets.2gis.com/widget?type=firmsonmap&options=%7B%22firmsonmap%22%3A%7B%22id%22%3A%2270000001088834598%22%7D%2C%22pos%22%3A%7B%22lon%22%3A74.5898%2C%22lat%22%3A42.8746%2C%22zoom%22%3A16%7D%2C%22opt%22%3A%7B%22city%22%3A%22bishkek%22%7D%7D";
+const TWO_GIS_MAP_HTML = `<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      html, body, #map {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+
+      body {
+        overflow: hidden;
+        background: #f3f4f6;
+        font-family: Arial, sans-serif;
+      }
+
+      #fallback {
+        align-items: center;
+        color: #6b7280;
+        display: none;
+        font-size: 13px;
+        font-weight: 600;
+        inset: 0;
+        justify-content: center;
+        position: absolute;
+      }
+
+      body.map-error #fallback {
+        display: flex;
+      }
+    </style>
+    <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full"><\/script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="fallback">Карта 2ГИС временно недоступна</div>
+    <script>
+      window.onerror = function () {
+        document.body.className = 'map-error';
+      };
+
+      DG.then(function () {
+        var coordinates = [42.8746, 74.5898];
+        var map = DG.map('map', {
+          center: coordinates,
+          zoom: 16
+        });
+
+        DG.marker(coordinates).addTo(map).bindPopup('Ростехсталь');
+      });
+    <\/script>
+  </body>
+</html>`;
 
 /* ── Форма ── */
 function ContactForm() {
@@ -228,7 +281,8 @@ export default function ContactsPage() {
                   </div>
                   <div>
                     <p className="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-0.5">Режим работы</p>
-                    <p className="text-[14px] font-semibold text-gray-900">{CONTACTS.workHours}</p>
+                    <p className="text-[14px] font-semibold text-gray-900">Пн-Пт: 09:00 — 18:00</p>
+                    <p className="text-[14px] font-semibold text-gray-900">Суббота: 10:00 — 16:00</p>
                     <p className="text-[12px] text-gray-400 mt-0.5">Воскресенье — выходной</p>
                   </div>
                 </div>
@@ -279,20 +333,17 @@ export default function ContactsPage() {
             {/* Карта */}
             <div className="relative bg-gray-100 border border-gray-200 rounded-2xl overflow-hidden h-52 flex items-center justify-center">
               <iframe
-                src={TWO_GIS_WIDGET_URL}
+                srcDoc={TWO_GIS_MAP_HTML}
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
                 title="Ростехсталь на карте 2ГИС"
               />
               <a
                 href={TWO_GIS_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 bg-white border border-gray-200 shadow-sm rounded-full px-3 py-1.5 text-[12px] font-semibold text-gray-700 hover:text-brand-primary transition-colors"
+                className="absolute bottom-3 right-3 z-30 inline-flex items-center gap-1.5 bg-white border border-gray-200 shadow-sm rounded-full px-3 py-1.5 text-[12px] font-semibold text-gray-700 hover:text-brand-primary transition-colors"
               >
                 <PinIcon /> Открыть в 2ГИС
               </a>
