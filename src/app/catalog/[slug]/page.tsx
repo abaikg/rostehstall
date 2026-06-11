@@ -121,7 +121,7 @@ export default function ProductPage() {
     .filter((p) => p.slug !== product.slug && (p.category === product.category || p.tags?.some((t) => product.tags?.includes(t))))
     .slice(0, 4);
 
-  const imgSrc = `https://source.unsplash.com/800x600/?${encodeURIComponent(product.imgQuery)}`;
+  const imgSrc = product.image || `https://picsum.photos/800/600?random=${product.id}`;
 
   return (
     <div className="flex flex-col pb-24">
@@ -182,7 +182,7 @@ export default function ProductPage() {
                   {!imgErr && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      src={`https://source.unsplash.com/160x128/?${encodeURIComponent(product.imgQuery)}&sig=${i}`}
+                      src={product.image || `https://picsum.photos/160/128?random=${product.id * 10 + i}`}
                       alt=""
                       className="w-full h-full object-cover"
                       onError={() => {}}
@@ -266,7 +266,7 @@ export default function ProductPage() {
             <div className="flex flex-col gap-2 pt-2">
               <div className="flex items-center gap-2.5 text-[13px] text-gray-500">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-                Собственный автопарк 50+ единиц — доставка по всему Кыргызстану
+                Оперативная доставка по всему Кыргызстану
               </div>
               <div className="flex items-center gap-2.5 text-[13px] text-gray-500">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>

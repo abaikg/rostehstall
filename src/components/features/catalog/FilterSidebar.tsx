@@ -36,7 +36,7 @@ export const FilterSidebar = () => {
               </div>
               <div className="flex items-center gap-3 group cursor-pointer">
                 <div className="w-6 h-6 rounded-lg border-2 border-slate-200 group-hover:border-brand-primary/40 transition-colors"></div>
-                <span className="text-[14px] font-bold text-slate-400 group-hover:text-slate-600 transition-colors">Под спецзаказ (СНГ)</span>
+                <span className="text-[14px] font-bold text-slate-400 group-hover:text-slate-600 transition-colors">Под спецзаказ</span>
               </div>
             </div>
           </div>

@@ -6,7 +6,7 @@ import { Product } from "@/data/catalog";
 export const ProductCard = ({ product }: { product: Product }) => {
   const [imgErr, setImgErr] = useState(false);
 
-  const imgSrc = `https://source.unsplash.com/400x300/?${encodeURIComponent(product.imgQuery)}`;
+  const imgSrc = product.image || `https://picsum.photos/400/300?random=${product.id}`;
 
   return (
     <Link

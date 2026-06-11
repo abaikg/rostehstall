@@ -12,9 +12,9 @@ const ChevronRight = () => (
 
 const STATS = [
   { value: "10+", label: "лет на рынке" },
-  { value: "5 000+", label: "клиентов по СНГ" },
+  { value: "5 000+", label: "клиентов" },
   { value: "50 000+", label: "тонн поставлено" },
-  { value: "50+", label: "единиц техники" },
+  { value: "1 000+", label: "позиций на складе" },
 ];
 
 const VALUES = [
@@ -59,10 +59,10 @@ const VALUES = [
 const MILESTONES = [
   { year: "2014", title: "Основание компании", desc: "Открытие первого склада в Бишкеке, первые прямые поставки из России." },
   { year: "2016", title: "Расширение ассортимента", desc: "Добавили трубный прокат и фасонный металл, заключили договоры с 5 заводами." },
-  { year: "2018", title: "Собственный автопарк", desc: "Сформировали парк из 20 единиц техники, запустили доставку по регионам КР." },
-  { year: "2020", title: "Выход на рынок СНГ", desc: "Начали поставки в Казахстан и Узбекистан, оборот превысил 1 млрд сом." },
+  { year: "2018", title: "Развитие логистики", desc: "Запустили оперативную доставку металлопроката по всем регионам КР." },
+  { year: "2020", title: "Выход на новые рынки", desc: "Начали поставки в Казахстан и Узбекистан, оборот превысил 1 млрд сом." },
   { year: "2022", title: "Новый складской комплекс", desc: "Открыли современный склад 8 000 м² с автоматизированным учётом и резкой металла." },
-  { year: "2024", title: "10 лет на рынке", desc: "50 000+ тонн поставлено, 5 000 клиентов, 50+ единиц техники в автопарке." },
+  { year: "2024", title: "Развитие и масштабирование", desc: "50 000+ тонн поставлено, более 5 000 постоянных клиентов по всей стране." },
 ];
 
 const TEAM = [
@@ -94,7 +94,7 @@ const TEAM = [
     name: "Нурлан Исаков",
     role: "Руководитель логистики",
     photo: "https://randomuser.me/api/portraits/men/54.jpg",
-    desc: "Координирует автопарк из 50+ единиц техники. Организует доставку по всему Кыргызстану в оговорённые сроки.",
+    desc: "Координирует отдел доставки. Организует транспортировку металлопроката по всему Кыргызстану в оговорённые сроки.",
   },
   {
     name: "Елена Жукова",
@@ -127,13 +127,13 @@ export default function AboutPage() {
           <div className="flex flex-col lg:flex-row lg:items-end gap-8 lg:gap-16">
             <div className="flex flex-col gap-5 max-w-2xl">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/10 text-white/80 text-[11px] font-bold uppercase tracking-widest w-fit">
-                С 2014 года в Кыргызстане
+                Более 3 лет в Кыргызстане
               </div>
               <h1 className="text-[26px] sm:text-[36px] md:text-[48px] font-bold tracking-tight leading-tight">
                 Ростехсталь — ведущий поставщик металлопроката в&nbsp;Кыргызстане
               </h1>
               <p className="text-[14px] sm:text-[16px] text-white/60 leading-relaxed max-w-xl">
-                Прямые поставки с заводов России и Казахстана, собственный склад 8&nbsp;000&nbsp;м² и автопарк 50+ единиц техники.
+                Прямые поставки с заводов России и Казахстана, собственный склад 8&nbsp;000&nbsp;м² и быстрая доставка.
               </p>
               <div className="flex flex-wrap gap-3 pt-1">
                 <button
@@ -172,14 +172,14 @@ export default function AboutPage() {
               <div className="flex flex-col gap-2">
                 <span className="text-[11px] font-bold uppercase tracking-widest text-brand-primary">Наша история</span>
                 <h2 className="text-[22px] sm:text-[28px] md:text-[34px] font-bold tracking-tight text-gray-900 leading-tight">
-                  Более 10 лет строим металлоторговлю в&nbsp;Кыргызстане
+                  Более 3 лет строим металлоторговлю в&nbsp;Кыргызстане
                 </h2>
               </div>
               <p className="text-[15px] sm:text-[16px] text-gray-700 leading-relaxed">
-                «Ростехсталь» — ведущая компания по поставке металлопроката в Кыргызстане и странах СНГ. Мы специализируемся на широком ассортименте металлопродукции: стальные листы, трубы, арматура, швеллер, двутавр, уголок и другие изделия.
+                «Ростехсталь» — ведущая компания по поставке металлопроката в Кыргызстане. Мы специализируемся на широком ассортименте металлопродукции: стальные листы, трубы, арматура, швеллер, двутавр, уголок и другие изделия.
               </p>
               <p className="text-[14px] sm:text-[15px] text-gray-500 leading-relaxed">
-                Прямые контракты с заводами-производителями позволяют предлагать конкурентные цены без посреднических наценок. Собственный склад 8 000 м² обеспечивает постоянное наличие товара. Автопарк из 50+ единиц специализированной техники гарантирует своевременную доставку по всему Кыргызстану.
+                Прямые контракты с заводами-производителями позволяют предлагать конкурентные цены без посреднических наценок. Собственный склад 8 000 м² обеспечивает постоянное наличие товара. Быстрая доставка гарантирует своевременное получение металла в любой точке Кыргызстана.
               </p>
               <div className="flex flex-wrap gap-3 pt-2">
                 <div className="flex items-center gap-2 text-[13px] font-semibold text-gray-700">
@@ -205,7 +205,7 @@ export default function AboutPage() {
             <div className="grid grid-cols-2 gap-3">
               <div className="col-span-2 bg-gradient-to-br from-brand-primary to-blue-700 rounded-2xl p-6 text-white flex flex-col gap-2">
                 <span className="text-[42px] font-bold tracking-tight leading-none">50 000+</span>
-                <span className="text-[14px] text-white/70 font-medium">тонн металлопроката поставлено клиентам с 2014 года</span>
+                <span className="text-[14px] text-white/70 font-medium">тонн металлопроката поставлено клиентам</span>
               </div>
               <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 flex flex-col gap-1.5">
                 <span className="text-[28px] font-bold text-gray-900">8 000</span>
@@ -324,7 +324,7 @@ export default function AboutPage() {
               Станьте нашим партнёром
             </h2>
             <p className="text-[13px] sm:text-[14px] text-gray-400 max-w-md leading-relaxed">
-              Строительные и промышленные предприятия Кыргызстана и СНГ доверяют нам уже более 10 лет. Обсудим условия сотрудничества.
+              Строительные и промышленные предприятия Кыргызстана доверяют нам уже более 3 лет. Обсудим условия сотрудничества.
             </p>
           </div>
           <div className="z-10 flex flex-col sm:flex-row gap-3 w-full sm:w-auto shrink-0">

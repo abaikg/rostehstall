@@ -22,6 +22,7 @@ export const products: Product[] = [
     id: 1, name: "Труба профильная 40×40×2 мм", category: "Трубный прокат",
     isNew: true, price: "68 500", priceUnit: "сом/т",
     slug: "truba-profilnaya-40x40x2", imgQuery: "square steel tube metal profile",
+    image: "/images/profile-pipes.png",
     desc: "Квадратная профильная труба из стали Ст3сп/Ст3пс. Широко применяется в металлоконструкциях, заборах, воротах, каркасах и опорных конструкциях. Поставляется мерными прутками 6 м и 12 м.",
     specs: [
       { label: "Сечение",        value: "40×40 мм" },
@@ -54,6 +55,7 @@ export const products: Product[] = [
     id: 3, name: "Бесшовные стальные трубы", category: "Трубный прокат",
     isNew: false, price: "72 000", priceUnit: "сом/т",
     slug: "besshovnye-stalnye-truby", imgQuery: "seamless steel pipe round",
+    image: "/images/seamless-pipes.png",
     desc: "Бесшовные трубы горячедеформированные для трубопроводов нефти, газа, пара и воды. Отсутствие шва исключает риск расслоения под давлением. Сертификаты ГОСТ в комплекте.",
     specs: [
       { label: "Диаметр",        value: "от 25 до 325 мм" },
@@ -305,6 +307,7 @@ export const products: Product[] = [
     id: 19, name: "Арматура А500С 12 мм", category: "Сортовой прокат",
     isNew: true, price: "64 200", priceUnit: "сом/т",
     slug: "armatura-a500s-12mm", imgQuery: "steel rebar reinforcement bar",
+    image: "/images/rebar.png",
     desc: "Горячекатаная стержневая арматура класса А500С диаметром 12 мм для армирования железобетонных конструкций. Повышенная свариваемость без ограничений.",
     specs: [
       { label: "Диаметр",      value: "12 мм" },
@@ -323,6 +326,7 @@ export const products: Product[] = [
     id: 20, name: "Лист г/к 3 мм Ст3", category: "Листовой прокат",
     isNew: false, price: "72 000", priceUnit: "сом/т",
     slug: "list-gk-3mm-st3", imgQuery: "hot rolled steel sheet plate",
+    image: "/images/steel-sheet.png",
     desc: "Горячекатаный стальной лист толщиной 3 мм из стали Ст3. Универсальный материал для металлоконструкций, штамповки, корпусов и ограждений.",
     specs: [
       { label: "Толщина",     value: "3 мм" },

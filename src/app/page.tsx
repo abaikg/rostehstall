@@ -30,10 +30,10 @@ const PhoneCallIcon = () => (
 
 /* ── Данные ── */
 const STATS = [
-  { value: "15 000+", label: "Успешных поставок",    sub: "с 2014 года" },
-  { value: "1 200+",  label: "Постоянных клиентов",  sub: "строительные и промышленные" },
-  { value: "10+",     label: "Лет на рынке",          sub: "КР и страны СНГ" },
-  { value: "500+",    label: "Позиций на складе",     sub: "всегда в наличии" },
+  { value: "5 000+", label: "Успешных поставок", sub: "за всё время" },
+  { value: "1 200+", label: "Постоянных клиентов", sub: "строительные и промышленные" },
+  { value: "3+", label: "года на рынке", sub: "в Кыргызстане" },
+  { value: "1000+", label: "Позиций на складе", sub: "всегда в наличии" },
 ];
 
 /* Реальные преимущества с rostehstal.kg */
@@ -51,30 +51,21 @@ const FEATURES = [
   },
   {
     title: "Соблюдение сроков",
-    desc: "Собственный автопарк из 50+ единиц спецтехники гарантирует оперативную доставку металла на строительный объект в оговорённые сроки — в день оплаты.",
+    desc: "Оперативная доставка металла на строительный объект в оговорённые сроки — в день оплаты.",
   },
   {
     blue: true,
     wide: true,
     title: "Инновационный подход",
-    desc: "Внедряем современные стандарты качества, систему ЭДО и онлайн-инструменты для клиентов. Сертифицированы по ISO 9001:2015. Постоянно растём — вместе с вашим бизнесом.",
+    desc: "Внедряем современные стандарты качества, систему ЭДО и онлайн-инструменты для клиентов. Постоянно растём — вместе с вашим бизнесом.",
   },
 ];
 
 const STEPS = [
-  { n: "01", title: "Оставьте заявку",      desc: "Укажите нужный металл, размер и объём. Займёт 2 минуты." },
-  { n: "02", title: "Получите расчёт",      desc: "Отдел продаж пришлёт КП с ценой и сроком за 30 минут." },
-  { n: "03", title: "Подпишите договор",    desc: "ЭДО или бумажный договор — как удобнее вашему бухгалтеру." },
-  { n: "04", title: "Получите металл",      desc: "Доставим на объект собственным транспортом в день оплаты." },
-];
-
-const GALLERY = [
-  { query: "steel warehouse metal", alt: "Склад металлопроката" },
-  { query: "metal pipes industrial", alt: "Металлические трубы" },
-  { query: "steel sheet construction", alt: "Стальные листы" },
-  { query: "rebar construction site", alt: "Арматура на стройплощадке" },
-  { query: "industrial metal cutting", alt: "Резка металла" },
-  { query: "steel delivery truck", alt: "Доставка металла" },
+  { n: "01", title: "Оставьте заявку", desc: "Укажите нужный металл, размер и объём. Займёт 2 минуты." },
+  { n: "02", title: "Получите расчёт", desc: "Отдел продаж пришлёт КП с ценой и сроком за 30 минут." },
+  { n: "03", title: "Подпишите договор", desc: "ЭДО или бумажный договор — как удобнее вашему бухгалтеру." },
+  { n: "04", title: "Получите металл", desc: "Доставим на объект собственным транспортом в день оплаты." },
 ];
 
 const VIDEO_ID = "dQw4w9WgXcQ"; // замените на реальный YouTube ID
@@ -102,10 +93,6 @@ export default function HomePage() {
         <div className="container">
           <div className="flex flex-col items-center text-center max-w-4xl mx-auto gap-6">
 
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-blue-200 text-brand-primary text-[12px] font-bold uppercase tracking-widest shadow-sm">
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse" />
-              Ведущая компания в КР и странах СНГ
-            </div>
 
             <h1 className="text-[28px] xs:text-[32px] sm:text-[44px] md:text-[54px] lg:text-[66px] font-bold tracking-tighter text-gray-900 leading-[1.1] sm:leading-[1.05]">
               Крупнейшая металлобаза<br className="hidden sm:block" />
@@ -144,7 +131,7 @@ export default function HomePage() {
 
             {/* Trust */}
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-2 text-[13px] font-semibold text-gray-500">
-              {["10+ лет на рынке", "Сертификат ISO 9001", "Доставка в день оплаты", "ЭДО и онлайн-расчёт"].map((t) => (
+              {["3 года на рынке", "Доставка в день оплаты", "ЭДО и онлайн-расчёт"].map((t) => (
                 <span key={t} className="flex items-center gap-1.5">
                   <span className="text-green-500"><CheckIcon /></span> {t}
                 </span>
@@ -226,13 +213,12 @@ export default function HomePage() {
                 Ростехсталь — ведущая металлобаза Кыргызстана
               </h3>
               <p className="text-[15px] text-gray-500 leading-relaxed">
-                С 2014 года мы поставляем металлопрокат для строительных и промышленных предприятий по всему Кыргызстану и странам СНГ. Собственный склад площадью более 10 000 м² в Бишкеке.
+                Мы поставляем металлопрокат для строительных и промышленных предприятий по всему Кыргызстану. Собственный склад площадью более 10 000 м² в Бишкеке.
               </p>
               <ul className="flex flex-col gap-3">
                 {[
                   "Прямые поставки с заводов России, Казахстана и Китая",
-                  "Собственный автопарк — более 50 единиц спецтехники",
-                  "Сертификаты качества на всю продукцию",
+                  "Быстрая доставка по всему Кыргызстану",
                   "Индивидуальные условия для крупных заказчиков",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-3 text-[14px] text-gray-600 font-medium">
@@ -249,27 +235,6 @@ export default function HomePage() {
               >
                 Оставить заявку <ArrowRight />
               </button>
-            </div>
-          </div>
-
-          {/* Галерея */}
-          <div className="flex flex-col gap-4">
-            <h3 className="text-[16px] font-bold text-gray-700">Фотогалерея</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-              {GALLERY.map((item, i) => (
-                <div key={i} className="group relative aspect-square rounded-xl overflow-hidden bg-gray-100">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`https://source.unsplash.com/400x400/?${encodeURIComponent(item.query)}&sig=${i}`}
-                    alt={item.alt}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
-                  <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <p className="text-white text-[11px] font-semibold truncate">{item.alt}</p>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
 
@@ -295,7 +260,7 @@ export default function HomePage() {
               <div className="flex flex-col gap-3 flex-1">
                 <h3 className="text-[20px] font-bold tracking-tight">Широкий ассортимент</h3>
                 <p className="text-[14px] text-gray-400 leading-relaxed">
-                  Стальные листы, трубы, профили, арматура, уголки, швеллеры — всё для строительных и промышленных проектов. Более 500 позиций в наличии.
+                  Стальные листы, трубы, профили, арматура, уголки, швеллеры — всё для строительных и промышленных проектов. Более 500 позиций в наличии и под заказ.
                 </p>
                 <ul className="mt-2 flex flex-col gap-2">
                   {["Чёрный и цветной прокат", "Нержавеющий металл", "Трубопроводная арматура", "Метизы и спецсталь"].map(item => (
@@ -327,7 +292,7 @@ export default function HomePage() {
               <div className="w-11 h-11 rounded-2xl bg-white shadow-sm border border-gray-100 flex items-center justify-center text-brand-primary text-[13px] font-bold">03</div>
               <h3 className="text-[17px] font-bold text-gray-900 tracking-tight">Соблюдение сроков</h3>
               <p className="text-[14px] text-gray-500 leading-relaxed">
-                Собственный автопарк 50+ единиц спецтехники. Доставка металла на объект в день оплаты.
+                Оперативная доставка металлопроката по всему Кыргызстану в день оплаты.
               </p>
             </div>
 
@@ -337,7 +302,7 @@ export default function HomePage() {
               <div className="flex flex-col gap-2">
                 <h3 className="text-[17px] font-bold tracking-tight">Инновационный подход</h3>
                 <p className="text-[14px] text-blue-100 leading-relaxed max-w-lg">
-                  Современные стандарты качества, система ЭДО, онлайн-калькулятор и быстрый расчёт КП. Сертифицированы ISO 9001:2015.
+                  Современные стандарты качества, система ЭДО, онлайн-калькулятор и быстрый расчёт КП.
                 </p>
               </div>
             </div>
@@ -425,7 +390,7 @@ export default function HomePage() {
                 Нужен расчёт под ваш проект?
               </h2>
               <p className="text-[13px] sm:text-[15px] md:text-[16px] text-gray-400 leading-relaxed">
-                Пришлите спецификацию — отдел продаж рассчитает точный объём и стоимость за 30 минут. Работаем с предприятиями КР и стран СНГ.
+                Пришлите спецификацию — отдел продаж рассчитает точный объём и стоимость за 30 минут. Работаем с предприятиями КР.
               </p>
               <div className="flex flex-wrap gap-3 justify-center lg:justify-start text-[13px] text-gray-600 font-medium">
                 <span className="flex items-center gap-1.5"><span className="text-green-400"><CheckIcon /></span> Бесплатный расчёт КП</span>

@@ -70,7 +70,7 @@ export const Footer = () => {
               />
             </Link>
             <p className="text-[14px] text-gray-400 leading-relaxed max-w-[300px]">
-              Надёжные поставки металлопроката для строительства. Прямые контракты с заводами РФ и СНГ, доставка по всему Кыргызстану.
+              Надёжные поставки металлопроката для строительства. Прямые контракты с заводами РФ, доставка по всему Кыргызстану.
             </p>
             {/* Social pills */}
             <div className="flex items-center gap-2 flex-wrap">
@@ -183,9 +183,6 @@ export const Footer = () => {
             <Link href="#" className="text-[12px] text-gray-600 hover:text-gray-300 transition-colors duration-150">
               Условия использования
             </Link>
-            <span className="px-2.5 py-1 bg-white/[0.05] border border-white/[0.08] rounded text-[10px] font-bold uppercase tracking-widest text-gray-600">
-              ISO 9001:2015
-            </span>
           </div>
         </div>
       </div>
