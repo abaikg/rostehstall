@@ -6,6 +6,7 @@ import { products, Product } from "@/data/catalog";
 import { ProductCard } from "@/components/features/catalog/ProductCard";
 import { useOrderModal } from "@/context/ModalContext";
 import { CONTACTS } from "@/lib/constants";
+import { getProductImage } from "@/lib/productImages";
 
 const ChevronRight = () => (
   <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden>
@@ -121,7 +122,7 @@ export default function ProductPage() {
     .filter((p) => p.slug !== product.slug && (p.category === product.category || p.tags?.some((t) => product.tags?.includes(t))))
     .slice(0, 4);
 
-  const imgSrc = product.image || `https://picsum.photos/800/600?random=${product.id}`;
+  const imgSrc = getProductImage(product);
 
   return (
     <div className="flex flex-col pb-24">
@@ -182,7 +183,7 @@ export default function ProductPage() {
                   {!imgErr && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      src={product.image || `https://picsum.photos/160/128?random=${product.id * 10 + i}`}
+                      src={imgSrc}
                       alt=""
                       className="w-full h-full object-cover"
                       onError={() => {}}

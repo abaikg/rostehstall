@@ -4,7 +4,7 @@ export const CONTACTS = {
   whatsappPhone: "+996 777 556 570",
   whatsappRaw: "+996777556570",
   email: "info@rostehstal.kg",
-  address: 'Бишкек, БЦ "Адмирал", пр. Манаса 41А, офис 19В',
+  address: 'Бишкек, БЦ "Адмирал", пр. Манаса 41А, офис 18В',
   addressShort: "Бишкек, пр. Манаса 41А",
   workHours: "Пн-Сб: 08:30 — 17:30",
   whatsapp: "wa.me/996777556570",

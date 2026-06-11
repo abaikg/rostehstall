@@ -45,6 +45,7 @@ export interface Order {
   id: string;
   name: string;
   phone: string;
+  email?: string;
   comment: string;
   product?: string;
   status: "new" | "inwork" | "done" | "cancelled";

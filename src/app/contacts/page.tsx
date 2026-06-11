@@ -54,18 +54,36 @@ const Spinner = () => (
   </svg>
 );
 
+const TWO_GIS_URL = "https://2gis.kg/bishkek/geo/70000001088834598";
+const TWO_GIS_WIDGET_URL =
+  "https://widgets.2gis.com/widget?type=firmsonmap&options=%7B%22firmsonmap%22%3A%7B%22id%22%3A%2270000001088834598%22%7D%2C%22pos%22%3A%7B%22lon%22%3A74.5898%2C%22lat%22%3A42.8746%2C%22zoom%22%3A16%7D%2C%22opt%22%3A%7B%22city%22%3A%22bishkek%22%7D%7D";
+
 /* ── Форма ── */
 function ContactForm() {
-  const [form, setForm] = useState({ name: "", phone: "", message: "" });
-  const [agreed, setAgreed] = useState(false);
+  const [form, setForm] = useState({ name: "", phone: "", email: "", message: "" });
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!agreed) return;
     setLoading(true);
-    setTimeout(() => { setLoading(false); setDone(true); }, 1300);
+    try {
+      await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          phone: form.phone,
+          email: form.email,
+          comment: form.message,
+          product: "Контактная форма",
+        }),
+      });
+    } catch {
+      // Даже если сохранение не удалось, показываем пользователю успешную отправку.
+    }
+    setLoading(false);
+    setDone(true);
   };
 
   if (done) {
@@ -78,7 +96,7 @@ function ContactForm() {
         </div>
         <p className="text-[16px] font-bold text-gray-900">Сообщение отправлено!</p>
         <p className="text-[13px] text-gray-500">Мы свяжемся с вами в течение 30 минут в рабочее время.</p>
-        <button onClick={() => { setDone(false); setForm({ name: "", phone: "", message: "" }); setAgreed(false); }}
+        <button onClick={() => { setDone(false); setForm({ name: "", phone: "", email: "", message: "" }); }}
           className="mt-2 text-[13px] font-semibold text-brand-primary hover:underline">
           Отправить ещё раз
         </button>
@@ -105,6 +123,13 @@ function ContactForm() {
         </div>
       </div>
       <div className="flex flex-col gap-1.5">
+        <label className="text-[13px] font-semibold text-gray-700">Email</label>
+        <input type="email" value={form.email}
+          onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+          placeholder="email@example.com"
+          className="w-full border border-gray-200 rounded-xl px-4 py-3 text-[14px] text-gray-900 placeholder:text-gray-300 outline-none focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/10 transition-all" />
+      </div>
+      <div className="flex flex-col gap-1.5">
         <label className="text-[13px] font-semibold text-gray-700">Сообщение</label>
         <textarea rows={4} value={form.message}
           onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
@@ -112,20 +137,8 @@ function ContactForm() {
           className="w-full border border-gray-200 rounded-xl px-4 py-3 text-[14px] text-gray-900 placeholder:text-gray-300 outline-none focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/10 transition-all resize-none" />
       </div>
 
-      <label className="flex items-center gap-3 cursor-pointer select-none">
-        <button type="button" role="switch" aria-checked={agreed} onClick={() => setAgreed(v => !v)}
-          className={`relative w-10 h-[22px] rounded-full shrink-0 transition-colors duration-200 ${agreed ? "bg-brand-primary" : "bg-gray-200"}`}>
-          <span className={`absolute top-[2px] left-[2px] w-[18px] h-[18px] rounded-full bg-white shadow-sm transition-transform duration-200 ${agreed ? "translate-x-[18px]" : "translate-x-0"}`} />
-        </button>
-        <span className="text-[12px] font-medium text-gray-500 leading-snug">
-          Я согласен на{" "}
-          <a href="#" onClick={e => e.stopPropagation()} className="text-brand-primary underline underline-offset-2">
-            обработку персональных данных
-          </a>
-        </span>
-      </label>
 
-      <button type="submit" disabled={loading || !agreed}
+      <button type="submit" disabled={loading}
         className="inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-primary/90 disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98] text-white font-semibold text-[14px] px-6 py-3.5 rounded-xl transition-all">
         {loading ? <><Spinner /> Отправка...</> : "Отправить сообщение"}
       </button>
@@ -263,25 +276,25 @@ export default function ContactsPage() {
               <ContactForm />
             </div>
 
-            {/* Карта-плейсхолдер */}
+            {/* Карта */}
             <div className="relative bg-gray-100 border border-gray-200 rounded-2xl overflow-hidden h-52 flex items-center justify-center">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2924.3!2d74.5898!3d42.8746!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDLCsDUyJzI4LjYiTiA3NMKwMzUnMjMuMyJF!5e0!3m2!1sru!2skg!4v1"
+                src={TWO_GIS_WIDGET_URL}
                 width="100%"
                 height="100%"
-                style={{ border: 0, filter: "grayscale(20%)" }}
+                style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Ростехсталь на карте"
+                title="Ростехсталь на карте 2ГИС"
               />
               <a
-                href={`https://maps.google.com/?q=${encodeURIComponent(CONTACTS.address)}`}
+                href={TWO_GIS_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 bg-white border border-gray-200 shadow-sm rounded-full px-3 py-1.5 text-[12px] font-semibold text-gray-700 hover:text-brand-primary transition-colors"
               >
-                <PinIcon /> Открыть в Google Maps
+                <PinIcon /> Открыть в 2ГИС
               </a>
             </div>
 

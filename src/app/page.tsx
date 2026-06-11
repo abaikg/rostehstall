@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { products, Product } from "@/data/catalog";
 import { ProductCard } from "@/components/features/catalog/ProductCard";
@@ -68,6 +68,19 @@ const STEPS = [
   { n: "04", title: "Получите металл", desc: "Доставим на объект собственным транспортом в день оплаты." },
 ];
 
+const POPULAR_PRODUCT_SLUGS = [
+  "truba-profilnaya-40x40x2",
+  "armatura-a500s-12mm",
+  "list-gk-3mm-st3",
+  "ugolok-stalnoy-50x50x5",
+];
+
+const HERO_SLIDES = [
+  "/images/hero/hero-metal-yard.jpg",
+  "/images/hero/hero-warehouse-rebar.jpg",
+  "/images/hero/hero-clean-stock.jpg",
+];
+
 const VIDEO_ID = "dQw4w9WgXcQ"; // замените на реальный YouTube ID
 
 const PlayIcon = () => (
@@ -80,28 +93,62 @@ const PlayIcon = () => (
 export default function HomePage() {
   const { openModal } = useOrderModal();
   const [videoPlaying, setVideoPlaying] = useState(false); // для секции видео
+  const [heroSlide, setHeroSlide] = useState(0);
+  const popularProducts = POPULAR_PRODUCT_SLUGS
+    .map((slug) => products.find((product) => product.slug === slug))
+    .filter((product): product is Product => Boolean(product));
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setHeroSlide((current) => (current + 1) % HERO_SLIDES.length);
+    }, 5000);
+
+    return () => window.clearInterval(timer);
+  }, []);
 
   return (
     <div className="flex flex-col pb-0 font-sans">
 
       {/* ═══════════ HERO ═══════════ */}
-      <section className="relative pt-12 sm:pt-20 pb-20 sm:pb-28 overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,#dbeafe,transparent)]" />
+      <section className="relative isolate pt-12 sm:pt-20 pb-20 sm:pb-28 overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+          {HERO_SLIDES.map((slide, index) => (
+            <div
+              key={slide}
+              className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-out ${
+                index === heroSlide ? "opacity-100" : "opacity-0"
+              }`}
+              style={{ backgroundImage: `url(${slide})` }}
+            />
+          ))}
+          <div className="absolute inset-0 backdrop-blur-[1px]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-blue-50/74 to-white/94" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_65%_at_50%_12%,rgba(191,219,254,0.68),rgba(239,246,255,0.48)_42%,transparent_72%)]" />
+          <div className="absolute left-1/2 top-6 h-56 w-[min(760px,92vw)] -translate-x-1/2 rounded-full bg-blue-400/18 blur-3xl" />
+          <div className="absolute inset-x-0 bottom-5 flex justify-center gap-2">
+            {HERO_SLIDES.map((slide, index) => (
+              <span
+                key={`${slide}-dot`}
+                className={`h-1.5 rounded-full transition-all duration-500 ${
+                  index === heroSlide ? "w-8 bg-brand-primary/80" : "w-1.5 bg-gray-400/50"
+                }`}
+              />
+            ))}
+          </div>
         </div>
 
         <div className="container">
           <div className="flex flex-col items-center text-center max-w-4xl mx-auto gap-6">
 
 
-            <h1 className="text-[28px] xs:text-[32px] sm:text-[44px] md:text-[54px] lg:text-[66px] font-bold tracking-tighter text-gray-900 leading-[1.1] sm:leading-[1.05]">
+            <h1 className="text-[28px] xs:text-[32px] sm:text-[44px] md:text-[54px] lg:text-[66px] font-bold tracking-tighter text-gray-950 leading-[1.1] sm:leading-[1.05] drop-shadow-sm">
               Крупнейшая металлобаза<br className="hidden sm:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary via-blue-500 to-blue-400">
+              <span className="text-brand-primary">
                 {" "}по металлопрокату в Кыргызстане
               </span>
             </h1>
 
-            <p className="text-[14px] sm:text-[16px] md:text-[18px] text-gray-500 max-w-2xl leading-relaxed font-medium">
+            <p className="text-[14px] sm:text-[16px] md:text-[18px] text-gray-700 max-w-2xl leading-relaxed font-semibold drop-shadow-sm">
               Стальные листы, трубы, профили, арматура и спецсталь — широкий ассортимент металлопродукции высокого качества для строительных и промышленных предприятий.
             </p>
 
@@ -179,7 +226,7 @@ export default function HomePage() {
                   <>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={`https://source.unsplash.com/1280x720/?steel,warehouse,industrial`}
+                      src="/images/profile-pipes.png"
                       alt="Видео о компании Ростехсталь"
                       className="absolute inset-0 w-full h-full object-cover"
                     />
@@ -213,7 +260,7 @@ export default function HomePage() {
                 Ростехсталь — ведущая металлобаза Кыргызстана
               </h3>
               <p className="text-[15px] text-gray-500 leading-relaxed">
-                Мы поставляем металлопрокат для строительных и промышленных предприятий по всему Кыргызстану. Собственный склад площадью более 10 000 м² в Бишкеке.
+                Мы поставляем металлопрокат для строительных и промышленных предприятий по всему Кыргызстану.
               </p>
               <ul className="flex flex-col gap-3">
                 {[
@@ -326,8 +373,8 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {products.slice(0, 4).map((product: Product) => (
-              <ProductCard key={product.id} product={product} />
+            {popularProducts.map((product) => (
+              <ProductCard key={product.id} product={product} hideSize hideMeta />
             ))}
           </div>
         </div>
@@ -390,10 +437,10 @@ export default function HomePage() {
                 Нужен расчёт под ваш проект?
               </h2>
               <p className="text-[13px] sm:text-[15px] md:text-[16px] text-gray-400 leading-relaxed">
-                Пришлите спецификацию — отдел продаж рассчитает точный объём и стоимость за 30 минут. Работаем с предприятиями КР.
+                Оставьте заявку — отдел продаж рассчитает точный объём и стоимость за 30 минут. Работаем с предприятиями КР.
               </p>
               <div className="flex flex-wrap gap-3 justify-center lg:justify-start text-[13px] text-gray-600 font-medium">
-                <span className="flex items-center gap-1.5"><span className="text-green-400"><CheckIcon /></span> Бесплатный расчёт КП</span>
+                <span className="flex items-center gap-1.5"><span className="text-green-400"><CheckIcon /></span> Расчёт КП</span>
                 <span className="flex items-center gap-1.5"><span className="text-green-400"><CheckIcon /></span> Ответ за 30 минут</span>
                 <span className="flex items-center gap-1.5"><span className="text-green-400"><CheckIcon /></span> Скидки от объёма</span>
               </div>

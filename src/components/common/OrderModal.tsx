@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useOrderModal } from "@/context/ModalContext";
 
 const Spinner = () => (
@@ -18,8 +18,14 @@ export const OrderModal = () => {
   const { isModalOpen, closeModal, modalData } = useOrderModal();
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
-  const [agreed, setAgreed] = useState(false);
-  const [form, setForm] = useState({ name: "", phone: "", comment: "" });
+  const [form, setForm] = useState({ name: "", phone: "", email: "", comment: "" });
+
+  const handleClose = useCallback(() => {
+    setDone(false);
+    setLoading(false);
+    setForm({ name: "", phone: "", email: "", comment: "" });
+    closeModal();
+  }, [closeModal]);
 
   /* Scroll lock */
   useEffect(() => {
@@ -29,26 +35,15 @@ export const OrderModal = () => {
 
   /* Escape key */
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") closeModal(); };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") handleClose(); };
     if (isModalOpen) document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [isModalOpen, closeModal]);
-
-  /* Reset when re-opening */
-  useEffect(() => {
-    if (isModalOpen) {
-      setDone(false);
-      setLoading(false);
-      setForm({ name: "", phone: "", comment: "" });
-      setAgreed(false);
-    }
-  }, [isModalOpen]);
+  }, [isModalOpen, handleClose]);
 
   if (!isModalOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!agreed) return;
     setLoading(true);
     try {
       await fetch("/api/orders", {
@@ -57,6 +52,7 @@ export const OrderModal = () => {
         body: JSON.stringify({
           name: form.name,
           phone: form.phone,
+          email: form.email,
           comment: form.comment,
           product: modalData?.productLabel || "",
         }),
@@ -78,7 +74,7 @@ export const OrderModal = () => {
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-reveal"
-        onClick={closeModal}
+        onClick={handleClose}
       />
 
       {/* Panel */}
@@ -99,7 +95,7 @@ export const OrderModal = () => {
               </p>
             </div>
             <button
-              onClick={closeModal}
+              onClick={handleClose}
               className="mt-2 px-7 py-3 bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold text-[14px] rounded-xl transition-colors"
             >
               Закрыть
@@ -113,7 +109,7 @@ export const OrderModal = () => {
                 Заказать звонок
               </h2>
               <button
-                onClick={closeModal}
+                onClick={handleClose}
                 className="text-gray-300 hover:text-gray-600 transition-colors p-1 -mt-0.5 -mr-1 rounded-full hover:bg-gray-100"
                 aria-label="Закрыть"
               >
@@ -165,6 +161,19 @@ export const OrderModal = () => {
                 />
               </div>
 
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-semibold text-gray-700">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                  placeholder="email@example.com"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-[15px] text-gray-900 placeholder:text-gray-300 outline-none transition-all focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/10"
+                />
+              </div>
+
               {/* Комментарий */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-[13px] font-semibold text-gray-700">
@@ -179,36 +188,12 @@ export const OrderModal = () => {
                 />
               </div>
 
-              {/* Согласие */}
-              <label className="flex items-center gap-3 cursor-pointer select-none mt-1">
-                <button
-                  type="button"
-                  role="switch"
-                  aria-checked={agreed}
-                  onClick={() => setAgreed(v => !v)}
-                  className={`relative w-11 h-6 rounded-full shrink-0 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/30 ${agreed ? "bg-brand-primary" : "bg-gray-200"}`}
-                >
-                  <span
-                    className={`absolute top-[3px] left-[3px] w-[18px] h-[18px] rounded-full bg-white shadow-sm transition-transform duration-200 ${agreed ? "translate-x-5" : "translate-x-0"}`}
-                  />
-                </button>
-                <span className="text-[13px] font-medium text-gray-600 leading-snug">
-                  Я согласен на{" "}
-                  <a
-                    href="#"
-                    onClick={e => e.stopPropagation()}
-                    className="text-brand-primary underline underline-offset-2 hover:text-brand-accent transition-colors"
-                  >
-                    обработку персональных данных
-                  </a>
-                </span>
-              </label>
 
               {/* Кнопка + сноска */}
               <div className="flex items-center gap-4 pt-1">
                 <button
                   type="submit"
-                  disabled={loading || !agreed}
+                  disabled={loading}
                   className="flex-1 inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-primary/90 disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98] text-white font-semibold text-[15px] px-6 py-3.5 rounded-xl transition-all duration-200"
                 >
                   {loading ? <><Spinner /> Отправка...</> : "Отправить"}

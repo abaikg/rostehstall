@@ -51,7 +51,7 @@ export default function AdminOrdersPage() {
 
   const filtered = useMemo(() => orders
     .filter(o => tab === "all" || o.status === tab)
-    .filter(o => !search || o.name?.toLowerCase().includes(search.toLowerCase()) || o.phone?.includes(search)),
+    .filter(o => !search || o.name?.toLowerCase().includes(search.toLowerCase()) || o.phone?.includes(search) || o.email?.toLowerCase().includes(search.toLowerCase())),
   [orders, tab, search]);
 
   const tabs: { key: Order["status"] | "all"; label: string }[] = [
@@ -95,7 +95,7 @@ export default function AdminOrdersPage() {
         </div>
         <div className="relative flex-1 max-w-xs">
           <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Поиск по имени, телефону..."
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Поиск по имени, телефону, email..."
             className="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-[13px] outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-500/10" />
         </div>
       </div>
@@ -128,6 +128,7 @@ export default function AdminOrdersPage() {
                     <span className="text-[16px] font-bold text-slate-900">{o.name || <span className="text-slate-400 font-normal">Без имени</span>}</span>
                     {o.phone && <a href={`tel:${o.phone}`} className="text-[14px] font-semibold text-blue-600 hover:underline">{o.phone}</a>}
                   </div>
+                  {o.email && <a href={`mailto:${o.email}`} className="text-[13px] font-semibold text-slate-500 hover:text-blue-600 hover:underline">{o.email}</a>}
                   {o.product && <div className="text-[13px] text-slate-500">📦 {o.product}</div>}
                   {o.comment && <div className="text-[13px] text-slate-600 bg-slate-50 rounded-xl px-3.5 py-2.5 mt-1 leading-relaxed">{o.comment}</div>}
                 </div>

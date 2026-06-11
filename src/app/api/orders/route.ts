@@ -8,6 +8,7 @@ export async function POST(req: NextRequest) {
     id: Date.now().toString(),
     name: body.name || "",
     phone: body.phone || "",
+    email: body.email || "",
     comment: body.comment || "",
     product: body.product || "",
     status: "new",

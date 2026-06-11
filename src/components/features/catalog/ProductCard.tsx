@@ -2,11 +2,26 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Product } from "@/data/catalog";
+import { getProductImage } from "@/lib/productImages";
 
-export const ProductCard = ({ product }: { product: Product }) => {
+type ProductCardProps = {
+  product: Product;
+  hideSize?: boolean;
+  hideMeta?: boolean;
+};
+
+const stripSizeFromName = (name: string) =>
+  name
+    .replace(/\s+\d+(?:[.,]\d+)?(?:\s*[xXхХ×]\s*\d+(?:[.,]\d+)?){1,3}\s*(?:мм|см|м)?/gi, "")
+    .replace(/\s+\d+(?:[.,]\d+)?\s*(?:мм|см)(?=$|\s)/gi, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+
+export const ProductCard = ({ product, hideSize = false, hideMeta = false }: ProductCardProps) => {
   const [imgErr, setImgErr] = useState(false);
 
-  const imgSrc = product.image || `https://picsum.photos/400/300?random=${product.id}`;
+  const imgSrc = getProductImage(product);
+  const productName = hideSize ? stripSizeFromName(product.name) : product.name;
 
   return (
     <Link
@@ -19,7 +34,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={imgSrc}
-            alt={product.name}
+            alt={productName}
             onError={() => setImgErr(true)}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
@@ -41,15 +56,17 @@ export const ProductCard = ({ product }: { product: Product }) => {
       {/* Контент */}
       <div className="flex flex-col gap-2.5 p-4 flex-1">
         <p className="text-[13px] font-bold text-gray-900 leading-snug group-hover:text-brand-primary transition-colors line-clamp-2">
-          {product.name}
+          {productName}
         </p>
 
-        <div className="flex flex-wrap gap-1 mt-0.5">
-          <span className="text-[11px] text-gray-400 font-medium">{product.category}</span>
-          {product.tags?.slice(0, 1).map((t) => (
-            <span key={t} className="text-[11px] text-gray-400 font-medium before:content-[','] before:mr-1">{t}</span>
-          ))}
-        </div>
+        {!hideMeta && (
+          <div className="flex flex-wrap gap-1 mt-0.5">
+            <span className="text-[11px] text-gray-400 font-medium">{product.category}</span>
+            {product.tags?.slice(0, 1).map((t) => (
+              <span key={t} className="text-[11px] text-gray-400 font-medium before:content-[','] before:mr-1">{t}</span>
+            ))}
+          </div>
+        )}
 
         <div className="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between">
           <span className="text-[12px] font-semibold text-brand-primary">Узнать цену →</span>
