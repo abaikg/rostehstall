@@ -8,8 +8,9 @@ import { roundPipeWeight } from "./roundPipe";
 import { profilePipeWeight } from "./profilePipe";
 import { stripWeight } from "./strip";
 import { angleWeight } from "./angle";
+import { channelWeight } from "./channel";
 
-type FormulaFn = (values: any, density: number) => number;
+type FormulaFn = (values: CalculationInputs["values"], density: number) => number;
 
 const formulaMap: Record<ProductCode, FormulaFn> = {
   sheet: sheetWeight,
@@ -21,6 +22,7 @@ const formulaMap: Record<ProductCode, FormulaFn> = {
   rebar: rodWeight, // Rebar uses the same formula as Rod
   strip: stripWeight,
   angle: angleWeight,
+  channel: channelWeight,
 };
 
 export const calculateWeight = (inputs: CalculationInputs): number => {

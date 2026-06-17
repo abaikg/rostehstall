@@ -4,6 +4,7 @@ import Link from "next/link";
 import { products, CATEGORY_LIST, Product } from "@/data/catalog";
 import { ProductCard } from "@/components/features/catalog/ProductCard";
 import { useOrderModal } from "@/context/ModalContext";
+import { getCategoryPath } from "@/lib/catalogRoutes";
 
 /* ── Иконки категорий ── */
 const CategoryIcon = ({ type }: { type: string }) => {
@@ -112,9 +113,13 @@ export default function CatalogPage() {
             {CATEGORY_LIST.map((cat) => {
               const active = activeCategory === cat.name;
               return (
-                <button
+                <Link
                   key={cat.name}
-                  onClick={() => selectCategory(cat.name)}
+                  href={getCategoryPath(cat.name)}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    selectCategory(cat.name);
+                  }}
                   className={`group flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium text-left transition-all ${
                     active
                       ? "bg-brand-primary/10 text-brand-primary font-semibold"
@@ -125,7 +130,7 @@ export default function CatalogPage() {
                     <CategoryIcon type={cat.icon} />
                   </span>
                   <span className="leading-snug">{cat.name}</span>
-                </button>
+                </Link>
               );
             })}
           </aside>
@@ -150,14 +155,18 @@ export default function CatalogPage() {
                   Все категории
                 </button>
                 {CATEGORY_LIST.map((cat) => (
-                  <button
+                  <Link
                     key={cat.name}
-                    onClick={() => selectCategory(cat.name)}
+                    href={getCategoryPath(cat.name)}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      selectCategory(cat.name);
+                    }}
                     className={`w-full flex items-center gap-2.5 text-left px-4 py-2.5 text-[13px] border-b border-gray-100 last:border-0 ${activeCategory === cat.name ? "text-brand-primary bg-brand-primary/5 font-semibold" : "text-gray-600 hover:bg-gray-50"}`}
                   >
                     <span className="text-gray-400"><CategoryIcon type={cat.icon} /></span>
                     {cat.name}
-                  </button>
+                  </Link>
                 ))}
               </div>
             )}

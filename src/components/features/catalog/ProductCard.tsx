@@ -34,7 +34,7 @@ export const ProductCard = ({ product, hideSize = false, hideMeta = false }: Pro
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={imgSrc}
-            alt={productName}
+            alt={`${productName} — каталог металлопроката Ростехсталь`}
             onError={() => setImgErr(true)}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />

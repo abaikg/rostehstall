@@ -217,7 +217,7 @@ function RelatedCard({ post, compact = false }: { post: BlogPost; compact?: bool
       <Link href={`/blog/${post.slug}`}
         className="group flex gap-3 items-start p-2.5 rounded-xl hover:bg-gray-50 transition-all">
         <div className="w-16 h-14 rounded-lg overflow-hidden bg-gray-100 shrink-0">
-          {!imgErr && <img src={src} alt="" onError={() => setImgErr(true)} className="w-full h-full object-cover" />}
+          {!imgErr && <img src={src} alt={post.title} onError={() => setImgErr(true)} className="w-full h-full object-cover" />}
         </div>
         <div className="flex flex-col gap-1 min-w-0">
           <span className="text-[10px] font-bold uppercase tracking-widest text-brand-primary">{post.category}</span>
@@ -254,7 +254,8 @@ function RelatedCard({ post, compact = false }: { post: BlogPost; compact?: bool
 /* ═════════════ Share button row ═════════════ */
 function ShareButtons({ post, vertical = false }: { post: BlogPost; vertical?: boolean }) {
   const [copied, setCopied] = useState(false);
-  const url = typeof window !== "undefined" ? window.location.href : `https://rostehstal.kg/blog/${post.slug}`;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "";
+  const url = typeof window !== "undefined" ? window.location.href : `${siteUrl}/blog/${post.slug}`;
 
   async function copyLink() {
     try {

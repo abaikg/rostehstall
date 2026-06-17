@@ -37,20 +37,20 @@ export default function CalculatorPage() {
   const { openModal } = useOrderModal();
 
   return (
-    <div className="flex flex-col pb-24 pt-6 sm:pt-10">
+    <div className="flex flex-col pb-20 sm:pb-24 pt-4 sm:pt-10">
 
       {/* ── Калькулятор ── */}
       <div className="container">
-        <div className="bg-white border border-gray-200/80 rounded-3xl sm:rounded-[32px] shadow-sm overflow-hidden">
+        <div className="bg-white border border-gray-200/80 rounded-2xl sm:rounded-[32px] shadow-sm overflow-hidden">
           {/* Верхняя полоска */}
-          <div className="flex items-center justify-between px-6 sm:px-8 py-4 border-b border-gray-100 bg-gray-50/60">
-            <div className="flex items-center gap-2.5">
-              <div className="flex gap-1.5">
-                <div className="w-3 h-3 rounded-full bg-gray-200" />
-                <div className="w-3 h-3 rounded-full bg-gray-200" />
-                <div className="w-3 h-3 rounded-full bg-gray-200" />
+          <div className="flex items-center justify-between px-4 sm:px-8 py-3 sm:py-4 border-b border-gray-100 bg-gray-50/60">
+            <div className="flex min-w-0 items-center gap-2 sm:gap-2.5">
+              <div className="flex gap-1.5 shrink-0">
+                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-gray-200" />
+                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-gray-200" />
+                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-gray-200" />
               </div>
-              <span className="text-[12px] font-bold text-gray-400 tracking-wide ml-1">
+              <span className="min-w-0 truncate text-[11px] sm:text-[12px] font-bold text-gray-400 tracking-wide sm:ml-1">
                 Расчёт веса / длины
               </span>
             </div>
@@ -60,14 +60,14 @@ export default function CalculatorPage() {
           </div>
 
           {/* Сам калькулятор */}
-          <div className="p-4 sm:p-6 lg:p-8">
+          <div className="p-3 sm:p-6 lg:p-8">
             <MetalCalculator />
           </div>
         </div>
       </div>
 
       {/* ── Инфо-блоки ── */}
-      <div className="container mt-8">
+      <div className="container mt-6 sm:mt-8">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {INFO_ITEMS.map((item, i) => (
             <div key={i} className="flex flex-col gap-3 p-5 sm:p-6 bg-white border border-gray-200 rounded-2xl">
@@ -83,7 +83,7 @@ export default function CalculatorPage() {
 
       {/* ── Bottom CTA ── */}
       <div className="container mt-6">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-5 p-6 sm:p-8 bg-gray-50 border border-gray-200 rounded-2xl">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-5 p-5 sm:p-8 bg-gray-50 border border-gray-200 rounded-2xl">
           <div className="flex flex-col gap-1 text-center sm:text-left">
             <p className="text-[15px] font-bold text-gray-900">Нужно точное коммерческое предложение?</p>
             <p className="text-[13px] text-gray-500">Укажите объём — менеджер рассчитает цену с учётом скидок за 30 минут.</p>

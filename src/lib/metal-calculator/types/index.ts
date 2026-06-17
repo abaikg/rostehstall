@@ -3,7 +3,10 @@ export type MaterialCode =
   | 'stainless' 
   | 'aluminum' 
   | 'copper' 
-  | 'brass';
+  | 'brass'
+  | 'bronze'
+  | 'lead'
+  | 'cast_iron';
 
 export type ProductCode = 
   | 'sheet' 
@@ -14,7 +17,8 @@ export type ProductCode =
   | 'pipe_profile' 
   | 'rebar' 
   | 'strip' 
-  | 'angle';
+  | 'angle'
+  | 'channel';
 
 export type CalculatorMode = 'weight_by_dimensions' | 'length_by_weight';
 
@@ -47,6 +51,19 @@ export interface CalculationInputs {
   product: ProductCode;
   mode: CalculatorMode;
   values: Partial<Record<InputFieldKey, number>>;
+}
+
+export type PresetSource = 'google_doc' | 'catalog';
+
+export interface CalculatorPreset {
+  id: string;
+  title: string;
+  productCode: ProductCode;
+  materialCode: MaterialCode;
+  presetValues: Partial<Record<InputFieldKey, number>>;
+  weightDisplay: string;
+  source: PresetSource;
+  sourceRef: string;
 }
 
 export interface CalculationResult {

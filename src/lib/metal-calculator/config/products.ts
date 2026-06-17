@@ -80,6 +80,16 @@ export const PRODUCTS: Record<ProductCode, ProductConfig> = {
       { key: 'thickness', label: 'Толщина (t)', unit: 'мм', min: 0.1, max: 50 },
     ],
   },
+  channel: {
+    code: 'channel',
+    label: 'РЁРІРµР»Р»РµСЂ',
+    icon: '⊏',
+    fields: [
+      { key: 'sideA', label: 'Р’С‹СЃРѕС‚Р° (h)', unit: 'РјРј', min: 1, max: 1000 },
+      { key: 'sideB', label: 'РџРѕР»РєР° (b)', unit: 'РјРј', min: 1, max: 500 },
+      { key: 'thickness', label: 'РЎС‚РµРЅРєР° (s)', unit: 'РјРј', min: 0.1, max: 100 },
+    ],
+  },
 };
 
 export const PRODUCT_LIST = Object.values(PRODUCTS);

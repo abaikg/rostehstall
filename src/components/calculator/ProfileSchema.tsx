@@ -7,28 +7,35 @@ interface ProfileSchemaProps {
   className?: string;
 }
 
-export const ProfileSchema = ({ type, className = "" }: ProfileSchemaProps) => {
-  // SVG Template Wrapper for Technical Drawings
-  const SvgBlueprint = ({ children, viewBox = "0 0 150 150" }: { children: React.ReactNode, viewBox?: string }) => (
-    <div className={`relative flex items-center justify-center p-4 bg-white w-full h-full ${className}`}>
-      <svg 
-        viewBox={viewBox} 
-        className="w-full h-full max-w-[220px] max-h-[220px] text-gray-900" 
-        fill="currentColor"
-      >
-        <defs>
-          <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-            <line x1="0" y1="0" x2="0" y2="6" stroke="#d1d5db" strokeWidth="0.8" />
-          </pattern>
-          <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-            <path d="M 0 1 L 10 5 L 0 9 z" fill="#000" />
-          </marker>
-        </defs>
-        {children}
-      </svg>
-    </div>
-  );
+const SvgBlueprint = ({
+  children,
+  viewBox = "0 0 150 150",
+  className = "",
+}: {
+  children: React.ReactNode;
+  viewBox?: string;
+  className?: string;
+}) => (
+  <div className={`relative flex items-center justify-center p-3 sm:p-4 bg-white w-full h-full ${className}`}>
+    <svg
+      viewBox={viewBox}
+      className="w-full h-full max-w-[190px] max-h-[190px] sm:max-w-[220px] sm:max-h-[220px] text-gray-900"
+      fill="currentColor"
+    >
+      <defs>
+        <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="6" stroke="#d1d5db" strokeWidth="0.8" />
+        </pattern>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#000" />
+        </marker>
+      </defs>
+      {children}
+    </svg>
+  </div>
+);
 
+export const ProfileSchema = ({ type }: ProfileSchemaProps) => {
   switch (type) {
     case "pipe_round":
       return (
