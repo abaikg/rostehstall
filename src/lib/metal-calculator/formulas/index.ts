@@ -1,5 +1,5 @@
 import { ProductCode, CalculationInputs } from "../types";
-import { MATERIALS } from "../config/materials";
+import { getMaterialDensity } from "../config/materials";
 import { sheetWeight } from "./sheet";
 import { rodWeight } from "./rod";
 import { squareWeight } from "./square";
@@ -26,8 +26,8 @@ const formulaMap: Record<ProductCode, FormulaFn> = {
 };
 
 export const calculateWeight = (inputs: CalculationInputs): number => {
-  const { product, material, values } = inputs;
-  const density = MATERIALS[material].density;
+  const { product, material, grade, values } = inputs;
+  const density = getMaterialDensity(material, grade);
   const formula = formulaMap[product];
   
   if (!formula) return 0;

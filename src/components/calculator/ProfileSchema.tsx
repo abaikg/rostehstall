@@ -43,7 +43,7 @@ export const ProfileSchema = ({ type }: ProfileSchemaProps) => {
           {/* Outer and Inner Circle using EvenOdd to crop center */}
           <path d="M75 15A60 60 0 1075 135A60 60 0 1075 15z M75 30A45 45 0 1175 120A45 45 0 1175 30z" fill="url(#hatch)" stroke="#000" strokeWidth="1.5" fillRule="evenodd" />
           
-          {/* Inner wall rim to double check border */}
+          {/* Inner wall rim for the hollow profile */}
           <circle cx="75" cy="75" r="45" fill="none" stroke="#000" strokeWidth="1.5" />
 
           {/* D: Diameter Arrow through center */}
@@ -138,7 +138,7 @@ export const ProfileSchema = ({ type }: ProfileSchemaProps) => {
     case "rebar":
       return (
         <SvgBlueprint>
-          {/* Rebar gets squiggly outer border visually by hatch + plain circle in classic blueprints, we'll keep it simple circle for accuracy */}
+          {/* Rebar keeps a simple circular outline for accuracy */}
           <circle cx="75" cy="75" r="50" fill="url(#hatch)" stroke="#000" strokeWidth="1.5" />
           
           {/* Diameter */}

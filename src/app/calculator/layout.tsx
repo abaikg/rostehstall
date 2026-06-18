@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Калькулятор веса металлопроката — Ростехсталь Бишкек",
+  title: "Расчёт веса металлопроката — Ростехсталь Бишкек",
   description:
     "Онлайн-калькулятор веса и длины металлопроката для расчёта арматуры, труб, листового и фасонного проката перед заказом в Бишкеке.",
   path: "/calculator",

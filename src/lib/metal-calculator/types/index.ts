@@ -8,6 +8,21 @@ export type MaterialCode =
   | 'lead'
   | 'cast_iron';
 
+export type MaterialGradeCode =
+  | 'st3'
+  | 'st20'
+  | 'steel_09g2s'
+  | 'a500c'
+  | 'aisi_304'
+  | 'aisi_316'
+  | 'ad31'
+  | 'amg5'
+  | 'm1'
+  | 'ls59'
+  | 'brof'
+  | 's1'
+  | 'sch20';
+
 export type ProductCode = 
   | 'sheet' 
   | 'rod' 
@@ -24,6 +39,13 @@ export type CalculatorMode = 'weight_by_dimensions' | 'length_by_weight';
 
 export interface MaterialConfig {
   code: MaterialCode;
+  name: string;
+  density: number; // kg/m3
+}
+
+export interface MaterialGradeConfig {
+  code: MaterialGradeCode;
+  materialCode: MaterialCode;
   name: string;
   density: number; // kg/m3
 }
@@ -48,6 +70,7 @@ export interface ProductConfig {
 
 export interface CalculationInputs {
   material: MaterialCode;
+  grade?: MaterialGradeCode;
   product: ProductCode;
   mode: CalculatorMode;
   values: Partial<Record<InputFieldKey, number>>;
@@ -60,6 +83,7 @@ export interface CalculatorPreset {
   title: string;
   productCode: ProductCode;
   materialCode: MaterialCode;
+  gradeCode?: MaterialGradeCode;
   presetValues: Partial<Record<InputFieldKey, number>>;
   weightDisplay: string;
   source: PresetSource;
@@ -70,6 +94,14 @@ export interface CalculationResult {
   value: number;
   unit: string;
   error?: string;
+  unitWeight?: number;
+  length?: number;
+  materialName?: string;
+  gradeName?: string;
+  productName?: string;
+  sheetWeight?: number;
+  area?: number;
+  isCalculated?: boolean;
 }
 
 export interface ValidationError {
