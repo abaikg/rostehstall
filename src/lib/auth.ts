@@ -1,7 +1,9 @@
 import crypto from "crypto";
 
 // В production все секреты обязаны быть заданы через окружение —
-// падаем сразу с понятной ошибкой вместо тихого небезопасного fallback.
+// понятная ошибка вместо тихого небезопасного fallback. Проверка ленивая
+// (в момент вызова, не при импорте): у `next build` NODE_ENV=production,
+// но runtime-секретов при сборке нет и быть не должно.
 function requiredEnv(name: string, devFallback: string): string {
   const value = process.env[name];
   if (value) return value;
@@ -11,9 +13,9 @@ function requiredEnv(name: string, devFallback: string): string {
   return devFallback;
 }
 
-// Fallback-значения согласованы с src/middleware.ts (edge-верификация токена)
-const SECRET = requiredEnv("ADMIN_SECRET", "dev-only-secret");
-const SALT   = requiredEnv("ADMIN_SALT", "dev-only-salt");
+// Fallback-значения согласованы с src/proxy.ts (edge-верификация токена)
+const getSecret = () => requiredEnv("ADMIN_SECRET", "dev-only-secret");
+const getSalt   = () => requiredEnv("ADMIN_SALT", "dev-only-salt");
 const SESSION_TTL = 7 * 24 * 60 * 60 * 1000; // 7 дней
 
 // ── Rate limiting (in-memory, сбрасывается при рестарте) ────────────────────
@@ -57,13 +59,13 @@ export function verifyUsername(input: string): boolean {
 
 export function verifyPassword(input: string): boolean {
   // Хэш введённого пароля
-  const inputHash = crypto.createHmac("sha256", SALT).update(input).digest();
+  const inputHash = crypto.createHmac("sha256", getSalt()).update(input).digest();
 
   // Эталонный хэш: если ADMIN_PASSWORD_HASH задан — используем его,
   // иначе хэшируем ADMIN_PASSWORD на лету
   const stored = process.env.ADMIN_PASSWORD_HASH
     ? Buffer.from(process.env.ADMIN_PASSWORD_HASH, "hex")
-    : crypto.createHmac("sha256", SALT)
+    : crypto.createHmac("sha256", getSalt())
         .update(requiredEnv("ADMIN_PASSWORD", "admin123"))
         .digest();
 
@@ -76,13 +78,13 @@ export function verifyPassword(input: string): boolean {
 
 // ── Утилита для генерации хэша (запустить один раз в консоли) ───────────────
 export function hashPassword(password: string): string {
-  return crypto.createHmac("sha256", SALT).update(password).digest("hex");
+  return crypto.createHmac("sha256", getSalt()).update(password).digest("hex");
 }
 
 // ── HMAC-подписанный токен сессии ───────────────────────────────────────────
 export function createSessionToken(): string {
   const payload = btoa(JSON.stringify({ role: "admin", exp: Date.now() + SESSION_TTL }));
-  const sig     = crypto.createHmac("sha256", SECRET).update(payload).digest("hex");
+  const sig     = crypto.createHmac("sha256", getSecret()).update(payload).digest("hex");
   return `${payload}.${sig}`;
 }
 
@@ -92,7 +94,7 @@ export function verifySessionToken(token: string): boolean {
     const [payload, sig] = token.split(".");
     if (!payload || !sig) return false;
 
-    const expected = crypto.createHmac("sha256", SECRET).update(payload).digest("hex");
+    const expected = crypto.createHmac("sha256", getSecret()).update(payload).digest("hex");
     if (!crypto.timingSafeEqual(Buffer.from(sig, "hex"), Buffer.from(expected, "hex"))) return false;
 
     const { exp } = JSON.parse(Buffer.from(payload, "base64").toString());
