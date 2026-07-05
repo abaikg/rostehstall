@@ -1,0 +1,64 @@
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "5"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-}
+        NEXT_PUBLIC_YM_ID: ${NEXT_PUBLIC_YM_ID:-}
+        NEXT_PUBLIC_GA_ID: ${NEXT_PUBLIC_GA_ID:-}
+        NEXT_PUBLIC_GOOGLE_ADS_SEND_TO: ${NEXT_PUBLIC_GOOGLE_ADS_SEND_TO:-}
+        NEXT_PUBLIC_YANDEX_VERIFICATION: ${NEXT_PUBLIC_YANDEX_VERIFICATION:-}
+        NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION: ${NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION:-}
+        NEXT_PUBLIC_JIVO_ID: ${NEXT_PUBLIC_JIVO_ID:-}
+    restart: unless-stopped
+    logging: *default-logging
+    environment:
+      ADMIN_USERNAME: ${ADMIN_USERNAME}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      ADMIN_SECRET: ${ADMIN_SECRET}
+      ADMIN_SALT: ${ADMIN_SALT}
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-}
+      NODE_ENV: production
+    volumes:
+      # Persist admin-edited catalog/blog/orders and uploaded images across
+      # rebuilds. Host dirs must be writable by uid 1001 (container user).
+      - ./storage/data:/app/data
+      - ./storage/uploads:/app/public/uploads
+    # No public port — the app is only reachable through Caddy.
+    expose:
+      - "3000"
+    networks:
+      - rostehstall
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    logging: *default-logging
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      CADDY_SITE_ADDRESS: ${CADDY_SITE_ADDRESS:-:80}
+      CADDY_WWW_ADDRESS: ${CADDY_WWW_ADDRESS:-http://www.metalloprokat.kg}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - rostehstall
+
+networks:
+  rostehstall:
+
+volumes:
+  caddy_data:
+  caddy_config:

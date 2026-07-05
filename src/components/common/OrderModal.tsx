@@ -1,6 +1,7 @@
 "use client";
 import React, { useCallback, useState, useEffect } from "react";
 import { useOrderModal } from "@/context/ModalContext";
+import { trackLead } from "@/lib/analytics";
 
 const Spinner = () => (
   <svg className="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden>
@@ -60,6 +61,8 @@ export const OrderModal = () => {
     } catch {
       // сохранить заявку не удалось, но показываем успех
     }
+    // Конверсия: заявка отправлена (цель для Метрики/GA/Google Ads)
+    trackLead("lead_form", { product: modalData?.productLabel || undefined });
     setLoading(false);
     setDone(true);
   };

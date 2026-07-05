@@ -1,0 +1,14 @@
+# Default serves the site over HTTP by server IP. When DNS is ready, set
+# CADDY_SITE_ADDRESS=metalloprokat.kg in .env — Caddy then obtains
+# Let's Encrypt certificates automatically, and www redirects to the apex.
+{$CADDY_SITE_ADDRESS::80} {
+	encode zstd gzip
+	reverse_proxy app:3000
+}
+
+# www → apex. До настройки DNS остаётся HTTP-only (нет попыток получить
+# сертификат); при переходе на HTTPS задайте в .env:
+#   CADDY_WWW_ADDRESS=www.metalloprokat.kg
+{$CADDY_WWW_ADDRESS:http://www.metalloprokat.kg} {
+	redir https://metalloprokat.kg{uri} permanent
+}

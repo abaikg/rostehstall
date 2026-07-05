@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ProductCard } from "@/components/features/catalog/ProductCard";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { getCategoryBySlug, getIndexedCategories, getProductsForCategory } from "@/lib/catalogRoutes";
+import { categorySeo } from "@/data/categorySeo";
 import {
   breadcrumbJsonLd,
   absoluteUrl,
@@ -75,6 +76,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   const categoryProducts = getProductsForCategory(category.name);
   const faqs = getCategoryFaq(category.name);
+  const seo = categorySeo[category.name];
   const jsonLd = jsonLdGraph([
     breadcrumbJsonLd([
       { name: "Главная", path: "/" },
@@ -117,7 +119,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               {category.name}
             </h1>
             <p className="text-[14px] sm:text-[16px] text-gray-500 leading-relaxed">
-              Позиции категории на складе Ростехсталь в Бишкеке. Поможем подобрать размер, марку и доставку по Кыргызстану.
+              {seo?.lead ??
+                "Позиции категории на складе Ростехсталь в Бишкеке. Поможем подобрать размер, марку и доставку по Кыргызстану."}
             </p>
           </div>
         </div>
@@ -157,6 +160,66 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               Показать все позиции
             </Link>
           </div>
+        )}
+
+        {seo && (
+          <section className="mt-4 border-t border-gray-100 pt-10">
+            <div className="flex flex-col gap-7 max-w-3xl">
+              {seo.popular && seo.popular.length > 0 && (
+                <div className="flex flex-col gap-3">
+                  <h2 className="text-[20px] sm:text-[26px] font-bold tracking-tight text-gray-900">
+                    {category.name} в Бишкеке — ходовые позиции
+                  </h2>
+                  <div className="flex flex-wrap gap-2">
+                    {seo.popular.map((item) => (
+                      <span
+                        key={item}
+                        className="inline-flex items-center bg-blue-50 text-brand-primary font-semibold text-[13px] px-3.5 py-1.5 rounded-full border border-blue-100"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {seo.sections.map((sec) => (
+                <div key={sec.heading} className="flex flex-col gap-3">
+                  <h3 className="text-[16px] sm:text-[18px] font-bold text-gray-900">{sec.heading}</h3>
+                  {sec.paragraphs?.map((p, i) => (
+                    <p key={i} className="text-[14px] sm:text-[15px] text-gray-600 leading-relaxed">
+                      {p}
+                    </p>
+                  ))}
+                  {sec.bullets && sec.bullets.length > 0 && (
+                    <ul className="flex flex-col gap-2">
+                      {sec.bullets.map((b) => (
+                        <li key={b} className="flex items-start gap-2.5 text-[14px] sm:text-[15px] text-gray-600 leading-relaxed">
+                          <span className="mt-[9px] w-1.5 h-1.5 rounded-full bg-brand-primary shrink-0" />
+                          <span>{b}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+
+              <div className="flex flex-wrap gap-2.5 pt-1">
+                <Link
+                  href="/calculator"
+                  className="inline-flex items-center justify-center bg-white text-gray-700 font-semibold text-[13px] px-5 py-2.5 rounded-full border border-gray-200 hover:bg-gray-50 transition-all"
+                >
+                  Рассчитать в калькуляторе
+                </Link>
+                <Link
+                  href="/contacts"
+                  className="inline-flex items-center justify-center bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold text-[13px] px-5 py-2.5 rounded-full shadow-sm transition-all"
+                >
+                  Узнать цену и наличие
+                </Link>
+              </div>
+            </div>
+          </section>
         )}
 
         <section className="mt-4 border-t border-gray-100 pt-10">

@@ -32,6 +32,15 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+
+# runtime data (заявки клиентов и загрузки админки — не для публичного репо)
+/data/orders.json
+/public/uploads/
+/storage/
+
+# local dev logs
+.codex-dev-current.*.log
 
 # vercel
 .vercel

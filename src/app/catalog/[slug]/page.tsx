@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React, { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -24,10 +24,10 @@ const CheckIcon = () => (
 function NotFound() {
   return (
     <div className="container py-24 flex flex-col items-center gap-4 text-center">
-      <p className="text-[18px] font-bold text-gray-900">РўРѕРІР°СЂ РЅРµ РЅР°Р№РґРµРЅ</p>
-      <p className="text-gray-500">Р’РѕР·РјРѕР¶РЅРѕ, РѕРЅ Р±С‹Р» СѓРґР°Р»С‘РЅ РёР»Рё РІС‹ РІРІРµР»Рё РЅРµРІРµСЂРЅС‹Р№ Р°РґСЂРµСЃ.</p>
+      <p className="text-[18px] font-bold text-gray-900">Товар не найден</p>
+      <p className="text-gray-500">Возможно, он был удалён или вы ввели неверный адрес.</p>
       <Link href="/catalog" className="inline-flex items-center gap-2 bg-brand-primary text-white font-semibold text-[14px] px-6 py-3 rounded-full transition-all hover:bg-brand-primary/90">
-        Р’РµСЂРЅСѓС‚СЊСЃСЏ РІ РєР°С‚Р°Р»РѕРі
+        Вернуться в каталог
       </Link>
     </div>
   );
@@ -52,13 +52,13 @@ export default function ProductPage() {
   return (
     <div className="flex flex-col pb-24">
 
-      {/* в”Ђв”Ђ Breadcrumb в”Ђв”Ђ */}
+      {/* ── Breadcrumb ── */}
       <div className="border-b border-gray-100 bg-white">
         <div className="container py-4">
           <nav className="flex items-center gap-1.5 text-[12px] font-semibold text-gray-400 flex-wrap">
-            <Link href="/" className="hover:text-gray-700 transition-colors">Р“Р»Р°РІРЅР°СЏ</Link>
+            <Link href="/" className="hover:text-gray-700 transition-colors">Главная</Link>
             <ChevronRight />
-            <Link href="/catalog" className="hover:text-gray-700 transition-colors">РљР°С‚Р°Р»РѕРі</Link>
+            <Link href="/catalog" className="hover:text-gray-700 transition-colors">Каталог</Link>
             <ChevronRight />
             <Link href={getCategoryPath(product.category)} className="hover:text-gray-700 transition-colors">
               {product.category}
@@ -69,18 +69,18 @@ export default function ProductPage() {
         </div>
       </div>
 
-      {/* в”Ђв”Ђ РћСЃРЅРѕРІРЅРѕР№ Р±Р»РѕРє в”Ђв”Ђ */}
+      {/* ── Основной блок ── */}
       <div className="container pt-8 sm:pt-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16">
 
-          {/* в”Ђ Р›РµРІР°СЏ РєРѕР»РѕРЅРєР°: С„РѕС‚Рѕ в”Ђ */}
+          {/* ─ Левая колонка: фото ─ */}
           <div className="flex flex-col gap-4">
             <div className="relative bg-gradient-to-br from-slate-100 to-slate-200 rounded-3xl overflow-hidden aspect-[4/3]">
               {!imgErr ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={imgSrc}
-                  alt={`${product.name} вЂ” РјРµС‚Р°Р»Р»РѕРїСЂРѕРєР°С‚ РІ Р‘РёС€РєРµРєРµ`}
+                  alt={`${product.name} — металлопрокат в Бишкеке`}
                   onError={() => setImgErr(true)}
                   className="w-full h-full object-cover"
                 />
@@ -93,12 +93,12 @@ export default function ProductPage() {
               )}
               {product.isNew && (
                 <span className="absolute top-4 left-4 px-3 py-1.5 bg-green-500 text-white rounded-full text-[11px] font-bold uppercase tracking-wider shadow-md">
-                  РќРѕРІРёРЅРєР°
+                  Новинка
                 </span>
               )}
             </div>
 
-            {/* Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РјРёРЅРёР°С‚СЋСЂС‹ вЂ” РїР»РµР№СЃС…РѕР»РґРµСЂС‹ */}
+            {/* Дополнительные миниатюры — плейсхолдеры */}
             <div className="flex gap-2 overflow-x-auto -mx-1 px-1 pb-1">
               {[0, 1, 2].map((i) => (
                 <div
@@ -109,7 +109,7 @@ export default function ProductPage() {
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={imgSrc}
-                      alt={`${product.name} вЂ” С„РѕС‚Рѕ ${i + 1}`}
+                      alt={`${product.name} — фото ${i + 1}`}
                       className="w-full h-full object-cover"
                       onError={() => {}}
                     />
@@ -119,30 +119,30 @@ export default function ProductPage() {
             </div>
           </div>
 
-          {/* в”Ђ РџСЂР°РІР°СЏ РєРѕР»РѕРЅРєР°: РёРЅС„РѕСЂРјР°С†РёСЏ в”Ђ */}
+          {/* ─ Правая колонка: информация ─ */}
           <div className="flex flex-col gap-6">
 
-            {/* РљР°С‚РµРіРѕСЂРёСЏ + Р±РµР№РґР¶ */}
+            {/* Категория + бейдж */}
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-[11px] font-bold uppercase tracking-widest text-brand-primary">
                 {product.category}
               </span>
               {product.tags?.map((t) => (
-                <span key={t} className="text-[11px] font-semibold text-gray-400 before:content-['В·'] before:mr-2">{t}</span>
+                <span key={t} className="text-[11px] font-semibold text-gray-400 before:content-['·'] before:mr-2">{t}</span>
               ))}
             </div>
 
-            {/* РќР°Р·РІР°РЅРёРµ */}
+            {/* Название */}
             <h1 className="text-[22px] sm:text-[26px] md:text-[32px] font-bold text-gray-900 tracking-tight leading-snug break-words">
               {product.name}
             </h1>
 
-            {/* РћРїРёСЃР°РЅРёРµ */}
+            {/* Описание */}
             {product.desc && (
               <p className="text-[14px] sm:text-[15px] text-gray-500 leading-relaxed">{product.desc}</p>
             )}
 
-            {/* Р¦РµРЅР° РїРѕ Р·Р°РїСЂРѕСЃСѓ */}
+            {/* Цена по запросу */}
             <div className="flex items-center gap-3 py-4 border-y border-gray-100">
               <div className="w-10 h-10 rounded-xl bg-blue-50 text-brand-primary flex items-center justify-center shrink-0">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
@@ -150,12 +150,12 @@ export default function ProductPage() {
                 </svg>
               </div>
               <div>
-                <p className="text-[15px] font-bold text-gray-900">Р¦РµРЅР° РїРѕ Р·Р°РїСЂРѕСЃСѓ</p>
-                <p className="text-[13px] text-gray-500">РњРµРЅРµРґР¶РµСЂ СЂР°СЃСЃС‡РёС‚Р°РµС‚ РљРџ Р·Р° 30 РјРёРЅСѓС‚</p>
+                <p className="text-[15px] font-bold text-gray-900">Цена по запросу</p>
+                <p className="text-[13px] text-gray-500">Менеджер рассчитает КП за 30 минут</p>
               </div>
             </div>
 
-            {/* Р¤РёС‡Рё */}
+            {/* Фичи */}
             {product.features && product.features.length > 0 && (
               <div className="flex flex-col gap-2.5">
                 {product.features.map((f) => (
@@ -175,7 +175,7 @@ export default function ProductPage() {
                 onClick={openModal}
                 className="flex-1 inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-semibold text-[14px] px-6 py-3.5 rounded-full shadow-sm transition-all"
               >
-                РћСЃС‚Р°РІРёС‚СЊ Р·Р°СЏРІРєСѓ
+                Оставить заявку
               </button>
               <a
                 href={`https://${CONTACTS.whatsapp}`}
@@ -188,15 +188,15 @@ export default function ProductPage() {
               </a>
             </div>
 
-            {/* Р”РѕСЃС‚Р°РІРєР° */}
+            {/* Доставка */}
             <div className="flex flex-col gap-2 pt-2">
               <div className="flex items-center gap-2.5 text-[13px] text-gray-500">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-                РћРїРµСЂР°С‚РёРІРЅР°СЏ РґРѕСЃС‚Р°РІРєР° РїРѕ РІСЃРµРјСѓ РљС‹СЂРіС‹Р·СЃС‚Р°РЅСѓ
+                Оперативная доставка по всему Кыргызстану
               </div>
               <div className="flex items-center gap-2.5 text-[13px] text-gray-500">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                РЎРµСЂС‚РёС„РёРєР°С‚С‹ Р“РћРЎРў Рё РїР°СЃРїРѕСЂС‚ РєР°С‡РµСЃС‚РІР° РІ РєРѕРјРїР»РµРєС‚Рµ
+                Сертификаты ГОСТ и паспорт качества в комплекте
               </div>
             </div>
 
@@ -204,7 +204,7 @@ export default function ProductPage() {
         </div>
       </div>
 
-      {/* в”Ђв”Ђ РҐР°СЂР°РєС‚РµСЂРёСЃС‚РёРєРё в”Ђв”Ђ */}
+      {/* ── Характеристики ── */}
       {product.specs && product.specs.length > 0 && (
         <div className="container mt-12">
           <div className="border border-gray-200 rounded-3xl overflow-hidden">
@@ -212,7 +212,7 @@ export default function ProductPage() {
               onClick={() => setSpecsOpen(!specsOpen)}
               className="w-full flex items-center justify-between px-6 sm:px-8 py-5 bg-gray-50 hover:bg-gray-100 transition-colors"
             >
-              <span className="text-[16px] font-bold text-gray-900">РўРµС…РЅРёС‡РµСЃРєРёРµ С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРєРё</span>
+              <span className="text-[16px] font-bold text-gray-900">Технические характеристики</span>
               <svg
                 width="20" height="20" viewBox="0 0 20 20" fill="none"
                 className={`transition-transform duration-200 ${specsOpen ? "rotate-180" : ""}`}
@@ -234,13 +234,13 @@ export default function ProductPage() {
         </div>
       )}
 
-      {/* в”Ђв”Ђ РџРѕС…РѕР¶РёРµ С‚РѕРІР°СЂС‹ в”Ђв”Ђ */}
+      {/* ── Похожие товары ── */}
       {related.length > 0 && (
         <div className="container mt-14">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-[20px] font-bold text-gray-900">РџРѕС…РѕР¶РёРµ РїРѕР·РёС†РёРё</h2>
+            <h2 className="text-[20px] font-bold text-gray-900">Похожие позиции</h2>
             <Link href="/catalog" className="text-[13px] font-semibold text-gray-500 hover:text-gray-900 transition-colors">
-              Р’РµСЃСЊ РєР°С‚Р°Р»РѕРі в†’
+              Весь каталог →
             </Link>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">

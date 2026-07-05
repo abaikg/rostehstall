@@ -22,7 +22,15 @@ const COMMON_KEYWORDS = [
 ];
 
 export function getSiteUrl() {
-  const rawUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  // 1) Explicit canonical domain (set this once a real domain is purchased).
+  // 2) Vercel's auto-provided production hostname (stable per project, no protocol).
+  // 3) Localhost fallback for local dev.
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  const vercelHost =
+    process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL?.trim() ||
+    process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+
+  const rawUrl = explicit || (vercelHost ? `https://${vercelHost}` : "");
 
   if (!rawUrl) return LOCAL_SITE_URL;
 
@@ -193,14 +201,25 @@ export function breadcrumbJsonLd(items: Array<{ name: string; path: string }>) {
   };
 }
 
+function parsePriceValue(price?: string) {
+  if (!price) return undefined;
+  const digits = price.replace(/[^\d]/g, "");
+  if (!digits) return undefined;
+  const value = Number(digits);
+  return Number.isFinite(value) && value > 0 ? value : undefined;
+}
+
 export function productJsonLd(product: Product) {
+  const url = absoluteUrl(`/catalog/${product.slug}`);
+  const priceValue = parsePriceValue(product.price);
+
   return {
     "@type": "Product",
-    "@id": `${absoluteUrl(`/catalog/${product.slug}`)}#product`,
+    "@id": `${url}#product`,
     name: product.name,
     description: truncateMeta(product.desc ?? `${product.name} в каталоге Ростехсталь.`, 500),
     image: absoluteUrl(getProductImage(product)),
-    url: absoluteUrl(`/catalog/${product.slug}`),
+    url,
     category: product.category,
     brand: {
       "@type": "Brand",
@@ -211,6 +230,21 @@ export function productJsonLd(product: Product) {
       name: spec.label,
       value: spec.value,
     })),
+    // Only emit an Offer when there's a real price — an Offer без цены
+    // triggers Google rich-result warnings.
+    ...(priceValue
+      ? {
+          offers: {
+            "@type": "Offer",
+            url,
+            priceCurrency: "KGS",
+            price: priceValue,
+            availability: "https://schema.org/InStock",
+            itemCondition: "https://schema.org/NewCondition",
+            seller: { "@id": `${getSiteUrl()}/#organization` },
+          },
+        }
+      : {}),
   };
 }
 

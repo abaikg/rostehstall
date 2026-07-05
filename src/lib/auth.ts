@@ -1,7 +1,19 @@
 import crypto from "crypto";
 
-const SECRET = process.env.ADMIN_SECRET ?? "change-this-secret-in-production";
-const SALT   = process.env.ADMIN_SALT   ?? "change-this-salt-in-production";
+// В production все секреты обязаны быть заданы через окружение —
+// падаем сразу с понятной ошибкой вместо тихого небезопасного fallback.
+function requiredEnv(name: string, devFallback: string): string {
+  const value = process.env[name];
+  if (value) return value;
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(`Переменная окружения ${name} обязательна в production (см. .env.example)`);
+  }
+  return devFallback;
+}
+
+// Fallback-значения согласованы с src/middleware.ts (edge-верификация токена)
+const SECRET = requiredEnv("ADMIN_SECRET", "dev-only-secret");
+const SALT   = requiredEnv("ADMIN_SALT", "dev-only-salt");
 const SESSION_TTL = 7 * 24 * 60 * 60 * 1000; // 7 дней
 
 // ── Rate limiting (in-memory, сбрасывается при рестарте) ────────────────────
@@ -51,7 +63,9 @@ export function verifyPassword(input: string): boolean {
   // иначе хэшируем ADMIN_PASSWORD на лету
   const stored = process.env.ADMIN_PASSWORD_HASH
     ? Buffer.from(process.env.ADMIN_PASSWORD_HASH, "hex")
-    : crypto.createHmac("sha256", SALT).update(process.env.ADMIN_PASSWORD ?? "admin123").digest();
+    : crypto.createHmac("sha256", SALT)
+        .update(requiredEnv("ADMIN_PASSWORD", "admin123"))
+        .digest();
 
   try {
     return crypto.timingSafeEqual(inputHash, stored);

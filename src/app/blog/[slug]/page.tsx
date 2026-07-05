@@ -47,6 +47,11 @@ function slugifyHeading(text: string): string {
 /* ═════════════ Markdown rendering ═════════════ */
 function mdInline(text: string): string {
   return text
+    // [текст](/path) — внутренние ссылки для перелинковки (SEO)
+    .replace(
+      /\[([^\]]+)\]\(([^)]+)\)/g,
+      '<a href="$2" class="text-brand-primary font-semibold underline underline-offset-2 decoration-brand-primary/30 hover:decoration-brand-primary transition-colors">$1</a>'
+    )
     .replace(/\*\*(.*?)\*\*/g, "<strong class='font-bold text-gray-900'>$1</strong>")
     .replace(/\*(.*?)\*/g, "<em class='italic'>$1</em>")
     .replace(/`(.*?)`/g, '<code class="bg-blue-50 text-brand-primary px-1.5 py-0.5 rounded text-[0.9em] font-mono">$1</code>');
