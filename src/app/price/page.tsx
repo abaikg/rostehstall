@@ -12,9 +12,9 @@ import {
 } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Прайс-лист на металлопрокат в Бишкеке — цены Ростехсталь",
+  title: "Прайс-лист на металлопрокат в Бишкеке — Ростехсталь",
   description:
-    "Актуальные цены на металлопрокат в Бишкеке: арматура, профильная труба, лист, швеллер, уголок. Прайс-лист Ростехсталь со склада, резка и доставка по Кыргызстану.",
+    "Прайс-лист на металлопрокат в Бишкеке: арматура, профильная труба, лист, швеллер, уголок со склада. Актуальную цену пришлём в WhatsApp за 5 минут — резка и доставка по Кыргызстану.",
   path: "/price",
   keywords: [
     "прайс металлопрокат Бишкек",
@@ -27,9 +27,9 @@ export const metadata: Metadata = buildMetadata({
 
 const PRICE_FAQ = [
   {
-    question: "Цены в прайсе актуальны?",
+    question: "Почему цены не указаны на сайте?",
     answer:
-      "Мы обновляем прайс при изменении заводских цен. Курс и рынок металла подвижны, поэтому перед заказом менеджер подтверждает финальную цену и фиксирует её в счёте.",
+      "Рынок металла подвижен: заводские цены и курс меняются еженедельно, а финальная цена зависит от объёма. Чтобы не вводить в заблуждение устаревшими цифрами, мы присылаем актуальный прайс в WhatsApp за 5 минут и фиксируем цену в счёте.",
   },
   {
     question: "Есть ли скидки от объёма?",
@@ -37,9 +37,9 @@ const PRICE_FAQ = [
       "Да, при заказе от 1 тонны действует гибкая система скидок. Для строительных компаний и постоянных клиентов — индивидуальные условия и отсрочка по договору.",
   },
   {
-    question: "Цена указана с доставкой?",
+    question: "Цена будет с доставкой?",
     answer:
-      "В прайсе указана цена со склада в Бишкеке. Доставку по городу и регионам Кыргызстана рассчитываем отдельно по тоннажу и маршруту — менеджер назовёт сумму сразу в КП.",
+      "Менеджер считает цену со склада в Бишкеке, а доставку по городу и регионам Кыргызстана — отдельно по тоннажу и маршруту. Обе суммы вы увидите сразу в коммерческом предложении.",
   },
 ];
 
@@ -47,7 +47,7 @@ export default function PricePage() {
   const grouped = CATEGORY_LIST
     .map(({ name }) => ({
       category: name,
-      items: products.filter((product) => product.category === name && product.price),
+      items: products.filter((product) => product.category === name),
     }))
     .filter((group) => group.items.length > 0);
 
@@ -58,19 +58,21 @@ export default function PricePage() {
     ]),
     faqPageJsonLd(PRICE_FAQ),
     {
-      "@type": "OfferCatalog",
+      "@type": "CollectionPage",
       "@id": `${absoluteUrl("/price")}#pricelist`,
       name: "Прайс-лист на металлопрокат — Ростехсталь, Бишкек",
       url: absoluteUrl("/price"),
-      itemListElement: grouped.flatMap((group) =>
-        group.items.map((product) => ({
-          "@type": "Offer",
-          itemOffered: { "@type": "Product", name: product.name, url: absoluteUrl(`/catalog/${product.slug}`) },
-          price: Number(product.price!.replace(/[^\d]/g, "")),
-          priceCurrency: "KGS",
-          availability: "https://schema.org/InStock",
-        }))
-      ),
+      mainEntity: {
+        "@type": "ItemList",
+        itemListElement: grouped.flatMap((group, groupIndex) =>
+          group.items.map((product, index) => ({
+            "@type": "ListItem",
+            position: groupIndex * 100 + index + 1,
+            name: product.name,
+            url: absoluteUrl(`/catalog/${product.slug}`),
+          }))
+        ),
+      },
     },
   ]);
 
@@ -91,9 +93,9 @@ export default function PricePage() {
               Цены на металлопрокат в Бишкеке
             </h1>
             <p className="text-[14px] sm:text-[16px] text-gray-500 leading-relaxed">
-              Актуальный прайс-лист Ростехсталь: арматура, трубы, лист, швеллер и уголок со склада в Бишкеке.
-              Цены за тонну, честный вес, резка под размер и доставка по всему Кыргызстану.
-              Финальную цену под ваш объём менеджер зафиксирует в коммерческом предложении.
+              Прайс-лист Ростехсталь: арматура, трубы, лист, швеллер и уголок со склада в Бишкеке.
+              Рынок металла меняется еженедельно, поэтому актуальную цену под ваш объём присылаем
+              в WhatsApp за 5 минут — с честным весом, резкой под размер и доставкой по всему Кыргызстану.
             </p>
           </div>
           <PriceActions />
@@ -108,13 +110,11 @@ export default function PricePage() {
               {group.category}
             </h2>
             <div className="overflow-x-auto rounded-2xl border border-gray-200">
-              <table className="w-full min-w-[560px] text-left">
+              <table className="w-full min-w-[480px] text-left">
                 <thead>
                   <tr className="bg-gray-50 text-[11px] font-bold uppercase tracking-wider text-gray-400">
                     <th className="px-4 py-3 sm:px-5">Наименование</th>
-                    <th className="px-4 py-3 sm:px-5 w-[150px]">Цена</th>
-                    <th className="px-4 py-3 sm:px-5 w-[110px]">Ед.</th>
-                    <th className="px-4 py-3 sm:px-5 w-[180px]" />
+                    <th className="px-4 py-3 sm:px-5 w-[240px]">Цена</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -127,12 +127,6 @@ export default function PricePage() {
                         >
                           {product.name}
                         </Link>
-                      </td>
-                      <td className="px-4 py-3 sm:px-5 whitespace-nowrap text-[14px] font-bold text-gray-900">
-                        {product.price}
-                      </td>
-                      <td className="px-4 py-3 sm:px-5 whitespace-nowrap text-[12px] font-medium text-gray-500">
-                        {product.priceUnit ?? "сом"}
                       </td>
                       <td className="px-4 py-3 sm:px-5 text-right">
                         <PriceRowCta productName={product.name} />

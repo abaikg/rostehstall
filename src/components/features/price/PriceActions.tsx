@@ -37,7 +37,7 @@ export const PriceActions = () => {
   );
 };
 
-/** Кнопка «Запросить цену» в строке прайс-таблицы */
+/** Кнопки в строке прайс-таблицы: цена по запросу в WhatsApp или заявкой */
 export const PriceRowCta = ({ productName }: { productName: string }) => {
   const { openModal } = useOrderModal();
 
@@ -47,10 +47,9 @@ export const PriceRowCta = ({ productName }: { productName: string }) => {
         href={waLink(`Здравствуйте! Интересует: ${productName}. Подскажите цену и наличие.`)}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`Спросить в WhatsApp: ${productName}`}
-        className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-green-50 text-green-600 transition-colors hover:bg-green-500 hover:text-white"
+        className="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-3.5 py-1.5 text-[12px] font-semibold text-green-700 transition-colors hover:bg-green-500 hover:text-white"
       >
-        <WhatsAppIcon size={14} />
+        <WhatsAppIcon size={13} /> Цена в WhatsApp
       </a>
       <button
         type="button"

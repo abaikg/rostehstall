@@ -201,17 +201,8 @@ export function breadcrumbJsonLd(items: Array<{ name: string; path: string }>) {
   };
 }
 
-function parsePriceValue(price?: string) {
-  if (!price) return undefined;
-  const digits = price.replace(/[^\d]/g, "");
-  if (!digits) return undefined;
-  const value = Number(digits);
-  return Number.isFinite(value) && value > 0 ? value : undefined;
-}
-
 export function productJsonLd(product: Product) {
   const url = absoluteUrl(`/catalog/${product.slug}`);
-  const priceValue = parsePriceValue(product.price);
 
   return {
     "@type": "Product",
@@ -230,21 +221,8 @@ export function productJsonLd(product: Product) {
       name: spec.label,
       value: spec.value,
     })),
-    // Only emit an Offer when there's a real price — an Offer без цены
-    // triggers Google rich-result warnings.
-    ...(priceValue
-      ? {
-          offers: {
-            "@type": "Offer",
-            url,
-            priceCurrency: "KGS",
-            price: priceValue,
-            availability: "https://schema.org/InStock",
-            itemCondition: "https://schema.org/NewCondition",
-            seller: { "@id": `${getSiteUrl()}/#organization` },
-          },
-        }
-      : {}),
+    // Цены на сайте скрыты (по запросу в WhatsApp) — Offer не размечаем,
+    // чтобы не публиковать устаревшие цифры в поисковой выдаче.
   };
 }
 
