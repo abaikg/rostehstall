@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useOrderModal } from "@/context/ModalContext";
 
 const ChevronRight = () => (
@@ -63,45 +62,6 @@ const MILESTONES = [
   { year: "2020", title: "Выход на новые рынки", desc: "Начали поставки в Казахстан и Узбекистан, оборот превысил 1 млрд сом." },
   { year: "2022", title: "Новый складской комплекс", desc: "Открыли современный склад 8 000 м² с автоматизированным учётом и резкой металла." },
   { year: "2024", title: "Развитие и масштабирование", desc: "50 000+ тонн поставлено, более 5 000 постоянных клиентов по всей стране." },
-];
-
-const TEAM = [
-  {
-    name: "Алексей Петров",
-    role: "Генеральный директор",
-    photo: "https://randomuser.me/api/portraits/men/32.jpg",
-    desc: "Основатель компании. Более 15 лет в металлоторговле, выстроил прямые партнёрства с заводами РФ и Казахстана.",
-  },
-  {
-    name: "Дмитрий Ковалёв",
-    role: "Коммерческий директор",
-    photo: "https://randomuser.me/api/portraits/men/45.jpg",
-    desc: "Отвечает за ценообразование и стратегические поставки. Обеспечивает конкурентные условия для ключевых клиентов.",
-  },
-  {
-    name: "Айгуль Сатыбалдиева",
-    role: "Руководитель отдела продаж",
-    photo: "https://randomuser.me/api/portraits/women/44.jpg",
-    desc: "Управляет командой менеджеров. Контролирует скорость обработки заявок и качество коммерческих предложений.",
-  },
-  {
-    name: "Сергей Мамонтов",
-    role: "Начальник складского комплекса",
-    photo: "https://randomuser.me/api/portraits/men/67.jpg",
-    desc: "Отвечает за учёт, хранение и отгрузку металлопроката. Обеспечивает точность веса и комплектности каждого заказа.",
-  },
-  {
-    name: "Нурлан Исаков",
-    role: "Руководитель логистики",
-    photo: "https://randomuser.me/api/portraits/men/54.jpg",
-    desc: "Координирует отдел доставки. Организует транспортировку металлопроката по всему Кыргызстану в оговорённые сроки.",
-  },
-  {
-    name: "Елена Жукова",
-    role: "Главный бухгалтер",
-    photo: "https://randomuser.me/api/portraits/women/68.jpg",
-    desc: "Обеспечивает прозрачность финансового документооборота, ЭДО и оперативную выдачу ЭСФ и актов сверок.",
-  },
 ];
 
 export default function AboutPage() {
@@ -270,44 +230,6 @@ export default function AboutPage() {
                 <span className="text-[13px] font-bold text-brand-primary">{m.year}</span>
                 <h3 className="text-[15px] font-bold text-gray-900">{m.title}</h3>
                 <p className="text-[13px] text-gray-500 leading-relaxed">{m.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Команда ── */}
-      <div className="py-16 sm:py-20 border-b border-gray-100">
-        <div className="container flex flex-col gap-10">
-          <div className="flex flex-col gap-2">
-            <span className="text-[11px] font-bold uppercase tracking-widest text-brand-primary">Люди компании</span>
-            <h2 className="text-[22px] sm:text-[28px] md:text-[34px] font-bold tracking-tight text-gray-900">
-              Наша команда
-            </h2>
-            <p className="text-[14px] sm:text-[15px] text-gray-500 max-w-xl leading-relaxed">
-              Профессионалы с многолетним опытом в металлоторговле, логистике и обслуживании клиентов.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {TEAM.map((member, i) => (
-              <div key={i} className="group bg-white border border-gray-200 hover:border-gray-300 hover:shadow-md rounded-2xl p-6 flex flex-col gap-4 transition-all duration-200">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-2xl overflow-hidden bg-gray-100 shrink-0 ring-2 ring-gray-100 group-hover:ring-brand-primary/25 transition-all">
-                    <Image
-                      src={member.photo}
-                      alt={member.name}
-                      width={56}
-                      height={56}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-[15px] font-bold text-gray-900 leading-snug">{member.name}</p>
-                    <p className="text-[12px] font-semibold text-brand-primary mt-0.5">{member.role}</p>
-                  </div>
-                </div>
-                <p className="text-[13px] text-gray-500 leading-relaxed">{member.desc}</p>
               </div>
             ))}
           </div>
