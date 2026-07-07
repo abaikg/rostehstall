@@ -10,6 +10,7 @@ import { CalculationInputs, CalculatorPreset, MaterialCode, MaterialGradeCode, P
 import { CalculatorForm } from "./CalculatorForm";
 import { CalculatorResult } from "./CalculatorResult";
 import { ProductDiagram } from "./ProductDiagram";
+import { useOrderModal } from "@/context/ModalContext";
 
 interface MetalCalculatorProps {
   defaultMaterial?: MaterialCode;
@@ -101,6 +102,40 @@ export const MetalCalculator = ({
 
   const { entries: history, addEntry, removeEntry, clearHistory } = useCalcHistory();
   const [historyOpen, setHistoryOpen] = useState(false);
+  const { openModal } = useOrderModal();
+
+  // Хук-конверсия: заявка с готовой номенклатурой из расчёта
+  const orderFromResult = () => {
+    const dims = formatDims(inputs);
+    const summary = [
+      result.productName,
+      dims,
+      inputs.mode === "weight_by_dimensions"
+        ? `L = ${fmtNum(inputs.values.length)} м — ${fmtNum(result.value)} кг`
+        : `${fmtNum(inputs.values.weight)} кг — ${fmtNum(result.value)} м`,
+    ]
+      .filter(Boolean)
+      .join(", ");
+    openModal({
+      productLabel: summary,
+      materialName: [result.materialName, result.gradeName].filter(Boolean).join(" "),
+    });
+  };
+
+  const resultCta = result.isCalculated && !result.error && (
+    <div className="flex flex-col items-center gap-1.5 px-5 pb-5 sm:px-8">
+      <button
+        type="button"
+        onClick={orderFromResult}
+        className="h-11 w-full max-w-[360px] rounded-full bg-brand-accent text-[12px] font-bold uppercase tracking-[0.14em] text-white shadow-sm transition-all hover:brightness-110 active:scale-[0.99]"
+      >
+        Узнать цену на этот металл
+      </button>
+      <span className="text-[11px] font-medium text-gray-400">
+        Расчёт подставится в заявку — менеджер ответит с ценой за 30 минут
+      </span>
+    </div>
+  );
 
   const handleCalculate = () => {
     if (draftResult.isCalculated && !draftResult.error) {
@@ -382,6 +417,7 @@ export const MetalCalculator = ({
       {(result.isCalculated || result.error) && (
         <div className="bg-gray-50">
           <CalculatorResult compact result={result} />
+          {resultCta}
         </div>
       )}
 
@@ -532,6 +568,7 @@ export const MetalCalculator = ({
           {(result.isCalculated || result.error) && (
             <div className="bg-gray-50/70">
               <CalculatorResult result={result} />
+              {resultCta}
             </div>
           )}
 

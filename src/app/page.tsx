@@ -5,6 +5,8 @@ import { products, Product } from "@/data/catalog";
 import { ProductCard } from "@/components/features/catalog/ProductCard";
 import { useOrderModal } from "@/context/ModalContext";
 import { CONTACTS } from "@/lib/constants";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { faqPageJsonLd, jsonLdGraph } from "@/lib/seo";
 
 /* ── Иконки ── */
 const ArrowRight = ({ size = 16 }: { size?: number }) => (
@@ -27,6 +29,40 @@ const PhoneCallIcon = () => (
     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 5.49 5.49l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
   </svg>
 );
+
+/* ── FAQ главной: живой блок + FAQPage-разметка для сниппетов в поиске ── */
+const HOME_FAQ = [
+  {
+    question: "Где купить металлопрокат в Бишкеке с доставкой?",
+    answer:
+      "Ростехсталь — металлобаза в Бишкеке с 1000+ позициями на складе: арматура, профильная и круглая труба, лист, швеллер, уголок, балка. Доставляем по Бишкеку и всем регионам Кыргызстана собственным транспортом, отгрузка в день оплаты.",
+  },
+  {
+    question: "Сколько стоит арматура и профильная труба?",
+    answer:
+      "Актуальные цены со склада публикуем на странице «Прайс». Цена зависит от объёма: от 1 тонны действуют скидки, для строительных компаний — индивидуальные условия. Финальную цену менеджер фиксирует в коммерческом предложении за 30 минут.",
+  },
+  {
+    question: "Есть ли резка металла под размер?",
+    answer:
+      "Да, режем металлопрокат под ваши проектные размеры: трубы, арматуру, лист, сортовой прокат. Это экономит транспорт и время на объекте — привозим готовые к монтажу отрезки.",
+  },
+  {
+    question: "Металл сертифицирован?",
+    answer:
+      "Весь металлопрокат поставляется напрямую с заводов РФ и Казахстана с паспортами качества и сертификатами ГОСТ. Для сейсмоопасного региона это критично: несём ответственность за каждую партию.",
+  },
+  {
+    question: "Как быстро посчитать вес и стоимость металла?",
+    answer:
+      "Воспользуйтесь онлайн-калькулятором металла на сайте: выбираете прокат, размеры или номер по ГОСТ — получаете точный вес. Одним кликом из расчёта отправляется заявка, и менеджер отвечает с ценой.",
+  },
+  {
+    question: "Работаете с юридическими лицами и по безналу?",
+    answer:
+      "Да, работаем с ОсОО, ИП и госорганизациями: безналичный расчёт, ЭСФ, договор поставки, отсрочка для постоянных клиентов. Бухгалтерские документы выдаём сразу при отгрузке.",
+  },
+];
 
 /* ── Данные ── */
 const STATS = [
@@ -108,6 +144,7 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col pb-0 font-sans">
+      <JsonLd id="home-faq-jsonld" data={jsonLdGraph([faqPageJsonLd(HOME_FAQ)])} />
 
       {/* ═══════════ HERO ═══════════ */}
       <section className="relative isolate pt-12 sm:pt-20 pb-20 sm:pb-28 overflow-hidden">
@@ -419,6 +456,26 @@ export default function HomePage() {
             >
               <WhatsAppIcon /> {CONTACTS.whatsappPhone}
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ FAQ (SEO: FAQPage schema) ═══════════ */}
+      <section className="py-14 sm:py-20 border-t border-gray-100">
+        <div className="container flex flex-col gap-8">
+          <div className="flex flex-col gap-2 max-w-2xl">
+            <span className="text-[11px] font-bold uppercase tracking-widest text-brand-primary">Частые вопросы</span>
+            <h2 className="text-[22px] sm:text-[28px] md:text-[34px] font-bold tracking-tight text-gray-900">
+              Вопросы о покупке металлопроката в Бишкеке
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {HOME_FAQ.map((faq) => (
+              <div key={faq.question} className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col gap-2.5">
+                <h3 className="text-[15px] font-bold text-gray-900 leading-snug">{faq.question}</h3>
+                <p className="text-[13px] sm:text-[14px] text-gray-500 leading-relaxed">{faq.answer}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
