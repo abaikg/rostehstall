@@ -178,7 +178,7 @@ export default function ProductPage() {
                 Оставить заявку
               </button>
               <a
-                href={`https://${CONTACTS.whatsapp}`}
+                href={`https://${CONTACTS.whatsapp}?text=${encodeURIComponent(`Здравствуйте! Интересует: ${product.name}. Подскажите цену и наличие.`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#22c55e] text-white font-semibold text-[14px] px-6 py-3.5 rounded-full transition-all"
