@@ -49,7 +49,7 @@ export const PriceRowCta = ({ productName }: { productName: string }) => {
         rel="noopener noreferrer"
         className="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-3.5 py-1.5 text-[12px] font-semibold text-green-700 transition-colors hover:bg-green-500 hover:text-white"
       >
-        <WhatsAppIcon size={13} /> Цена в WhatsApp
+        <WhatsAppIcon size={13} /> Написать WhatsApp
       </a>
       <button
         type="button"

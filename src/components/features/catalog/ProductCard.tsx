@@ -93,14 +93,14 @@ export const ProductCard = ({ product, hideSize = false, hideMeta = false }: Pro
           <span
             role="button"
             tabIndex={0}
-            aria-label={`Узнать цену в WhatsApp: ${productName}`}
+            aria-label={`Написать в WhatsApp: ${productName}`}
             onClick={openWhatsApp}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") openWhatsApp(e);
             }}
             className="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-3 py-1.5 text-[12px] font-semibold text-green-700 transition-colors hover:bg-green-500 hover:text-white"
           >
-            <WhatsAppIcon /> Цена в WhatsApp
+            <WhatsAppIcon /> Написать WhatsApp
           </span>
           <div className="w-7 h-7 rounded-full bg-gray-100 group-hover:bg-brand-primary group-hover:text-white transition-all flex items-center justify-center text-gray-400 shrink-0">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
