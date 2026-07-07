@@ -23,17 +23,18 @@ export type MaterialGradeCode =
   | 's1'
   | 'sch20';
 
-export type ProductCode = 
-  | 'sheet' 
-  | 'rod' 
-  | 'square' 
-  | 'hex' 
-  | 'pipe_round' 
-  | 'pipe_profile' 
-  | 'rebar' 
-  | 'strip' 
+export type ProductCode =
+  | 'sheet'
+  | 'rod'
+  | 'square'
+  | 'hex'
+  | 'pipe_round'
+  | 'pipe_profile'
+  | 'rebar'
+  | 'strip'
   | 'angle'
-  | 'channel';
+  | 'channel'
+  | 'beam';
 
 export type CalculatorMode = 'weight_by_dimensions' | 'length_by_weight';
 
@@ -74,6 +75,9 @@ export interface CalculationInputs {
   product: ProductCode;
   mode: CalculatorMode;
   values: Partial<Record<InputFieldKey, number>>;
+  // Номер табличной позиции по ГОСТ (двутавр/швеллер); если задан —
+  // вес берётся из таблицы, а не из формулы
+  section?: string;
 }
 
 export type PresetSource = 'google_doc' | 'catalog';

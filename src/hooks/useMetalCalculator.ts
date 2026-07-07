@@ -14,6 +14,7 @@ import { calculateWeight, calculateLength } from "@/lib/metal-calculator/formula
 import { validateInputs } from "@/lib/metal-calculator/validation/validateInputs";
 import { MATERIALS, MATERIAL_GRADES, getDefaultGrade } from "@/lib/metal-calculator/config/materials";
 import { PRODUCTS } from "@/lib/metal-calculator/config/products";
+import { getSection, getSections, isSectionProduct } from "@/lib/metal-calculator/config/sections";
 
 interface UseMetalCalculatorProps {
   defaultMaterial?: MaterialCode;
@@ -56,13 +57,45 @@ export const useMetalCalculator = ({
     setActivePresetId(null);
     setInputs((prev) => ({
       ...prev,
+      // Ручная правка размеров переводит табличный прокат в режим формулы
+      section: key === "length" || key === "weight" ? prev.section : undefined,
       values: { ...prev.values, [key]: value },
     }));
   }, []);
 
+  const setSection = useCallback((code: string) => {
+    setActivePresetId(null);
+    setInputs((prev) => {
+      const sectionConfig = getSection(prev.product, code);
+      if (!sectionConfig) return { ...prev, section: undefined };
+      return {
+        ...prev,
+        section: code,
+        // Размеры из таблицы — для схемы и полей формы
+        values: {
+          ...prev.values,
+          sideA: sectionConfig.h,
+          sideB: sectionConfig.b,
+          thickness: sectionConfig.s,
+        },
+      };
+    });
+  }, []);
+
   const setMaterial = useCallback((material: MaterialCode) => {
     setActivePresetId(null);
-    setInputs((prev) => ({ ...prev, material, grade: getDefaultGrade(material) }));
+    setInputs((prev) => {
+      // ГОСТ-номера двутавра/швеллера нормированы для стали — при уходе
+      // с чёрного металла переключаем табличный прокат на лист
+      const leavesSteel = material !== "steel" && isSectionProduct(prev.product);
+      return {
+        ...prev,
+        material,
+        grade: getDefaultGrade(material),
+        product: leavesSteel ? "sheet" : prev.product,
+        section: leavesSteel ? undefined : prev.section,
+      };
+    });
   }, []);
 
   const setGrade = useCallback((grade: MaterialGradeCode) => {
@@ -71,7 +104,19 @@ export const useMetalCalculator = ({
 
   const setProduct = useCallback((product: ProductCode) => {
     setActivePresetId(null);
-    setInputs((prev) => ({ ...prev, product, grade: getDefaultGrade(prev.material) }));
+    setInputs((prev) => {
+      // Для табличного проката сразу подставляем первый номер по ГОСТ
+      const defaultSection = isSectionProduct(product) ? getSections(product)[0] : undefined;
+      return {
+        ...prev,
+        product,
+        grade: getDefaultGrade(prev.material),
+        section: defaultSection?.code,
+        values: defaultSection
+          ? { ...prev.values, sideA: defaultSection.h, sideB: defaultSection.b, thickness: defaultSection.s }
+          : prev.values,
+      };
+    });
   }, []);
 
   const setMode = useCallback((mode: CalculatorMode) => {
@@ -90,6 +135,7 @@ export const useMetalCalculator = ({
       material: preset.materialCode,
       grade: preset.gradeCode ?? getDefaultGrade(preset.materialCode),
       product: preset.productCode,
+      section: undefined,
       values: {
         ...DEFAULT_VALUES,
         length: prev.values.length ?? 1,
@@ -97,6 +143,12 @@ export const useMetalCalculator = ({
         ...preset.presetValues,
       },
     }));
+  }, []);
+
+  // Восстановление сохранённого расчёта (история)
+  const restoreInputs = useCallback((saved: CalculationInputs) => {
+    setActivePresetId(null);
+    setInputs({ ...saved, values: { ...saved.values } });
   }, []);
 
   const reset = useCallback(() => {
@@ -148,7 +200,9 @@ export const useMetalCalculator = ({
       length,
       materialName: MATERIALS[inputs.material].name,
       gradeName: inputs.grade ? MATERIAL_GRADES[inputs.grade]?.name : undefined,
-      productName: PRODUCTS[inputs.product].label,
+      productName: inputs.section
+        ? `${PRODUCTS[inputs.product].label} ${getSection(inputs.product, inputs.section)?.label ?? inputs.section}`
+        : PRODUCTS[inputs.product].label,
       sheetWeight,
       area,
       isCalculated: true,
@@ -172,9 +226,11 @@ export const useMetalCalculator = ({
     setMaterial,
     setGrade,
     setProduct,
+    setSection,
     setMode,
     calculate,
     applyPreset,
+    restoreInputs,
     reset,
   };
 };

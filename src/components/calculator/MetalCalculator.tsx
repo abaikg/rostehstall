@@ -1,12 +1,15 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useMetalCalculator } from "@/hooks/useMetalCalculator";
+import { useCalcHistory, CalcHistoryEntry } from "@/hooks/useCalcHistory";
 import { CALCULATOR_PRESETS } from "@/lib/metal-calculator/config/presets";
 import { MATERIAL_LIST, getGradesByMaterial } from "@/lib/metal-calculator/config/materials";
 import { PRODUCT_LIST, PRODUCTS } from "@/lib/metal-calculator/config/products";
-import { CalculatorPreset, MaterialCode, MaterialGradeCode, ProductCode } from "@/lib/metal-calculator/types";
+import { getSections, isSectionProduct } from "@/lib/metal-calculator/config/sections";
+import { CalculationInputs, CalculatorPreset, MaterialCode, MaterialGradeCode, ProductCode } from "@/lib/metal-calculator/types";
 import { CalculatorForm } from "./CalculatorForm";
 import { CalculatorResult } from "./CalculatorResult";
+import { ProductDiagram } from "./ProductDiagram";
 
 interface MetalCalculatorProps {
   defaultMaterial?: MaterialCode;
@@ -50,7 +53,29 @@ const SORTAMENT_ORDER: ProductCode[] = [
   "sheet",
   "angle",
   "channel",
+  "beam",
 ];
+
+const formatDims = (inputs: CalculationInputs): string => {
+  const v = inputs.values;
+  if (inputs.section) return ""; // номер уже в названии («Швеллер №10У»)
+  switch (inputs.product) {
+    case "pipe_round": return `Ø${fmtNum(v.diameter)}×${fmtNum(v.thickness)}`;
+    case "pipe_profile": return `${fmtNum(v.sideA)}×${fmtNum(v.sideB)}×${fmtNum(v.thickness)}`;
+    case "sheet":
+    case "strip": return `${fmtNum(v.thickness)}×${fmtNum(v.width)}`;
+    case "rod":
+    case "rebar": return `Ø${fmtNum(v.diameter)}`;
+    case "square": return `${fmtNum(v.sideA)}`;
+    case "hex": return `S${fmtNum(v.diameter)}`;
+    case "angle":
+    case "channel": return `${fmtNum(v.sideA)}×${fmtNum(v.sideB)}×${fmtNum(v.thickness)}`;
+    default: return "";
+  }
+};
+
+const fmtNum = (value?: number) =>
+  value === undefined || Number.isNaN(value) ? "?" : value.toLocaleString("ru-RU", { maximumFractionDigits: 2 });
 
 export const MetalCalculator = ({
   defaultMaterial,
@@ -60,16 +85,41 @@ export const MetalCalculator = ({
   const {
     inputs,
     result,
+    draftResult,
     errors,
     activePresetId,
     handleInputChange,
     setMaterial,
     setGrade,
     setProduct,
+    setSection,
     setMode,
     calculate,
     applyPreset,
+    restoreInputs,
   } = useMetalCalculator({ defaultMaterial, defaultProduct, onCalculated });
+
+  const { entries: history, addEntry, removeEntry, clearHistory } = useCalcHistory();
+  const [historyOpen, setHistoryOpen] = useState(false);
+
+  const handleCalculate = () => {
+    if (draftResult.isCalculated && !draftResult.error) {
+      const title = [draftResult.productName, formatDims(inputs), draftResult.gradeName]
+        .filter(Boolean)
+        .join(" · ");
+      const resultText =
+        inputs.mode === "weight_by_dimensions"
+          ? `${fmtNum(draftResult.value)} кг (L = ${fmtNum(inputs.values.length)} м)`
+          : `${fmtNum(draftResult.value)} м (${fmtNum(inputs.values.weight)} кг)`;
+      addEntry({ title, result: resultText, inputs });
+    }
+    calculate();
+  };
+
+  const restoreFromHistory = (entry: CalcHistoryEntry) => {
+    restoreInputs(entry.inputs);
+    setHistoryOpen(false);
+  };
 
   const productConfig = PRODUCTS[inputs.product];
   const gradeList = getGradesByMaterial(inputs.material);
@@ -88,11 +138,26 @@ export const MetalCalculator = ({
     }))
     .filter((group) => group.items.length > 0);
   const allPresetGroups = [...presetGroups, ...remainingPresetGroups];
+  // Табличный прокат (двутавр) попадает в список сортамента без пресетов
+  SORTAMENT_ORDER.forEach((productCode) => {
+    if (isSectionProduct(productCode) && !allPresetGroups.some((group) => group.product.code === productCode)) {
+      allPresetGroups.push({ product: PRODUCTS[productCode], items: [] });
+    }
+  });
   const activeGroupItems = CALCULATOR_PRESETS.filter((preset) => preset.productCode === inputs.product);
   const activePresetValue = activePresetId && activeGroupItems.some((preset) => preset.id === activePresetId)
     ? activePresetId
     : "";
+  const sectionList = getSections(inputs.product);
+  const isTableProduct = sectionList.length > 0;
   const applyProductOnMobile = (productCode: ProductCode) => {
+    // Номера двутавра/швеллера нормированы по ГОСТ для стали
+    if (isSectionProduct(productCode)) {
+      if (inputs.material !== "steel") setMaterial("steel");
+      setProduct(productCode);
+      return;
+    }
+
     const firstPreset = CALCULATOR_PRESETS.find((preset) => preset.productCode === productCode);
 
     if (firstPreset) {
@@ -102,6 +167,94 @@ export const MetalCalculator = ({
 
     setProduct(productCode);
   };
+
+  const sectionSelect = (compact: boolean) => (
+    <label className="flex flex-col gap-1.5">
+      <span className={`${compact ? "text-[13px]" : "text-[13px]"} font-bold text-gray-950`}>
+        Номер по ГОСТ
+      </span>
+      <select
+        value={inputs.section ?? ""}
+        onChange={(event) => setSection(event.target.value)}
+        className={`${compact ? "h-10 text-[13px]" : "h-10 text-[14px] font-semibold"} w-full rounded-xl bg-gray-50 px-3 font-medium text-gray-900 outline-none focus:bg-white focus:ring-4 focus:ring-brand-primary/10`}
+      >
+        {!inputs.section && <option value="">Выберите номер</option>}
+        {sectionList.map((section) => (
+          <option key={section.code} value={section.code}>
+            {section.label} — {section.kgm.toLocaleString("ru-RU")} кг/м
+          </option>
+        ))}
+      </select>
+      {inputs.product === "channel" && !inputs.section && (
+        <span className="text-[11px] font-medium text-gray-400">
+          Или задайте размеры вручную ниже — расчёт по формуле
+        </span>
+      )}
+    </label>
+  );
+
+  const historyPanel = (compact: boolean) => (
+    <div className={`${compact ? "px-4 py-4" : "px-5 py-4 sm:px-8"} border-t border-gray-100 bg-white`}>
+      <div className="flex items-center justify-between gap-3">
+        <button
+          type="button"
+          onClick={() => setHistoryOpen((open) => !open)}
+          className="inline-flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-widest text-gray-500 transition-colors hover:text-brand-primary"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+            <path d="M3 12a9 9 0 1 0 3-6.7L3 8" /><path d="M3 3v5h5" /><path d="M12 7v5l3 3" />
+          </svg>
+          История расчётов{history.length > 0 ? ` (${history.length})` : ""}
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className={`transition-transform ${historyOpen ? "rotate-180" : ""}`} aria-hidden>
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </button>
+        {historyOpen && history.length > 0 && (
+          <button
+            type="button"
+            onClick={clearHistory}
+            className="text-[11px] font-semibold text-gray-400 transition-colors hover:text-red-500"
+          >
+            Очистить всё
+          </button>
+        )}
+      </div>
+
+      {historyOpen && (
+        history.length === 0 ? (
+          <p className="mt-3 text-[12px] font-medium text-gray-400">
+            Пока пусто — нажмите «Рассчитать», и расчёт сохранится здесь.
+          </p>
+        ) : (
+          <ul className="mt-3 flex flex-col gap-1.5">
+            {history.map((entry) => (
+              <li key={entry.id} className="group flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => restoreFromHistory(entry)}
+                  title="Подставить этот расчёт в калькулятор"
+                  className="flex min-w-0 flex-1 flex-col rounded-xl bg-gray-50 px-3 py-2 text-left transition-colors hover:bg-brand-primary/10"
+                >
+                  <span className="truncate text-[12px] font-semibold text-gray-900">{entry.title}</span>
+                  <span className="text-[12px] font-bold text-brand-primary">{entry.result}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => removeEntry(entry.id)}
+                  aria-label="Удалить из истории"
+                  className="shrink-0 rounded-full p-1.5 text-gray-300 transition-colors hover:bg-gray-100 hover:text-red-500"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+                    <path d="M18 6 6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )
+      )}
+    </div>
+  );
 
   return (
     <>
@@ -165,7 +318,9 @@ export const MetalCalculator = ({
             </select>
           </label>
 
-          {activeGroupItems.length > 0 && inputs.product !== "rebar" && (
+          {isTableProduct
+            ? sectionSelect(true)
+            : activeGroupItems.length > 0 && inputs.product !== "rebar" && (
             <label className="flex flex-col gap-1">
               <span className="text-[13px] font-bold text-gray-950">Позиция</span>
               <select
@@ -201,6 +356,10 @@ export const MetalCalculator = ({
             </select>
           </label>
 
+          <div className="flex justify-center">
+            <ProductDiagram compact product={inputs.product} values={inputs.values} />
+          </div>
+
           <CalculatorForm
             compact
             productConfig={productConfig}
@@ -212,7 +371,7 @@ export const MetalCalculator = ({
 
           <button
             type="button"
-            onClick={calculate}
+            onClick={handleCalculate}
             className="mt-2 h-11 w-full rounded-full bg-brand-primary text-[12px] font-bold uppercase tracking-[0.16em] text-white shadow-sm transition-colors hover:bg-brand-primary/90 active:scale-[0.99]"
           >
             Рассчитать
@@ -225,6 +384,8 @@ export const MetalCalculator = ({
           <CalculatorResult compact result={result} />
         </div>
       )}
+
+      {historyPanel(true)}
     </section>
 
     <section className="mx-auto hidden w-full max-w-[1040px] overflow-hidden rounded-3xl bg-white shadow-sm lg:block">
@@ -320,7 +481,9 @@ export const MetalCalculator = ({
               </select>
             </div>
 
-            {activeGroupItems.length > 0 && inputs.product !== "rebar" && (
+            {isTableProduct ? (
+              <div className="mb-3 sm:mb-4">{sectionSelect(false)}</div>
+            ) : activeGroupItems.length > 0 && inputs.product !== "rebar" && (
               <div className="mb-3 flex flex-col gap-1.5 sm:mb-4">
                 <label className="text-[13px] font-bold text-gray-900">Позиция</label>
                 <select
@@ -341,22 +504,29 @@ export const MetalCalculator = ({
               </div>
             )}
 
-            <CalculatorForm
-              compact
-              productConfig={productConfig}
-              mode={inputs.mode}
-              inputs={inputs}
-              errors={errors}
-              onInputChange={handleInputChange}
-            />
+            <div className="flex items-start gap-6">
+              <div className="hidden shrink-0 pt-6 lg:block">
+                <ProductDiagram product={inputs.product} values={inputs.values} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <CalculatorForm
+                  compact
+                  productConfig={productConfig}
+                  mode={inputs.mode}
+                  inputs={inputs}
+                  errors={errors}
+                  onInputChange={handleInputChange}
+                />
 
-            <button
-              type="button"
-              onClick={calculate}
-              className="mt-4 h-12 w-full rounded-full bg-brand-primary text-[12px] font-bold uppercase tracking-[0.16em] text-white shadow-sm transition-colors hover:bg-brand-primary/90 active:scale-[0.99] sm:mt-5 sm:h-11"
-            >
-              Рассчитать
-            </button>
+                <button
+                  type="button"
+                  onClick={handleCalculate}
+                  className="mt-4 h-12 w-full rounded-full bg-brand-primary text-[12px] font-bold uppercase tracking-[0.16em] text-white shadow-sm transition-colors hover:bg-brand-primary/90 active:scale-[0.99] sm:mt-5 sm:h-11"
+                >
+                  Рассчитать
+                </button>
+              </div>
+            </div>
           </div>
 
           {(result.isCalculated || result.error) && (
@@ -364,6 +534,8 @@ export const MetalCalculator = ({
               <CalculatorResult result={result} />
             </div>
           )}
+
+          {historyPanel(false)}
         </div>
       </div>
     </section>

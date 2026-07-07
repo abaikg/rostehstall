@@ -90,6 +90,13 @@ export const PRODUCTS: Record<ProductCode, ProductConfig> = {
       { key: "thickness", label: "Толщина стенки", unit: "мм", min: 0.1, max: 100 },
     ],
   },
+  beam: {
+    code: "beam",
+    label: "Балка / двутавр",
+    icon: "beam",
+    // Размеры не вводятся — выбираются номером по ГОСТ 8239 (см. sections.ts)
+    fields: [],
+  },
 };
 
 export const PRODUCT_LIST = Object.values(PRODUCTS);

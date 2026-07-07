@@ -3,11 +3,16 @@ import { PRODUCT_LIST } from "../config/products";
 
 export const validateInputs = (inputs: CalculationInputs): ValidationError[] => {
   const errors: ValidationError[] = [];
-  const { product, mode, values } = inputs;
-  
+  const { product, mode, values, section } = inputs;
+
+  // 0. Табличный прокат без размерных полей требует выбранного номера
+  if (product === 'beam' && !section) {
+    errors.push({ key: 'sideA', message: 'Выберите номер балки' });
+  }
+
   // 1. Check required fields for the selected product
   const config = PRODUCT_LIST.find(p => p.code === product);
-  if (config) {
+  if (config && !(section && (product === 'channel' || product === 'beam'))) {
     config.fields.forEach((field) => {
       const val = values[field.key as keyof typeof values];
       if (val === undefined || val === null || isNaN(val)) {

@@ -1,5 +1,6 @@
 import { ProductCode, CalculationInputs } from "../types";
 import { getMaterialDensity } from "../config/materials";
+import { getSection } from "../config/sections";
 import { sheetWeight } from "./sheet";
 import { rodWeight } from "./rod";
 import { squareWeight } from "./square";
@@ -23,15 +24,25 @@ const formulaMap: Record<ProductCode, FormulaFn> = {
   strip: stripWeight,
   angle: angleWeight,
   channel: channelWeight,
+  beam: () => 0, // только табличный расчёт по номеру (ГОСТ 8239)
 };
 
+const STEEL_DENSITY = 7850; // табличные кг/м в ГОСТ нормированы для стали
+
 export const calculateWeight = (inputs: CalculationInputs): number => {
-  const { product, material, grade, values } = inputs;
+  const { product, material, grade, values, section } = inputs;
   const density = getMaterialDensity(material, grade);
+
+  // Табличная позиция (двутавр/швеллер по номеру): точный вес из ГОСТ
+  const sectionConfig = section ? getSection(product, section) : undefined;
+  if (sectionConfig) {
+    return sectionConfig.kgm * (density / STEEL_DENSITY) * (values.length || 0);
+  }
+
   const formula = formulaMap[product];
-  
+
   if (!formula) return 0;
-  
+
   return formula(values, density);
 };
 
