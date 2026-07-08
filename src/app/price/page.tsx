@@ -91,7 +91,7 @@ export default function PricePage() {
         <div className="container relative flex flex-col gap-6">
           <div className="grid gap-6 lg:grid-cols-[1fr_360px] lg:items-end">
             <div className="flex max-w-4xl flex-col gap-4">
-              <h1 className="text-[30px] sm:text-[42px] md:text-[54px] font-bold uppercase tracking-normal text-gray-950 leading-tight">
+              <h1 className="whitespace-nowrap text-[clamp(20px,6vw,54px)] font-bold uppercase tracking-normal text-gray-950 leading-tight">
                 Напишите прямо менеджеру
               </h1>
             </div>

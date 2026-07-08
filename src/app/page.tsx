@@ -226,8 +226,8 @@ export default function HomePage() {
       {/* ═══════════ КАТЕГОРИИ ═══════════ */}
       <section className="py-14 sm:py-20">
         <div className="container flex flex-col gap-6 sm:gap-8">
-          <div className="flex max-w-xl flex-col items-start gap-2 text-left">
-            <h2 className="text-[22px] sm:text-[28px] md:text-[36px] font-bold uppercase tracking-normal text-gray-900 leading-tight">
+          <div className="flex w-full flex-col items-start gap-2 overflow-hidden text-left">
+            <h2 className="whitespace-nowrap text-[clamp(14px,4.2vw,36px)] font-bold uppercase tracking-normal text-gray-900 leading-tight">
               СВЯЖИТЕСЬ С МЕНЕДЖЕРОМ НАПРЯМУЮ
             </h2>
           </div>
