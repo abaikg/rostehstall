@@ -37,50 +37,32 @@ const WhatsAppIconSmall = () => (
   </svg>
 );
 
-/* ── Иконки категорий (упрощённые, белым по плитке) ── */
-const CategoryTileIcon = ({ type }: { type: string }) => {
-  const cls = "w-8 h-8 sm:w-9 sm:h-9";
-  switch (type) {
-    case "rebar": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M6 4v16M18 4v16M6 7h12M6 11h12M6 15h12"/></svg>;
-    case "coil": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/></svg>;
-    case "rod": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><circle cx="8" cy="16" r="4"/><path d="M11 13 L20 4"/></svg>;
-    case "sheet": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="6" width="16" height="3.5" rx="0.5"/><rect x="4" y="12" width="16" height="3.5" rx="0.5"/><rect x="4" y="18" width="11" height="1.8" rx="0.5"/></svg>;
-    case "angle": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M5 4 V20 H19"/></svg>;
-    case "channel": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M6 4 V20 H18 V4"/></svg>;
-    case "welding": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M4 20 L15 9"/><path d="M13 5 L19 11 L16 14"/><path d="M17 17 L20 14 M14 20 L17 17"/></svg>;
-    case "mesh": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"><line x1="5" y1="4" x2="5" y2="20"/><line x1="10" y1="4" x2="10" y2="20"/><line x1="14" y1="4" x2="14" y2="20"/><line x1="19" y1="4" x2="19" y2="20"/><line x1="5" y1="6" x2="19" y2="6"/><line x1="5" y1="11" x2="19" y2="11"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="5" y1="19" x2="19" y2="19"/></svg>;
-    case "pipe": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/></svg>;
-    case "nail": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M12 4 V17"/><path d="M6 4 H18"/><path d="M12 17 L9 21 M12 17 L15 21"/></svg>;
-    case "valve": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12 h5 M14 12 h5"/><circle cx="12" cy="12" r="3"/><path d="M9 6 h6 M9 18 h6"/></svg>;
-    case "wire": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M3 8 Q7 4 11 8 Q15 12 19 8 Q21 6 22 8"/><path d="M3 15 Q7 11 11 15 Q15 19 19 15 Q21 13 22 15"/></svg>;
-    case "ibeam": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M6 4 H18 M6 20 H18 M12 4 V20"/></svg>;
-    case "fastener": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="7" r="3.5"/><path d="M12 10.5 V20"/><path d="M8 15 H16"/></svg>;
-    default: return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><rect x="4" y="9" width="16" height="10" rx="1"/><path d="M8 9 V7 a4 4 0 0 1 8 0 v2"/></svg>;
-  }
-};
-
 interface HomeCategory {
   name: string;
-  icon: string;
   categoryName: string; // точное имя из CATEGORY_LIST — для ссылки на страницу категории
+  photo: string;        // локальное фото-заглушка (реальных фото на каждую категорию пока нет)
+  span?: string;        // доп. классы grid-span для мозаики на lg+
 }
 
-/* ── Категории для быстрого перехода — точки входа как в прайсе конкурентов ── */
+/* ── Категории для быстрого перехода — мозаика с фото вместо иконок.
+   Уникальных фото на каждую категорию нет, поэтому переиспользуем 10 имеющихся
+   снимков по смыслу (одна товарная группа — один снимок), это не вводит в
+   заблуждение, т.к. категории и правда relatedные (см. CATEGORY_LIST). ── */
 const HOME_CATEGORIES: HomeCategory[] = [
-  { name: "Арматура", icon: "rebar", categoryName: "Сортовой прокат" },
-  { name: "Катанка", icon: "coil", categoryName: "Сортовой прокат" },
-  { name: "Круг", icon: "rod", categoryName: "Сортовой прокат" },
-  { name: "Листовой металл", icon: "sheet", categoryName: "Листовой прокат" },
-  { name: "Угол", icon: "angle", categoryName: "Фасонный прокат" },
-  { name: "Швеллер", icon: "channel", categoryName: "Фасонный прокат" },
-  { name: "Электроды", icon: "welding", categoryName: "Сварочные материалы" },
-  { name: "Сетка МАК", icon: "mesh", categoryName: "Металлические сетки" },
-  { name: "Трубы", icon: "pipe", categoryName: "Трубный прокат" },
-  { name: "Гвозди", icon: "nail", categoryName: "Метизы" },
-  { name: "Задвижки и фланцы", icon: "valve", categoryName: "Трубопроводная арматура" },
-  { name: "Проволока", icon: "wire", categoryName: "Провода и кабельная продукция" },
-  { name: "Двутавр", icon: "ibeam", categoryName: "Фасонный прокат" },
-  { name: "Гайки, болты, шайбы", icon: "fastener", categoryName: "Крепежные элементы" },
+  { name: "Арматура", categoryName: "Сортовой прокат", photo: "/images/rebar.png", span: "lg:col-span-2 lg:row-span-2" },
+  { name: "Листовой металл", categoryName: "Листовой прокат", photo: "/images/steel-sheet.png", span: "lg:col-span-2" },
+  { name: "Трубы", categoryName: "Трубный прокат", photo: "/images/seamless-pipes.png", span: "lg:col-span-2" },
+  { name: "Катанка", categoryName: "Сортовой прокат", photo: "/images/hero/hero-warehouse-rebar.jpg" },
+  { name: "Круг", categoryName: "Сортовой прокат", photo: "/images/profile-pipes.png" },
+  { name: "Угол", categoryName: "Фасонный прокат", photo: "/images/products/structural-profiles.png" },
+  { name: "Швеллер", categoryName: "Фасонный прокат", photo: "/images/products/structural-profiles.png" },
+  { name: "Электроды", categoryName: "Сварочные материалы", photo: "/images/hero/hero-clean-stock.jpg" },
+  { name: "Сетка МАК", categoryName: "Металлические сетки", photo: "/images/products/aluminum-profiles.png" },
+  { name: "Гвозди", categoryName: "Метизы", photo: "/images/rebar.png" },
+  { name: "Задвижки и фланцы", categoryName: "Трубопроводная арматура", photo: "/images/products/cement-pipes.png" },
+  { name: "Проволока", categoryName: "Провода и кабельная продукция", photo: "/images/hero/hero-metal-yard.jpg" },
+  { name: "Двутавр", categoryName: "Фасонный прокат", photo: "/images/products/structural-profiles.png" },
+  { name: "Гайки, болты, шайбы", categoryName: "Крепежные элементы", photo: "/images/products/aluminum-profiles.png" },
 ];
 
 /* ── FAQ главной: живой блок + FAQPage-разметка для сниппетов в поиске ── */
@@ -251,18 +233,23 @@ export default function HomePage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 lg:auto-rows-[140px] lg:grid-flow-dense gap-3 sm:gap-4">
             {HOME_CATEGORIES.map((cat) => (
               <Link
                 key={cat.name}
                 href={getCategoryPath(cat.categoryName)}
-                className="group relative flex aspect-square flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a3f7a] to-[#0d1f42] p-4 text-center shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+                className={`group relative aspect-square lg:aspect-auto flex flex-col items-center justify-center gap-2 overflow-hidden rounded-2xl p-4 text-center shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg ${cat.span ?? ""}`}
               >
-                <div className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white/5 blur-xl" />
-                <span className="text-white/90 transition-colors group-hover:text-white">
-                  <CategoryTileIcon type={cat.icon} />
-                </span>
-                <span className="px-1 text-[12px] sm:text-[13px] font-bold uppercase leading-snug text-white">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={cat.photo}
+                  alt={`${cat.name} в Бишкеке — Ростехсталь`}
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0a1730]/92 via-[#12244d]/55 to-[#12244d]/10" />
+
+                <span className="relative z-10 px-1 text-[13px] sm:text-[14px] font-bold uppercase leading-snug text-white drop-shadow-sm">
                   {cat.name}
                 </span>
                 <button
@@ -278,7 +265,7 @@ export default function HomePage() {
                     );
                   }}
                   aria-label={`Написать в WhatsApp: ${cat.name}`}
-                  className="group/wa absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-white px-2.5 py-1.5 text-[9px] font-bold uppercase tracking-tight text-gray-900 shadow-sm transition-colors hover:bg-green-500 hover:text-white"
+                  className="group/wa relative z-10 mt-1 inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-white px-2.5 py-1.5 text-[9px] font-bold uppercase tracking-tight text-gray-900 shadow-sm transition-colors hover:bg-green-500 hover:text-white"
                 >
                   <span className="text-green-600 transition-colors group-hover/wa:text-white"><WhatsAppIconSmall /></span>
                   Написать WhatsApp
