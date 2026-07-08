@@ -46,7 +46,7 @@ export const ProductCard = ({ product, hideSize = false, hideMeta = false }: Pro
   return (
     <Link
       href={`/catalog/${product.slug}`}
-      className="group bg-white border border-gray-200 hover:border-gray-300 hover:shadow-lg rounded-2xl overflow-hidden flex flex-col transition-all duration-200"
+      className="group bg-white border border-gray-200 hover:border-gray-300 hover:shadow-lg rounded-xl overflow-hidden flex flex-col transition-all duration-200"
     >
       {/* Фото */}
       <div className="relative bg-gradient-to-br from-slate-100 to-slate-200 aspect-[4/3] overflow-hidden">
@@ -66,7 +66,7 @@ export const ProductCard = ({ product, hideSize = false, hideMeta = false }: Pro
           </div>
         )}
         {product.isNew && (
-          <span className="absolute top-2.5 left-2.5 px-2.5 py-1 bg-green-500 text-white rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm">
+          <span className="absolute top-2.5 left-2.5 px-2.5 py-1 bg-green-500 text-white rounded-xl text-[10px] font-bold uppercase tracking-wider shadow-sm">
             Новинка
           </span>
         )}
@@ -98,7 +98,7 @@ export const ProductCard = ({ product, hideSize = false, hideMeta = false }: Pro
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") openWhatsApp(e);
             }}
-            className="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-3 py-1.5 text-[12px] font-semibold text-green-700 transition-colors hover:bg-green-500 hover:text-white"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-green-50 px-3 py-1.5 text-[12px] font-semibold text-green-700 transition-colors hover:bg-green-500 hover:text-white"
           >
             <WhatsAppIcon /> Написать WhatsApp
           </span>

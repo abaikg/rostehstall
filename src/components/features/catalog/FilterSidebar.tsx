@@ -19,7 +19,7 @@ export const FilterSidebar = () => {
               {productCategories.map((c, i) => (
                 <button 
                   key={c} 
-                  className={`px-5 py-3 rounded-2xl text-[12px] font-black transition-all border ${i === 0 ? "bg-brand-dark text-white border-brand-dark shadow-xl" : "bg-white text-slate-500 border-slate-100 hover:border-brand-primary/30"}`}
+                  className={`px-5 py-3 rounded-xl text-[12px] font-black transition-all border ${i === 0 ? "bg-brand-dark text-white border-brand-dark shadow-xl" : "bg-white text-slate-500 border-slate-100 hover:border-brand-primary/30"}`}
                 >
                   {c}
                 </button>
@@ -31,11 +31,11 @@ export const FilterSidebar = () => {
             <h4 className="text-[13px] font-black text-brand-dark mb-6 tracking-wide">Наличие на складе</h4>
             <div className="space-y-4">
               <div className="flex items-center gap-3 group cursor-pointer">
-                <div className="w-6 h-6 rounded-lg border-2 border-brand-primary bg-brand-primary text-white flex items-center justify-center text-[10px] font-black">✓</div>
+                <div className="w-6 h-6 rounded-xl border-2 border-brand-primary bg-brand-primary text-white flex items-center justify-center text-[10px] font-black">✓</div>
                 <span className="text-[14px] font-bold text-slate-600 group-hover:text-brand-primary transition-colors">Бишкек (В наличии)</span>
               </div>
               <div className="flex items-center gap-3 group cursor-pointer">
-                <div className="w-6 h-6 rounded-lg border-2 border-slate-200 group-hover:border-brand-primary/40 transition-colors"></div>
+                <div className="w-6 h-6 rounded-xl border-2 border-slate-200 group-hover:border-brand-primary/40 transition-colors"></div>
                 <span className="text-[14px] font-bold text-slate-400 group-hover:text-slate-600 transition-colors">Под спецзаказ</span>
               </div>
             </div>

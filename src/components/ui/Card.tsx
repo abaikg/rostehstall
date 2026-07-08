@@ -11,7 +11,7 @@ export const Card = ({ children, className = "", hoverable = false }: CardProps)
   return (
     <div 
       className={`
-        bg-white rounded-lg border border-brand-border
+        bg-white rounded-xl border border-brand-border
         ${hoverable ? "transition-colors duration-150 hover:bg-gray-50" : ""}
         ${className}
       `}

@@ -101,7 +101,7 @@ export const CalculatorResult = ({ result, compact = false }: ResultProps) => {
       {!compact && rows.length > 0 && (
         <dl className="mt-5 grid grid-cols-1 gap-2 text-[12px]">
           {rows.map(([label, value]) => (
-            <div key={label} className="flex items-center justify-between gap-3 rounded-lg bg-gray-50 px-3 py-2">
+            <div key={label} className="flex items-center justify-between gap-3 rounded-xl bg-gray-50 px-3 py-2">
               <dt className="font-semibold text-gray-500">{label}</dt>
               <dd className="text-right font-bold text-gray-900">{value}</dd>
             </div>

@@ -127,7 +127,7 @@ export const MetalCalculator = ({
       <button
         type="button"
         onClick={orderFromResult}
-        className="h-11 w-full max-w-[360px] rounded-full bg-brand-accent text-[12px] font-bold uppercase tracking-[0.14em] text-white shadow-sm transition-all hover:brightness-110 active:scale-[0.99]"
+        className="h-11 w-full max-w-[360px] rounded-xl bg-brand-accent text-[12px] font-bold uppercase tracking-[0.14em] text-white shadow-sm transition-all hover:brightness-110 active:scale-[0.99]"
       >
         Узнать цену на этот металл
       </button>
@@ -277,7 +277,7 @@ export const MetalCalculator = ({
                   type="button"
                   onClick={() => removeEntry(entry.id)}
                   aria-label="Удалить из истории"
-                  className="shrink-0 rounded-full p-1.5 text-gray-300 transition-colors hover:bg-gray-100 hover:text-red-500"
+                  className="shrink-0 rounded-xl p-1.5 text-gray-300 transition-colors hover:bg-gray-100 hover:text-red-500"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
                     <path d="M18 6 6 18M6 6l12 12" />
@@ -293,7 +293,7 @@ export const MetalCalculator = ({
 
   return (
     <>
-    <section className="mx-auto w-full max-w-[360px] overflow-hidden rounded-2xl bg-white shadow-sm lg:hidden">
+    <section className="mx-auto w-full max-w-[360px] overflow-hidden rounded-xl bg-white shadow-sm lg:hidden">
       <div className="px-4 py-4">
         <div className="mb-3">
           <h2 className="text-[14px] font-bold leading-tight text-gray-950">
@@ -301,7 +301,7 @@ export const MetalCalculator = ({
           </h2>
         </div>
 
-        <div className="mb-4 flex rounded-full bg-gray-100 p-1 text-[12px]">
+        <div className="mb-4 flex rounded-xl bg-gray-100 p-1 text-[12px]">
           <button
             type="button"
             onClick={() => setMode("weight_by_dimensions")}
@@ -407,7 +407,7 @@ export const MetalCalculator = ({
           <button
             type="button"
             onClick={handleCalculate}
-            className="mt-2 h-11 w-full rounded-full bg-brand-primary text-[12px] font-bold uppercase tracking-[0.16em] text-white shadow-sm transition-colors hover:bg-brand-primary/90 active:scale-[0.99]"
+            className="mt-2 h-11 w-full rounded-xl bg-brand-primary text-[12px] font-bold uppercase tracking-[0.16em] text-white shadow-sm transition-colors hover:bg-brand-primary/90 active:scale-[0.99]"
           >
             Рассчитать
           </button>
@@ -424,7 +424,7 @@ export const MetalCalculator = ({
       {historyPanel(true)}
     </section>
 
-    <section className="mx-auto hidden w-full max-w-[1040px] overflow-hidden rounded-3xl bg-white shadow-sm lg:block">
+    <section className="mx-auto hidden w-full max-w-[1040px] overflow-hidden rounded-xl bg-white shadow-sm lg:block">
       <div className="grid grid-cols-1 lg:min-h-[560px] lg:grid-cols-[132px_316px_1fr]">
         <aside className="bg-white">
           <div className="px-4 pt-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 lg:py-3 lg:text-[11px]">
@@ -439,7 +439,7 @@ export const MetalCalculator = ({
                   key={material.code}
                   type="button"
                   onClick={() => setMaterial(material.code)}
-                  className={`shrink-0 rounded-full px-3.5 py-2 text-left text-[12px] font-semibold transition-colors lg:block lg:w-full lg:rounded-none lg:px-4 lg:py-3 lg:text-[13px] lg:font-medium ${
+                  className={`shrink-0 rounded-xl px-3.5 py-2 text-left text-[12px] font-semibold transition-colors lg:block lg:w-full lg:rounded-none lg:px-4 lg:py-3 lg:text-[13px] lg:font-medium ${
                     isActive
                       ? "bg-brand-primary/10 text-brand-primary"
                       : "bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-900 lg:bg-transparent lg:hover:bg-gray-50"
@@ -480,11 +480,11 @@ export const MetalCalculator = ({
               <h2 className="text-[14px] font-bold leading-snug tracking-tight text-gray-900 sm:text-[15px]">
                 {inputs.mode === "weight_by_dimensions" ? "Расчет веса" : "Расчет длины"}: {title}
               </h2>
-              <div className="flex w-full rounded-full bg-gray-100 p-1 text-[12px] sm:w-[228px]">
+              <div className="flex w-full rounded-xl bg-gray-100 p-1 text-[12px] sm:w-[228px]">
                 <button
                   type="button"
                   onClick={() => setMode("weight_by_dimensions")}
-                  className={`h-8 flex-1 rounded-full font-semibold transition-colors ${
+                  className={`h-8 flex-1 rounded-xl font-semibold transition-colors ${
                     inputs.mode === "weight_by_dimensions" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500"
                   }`}
                 >
@@ -493,7 +493,7 @@ export const MetalCalculator = ({
                 <button
                   type="button"
                   onClick={() => setMode("length_by_weight")}
-                  className={`h-8 flex-1 rounded-full font-semibold transition-colors ${
+                  className={`h-8 flex-1 rounded-xl font-semibold transition-colors ${
                     inputs.mode === "length_by_weight" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500"
                   }`}
                 >
@@ -557,7 +557,7 @@ export const MetalCalculator = ({
                 <button
                   type="button"
                   onClick={handleCalculate}
-                  className="mt-4 h-12 w-full rounded-full bg-brand-primary text-[12px] font-bold uppercase tracking-[0.16em] text-white shadow-sm transition-colors hover:bg-brand-primary/90 active:scale-[0.99] sm:mt-5 sm:h-11"
+                  className="mt-4 h-12 w-full rounded-xl bg-brand-primary text-[12px] font-bold uppercase tracking-[0.16em] text-white shadow-sm transition-colors hover:bg-brand-primary/90 active:scale-[0.99] sm:mt-5 sm:h-11"
                 >
                   Рассчитать
                 </button>

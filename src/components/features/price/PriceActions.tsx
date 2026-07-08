@@ -12,49 +12,24 @@ const WhatsAppIcon = ({ size = 16 }: { size?: number }) => (
 const waLink = (text: string) =>
   `https://${CONTACTS.whatsapp}?text=${encodeURIComponent(text)}`;
 
-/** Кнопки под заголовком прайса: получить прайс в WhatsApp или заявкой */
-export const PriceActions = () => {
-  const { openModal } = useOrderModal();
-
-  return (
-    <div className="flex flex-wrap gap-2.5">
-      <a
-        href={waLink("Здравствуйте! Пришлите, пожалуйста, актуальный прайс на металлопрокат.")}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 justify-center bg-green-500 hover:bg-green-600 text-white font-semibold text-[13px] px-5 py-2.5 rounded-full shadow-sm transition-all active:scale-[0.98]"
-      >
-        <WhatsAppIcon /> Получить прайс в WhatsApp
-      </a>
-      <button
-        type="button"
-        onClick={() => openModal({ productLabel: "Актуальный прайс-лист на металлопрокат" })}
-        className="inline-flex items-center justify-center bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold text-[13px] px-5 py-2.5 rounded-full shadow-sm transition-all active:scale-[0.98]"
-      >
-        Прайс на почту / звонок
-      </button>
-    </div>
-  );
-};
-
 /** Кнопки в строке прайс-таблицы: цена по запросу в WhatsApp или заявкой */
 export const PriceRowCta = ({ productName }: { productName: string }) => {
   const { openModal } = useOrderModal();
 
   return (
-    <span className="inline-flex items-center gap-1.5">
+    <span className="flex flex-col items-stretch gap-2 sm:inline-flex sm:flex-row sm:items-center sm:gap-1.5">
       <a
         href={waLink(`Здравствуйте! Интересует: ${productName}. Подскажите цену и наличие.`)}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-3.5 py-1.5 text-[12px] font-semibold text-green-700 transition-colors hover:bg-green-500 hover:text-white"
+        className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-green-50 px-3.5 py-2 sm:py-1.5 text-[12px] font-bold text-green-700 transition-colors hover:bg-green-500 hover:text-white"
       >
         <WhatsAppIcon size={13} /> Написать WhatsApp
       </a>
       <button
         type="button"
         onClick={() => openModal({ productLabel: productName })}
-        className="inline-flex items-center justify-center rounded-full border border-gray-200 bg-white px-3.5 py-1.5 text-[12px] font-semibold text-gray-700 transition-all hover:border-brand-primary/40 hover:text-brand-primary"
+        className="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-3.5 py-2 sm:py-1.5 text-[12px] font-bold text-gray-700 transition-all hover:border-brand-primary/40 hover:text-brand-primary"
       >
         Заказать
       </button>

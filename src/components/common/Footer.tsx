@@ -86,7 +86,7 @@ export const Footer = () => {
                 href="https://t.me/rostehstal"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/[0.07] hover:bg-white/[0.13] border border-white/[0.09] text-[12px] font-semibold text-gray-300 hover:text-white transition-all duration-200"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/[0.07] hover:bg-white/[0.13] border border-white/[0.09] text-[12px] font-semibold text-gray-300 hover:text-white transition-all duration-200"
               >
                 <TelegramIcon /> Telegram
               </a>
@@ -94,7 +94,7 @@ export const Footer = () => {
                 href={`https://${CONTACTS.whatsapp}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/[0.07] hover:bg-white/[0.13] border border-white/[0.09] text-[12px] font-semibold text-gray-300 hover:text-white transition-all duration-200"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/[0.07] hover:bg-white/[0.13] border border-white/[0.09] text-[12px] font-semibold text-gray-300 hover:text-white transition-all duration-200"
               >
                 <WhatsAppIcon /> WhatsApp
               </a>
@@ -102,7 +102,7 @@ export const Footer = () => {
                 href="https://www.instagram.com/rostehstal.kg/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/[0.07] hover:bg-white/[0.13] border border-white/[0.09] text-[12px] font-semibold text-gray-300 hover:text-white transition-all duration-200"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/[0.07] hover:bg-white/[0.13] border border-white/[0.09] text-[12px] font-semibold text-gray-300 hover:text-white transition-all duration-200"
               >
                 <InstagramIcon /> Instagram
               </a>
@@ -179,7 +179,7 @@ export const Footer = () => {
             </div>
             <button
               onClick={openModal}
-              className="mt-1 inline-flex items-center justify-center bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white text-[13px] font-semibold px-5 py-2.5 rounded-full transition-all duration-200 shadow-lg shadow-brand-primary/20 self-start"
+              className="mt-1 inline-flex items-center justify-center bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white text-[13px] font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-lg shadow-brand-primary/20 self-start"
             >
               Получить предложение
             </button>

@@ -90,10 +90,10 @@ export default function ServicesPage() {
             {services.map((service, i) => (
               <div
                 key={i}
-                className="group relative bg-white border border-gray-200 hover:border-gray-300 hover:shadow-lg rounded-3xl p-8 sm:p-10 flex flex-col gap-6 transition-all duration-200"
+                className="group relative bg-white border border-gray-200 hover:border-gray-300 hover:shadow-lg rounded-xl p-8 sm:p-10 flex flex-col gap-6 transition-all duration-200"
               >
                 <div className="flex items-start justify-between gap-4">
-                  <div className="w-14 h-14 rounded-2xl bg-blue-50 text-brand-primary flex items-center justify-center shrink-0 group-hover:bg-brand-primary group-hover:text-white transition-all duration-200">
+                  <div className="w-14 h-14 rounded-xl bg-blue-50 text-brand-primary flex items-center justify-center shrink-0 group-hover:bg-brand-primary group-hover:text-white transition-all duration-200">
                     {SERVICE_ICONS[i]}
                   </div>
                   <span className="text-[11px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-brand-primary/50 transition-colors pt-1">
@@ -114,7 +114,7 @@ export default function ServicesPage() {
                   {service.features.map((f, fi) => (
                     <span
                       key={fi}
-                      className="inline-flex items-center px-3 py-1.5 rounded-full bg-gray-50 border border-gray-200 text-[12px] font-semibold text-gray-600"
+                      className="inline-flex items-center px-3 py-1.5 rounded-xl bg-gray-50 border border-gray-200 text-[12px] font-semibold text-gray-600"
                     >
                       {f}
                     </span>
@@ -147,7 +147,7 @@ export default function ServicesPage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {HIGHLIGHTS.map((h, i) => (
-              <div key={i} className="flex flex-col gap-4 p-6 bg-white border border-gray-200 rounded-2xl">
+              <div key={i} className="flex flex-col gap-4 p-6 bg-white border border-gray-200 rounded-xl">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 text-brand-primary flex items-center justify-center">
                   {h.icon}
                 </div>
@@ -163,7 +163,7 @@ export default function ServicesPage() {
 
       {/* ── CTA ── */}
       <div className="container">
-        <div className="relative overflow-hidden bg-[#0d1117] rounded-3xl p-10 sm:p-14 flex flex-col sm:flex-row items-center justify-between gap-8">
+        <div className="relative overflow-hidden bg-[#0d1117] rounded-xl p-10 sm:p-14 flex flex-col sm:flex-row items-center justify-between gap-8">
           <div className="pointer-events-none absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4" />
           <div className="flex flex-col gap-3 z-10 text-center sm:text-left">
             <h2 className="text-[24px] sm:text-[32px] font-bold text-white tracking-tight">
@@ -176,13 +176,13 @@ export default function ServicesPage() {
           <div className="z-10 flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <button
               onClick={openModal}
-              className="inline-flex items-center justify-center bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-semibold text-[14px] px-7 py-3.5 rounded-full shadow-lg shadow-brand-primary/25 transition-all"
+              className="inline-flex items-center justify-center bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-semibold text-[14px] px-7 py-3.5 rounded-xl shadow-lg shadow-brand-primary/25 transition-all"
             >
               Оставить заявку
             </button>
             <Link
               href="/contacts"
-              className="inline-flex items-center justify-center bg-white/10 hover:bg-white/15 text-white font-semibold text-[14px] px-7 py-3.5 rounded-full border border-white/10 transition-all"
+              className="inline-flex items-center justify-center bg-white/10 hover:bg-white/15 text-white font-semibold text-[14px] px-7 py-3.5 rounded-xl border border-white/10 transition-all"
             >
               Контакты
             </Link>

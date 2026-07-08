@@ -81,7 +81,7 @@ export default function AdminOrdersPage() {
         <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl overflow-x-auto">
           {tabs.map(t => (
             <button key={t.key} onClick={() => setTab(t.key)}
-              className={`relative shrink-0 px-3.5 py-1.5 rounded-lg text-[13px] font-semibold transition-all ${
+              className={`relative shrink-0 px-3.5 py-1.5 rounded-xl text-[13px] font-semibold transition-all ${
                 tab === t.key ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
               }`}>
               {t.label}
@@ -103,17 +103,17 @@ export default function AdminOrdersPage() {
       {/* Cards */}
       {loading ? (
         <div className="flex flex-col gap-3">
-          {[0,1,2].map(i => <div key={i} className="h-28 bg-white rounded-2xl border border-slate-200 animate-pulse" />)}
+          {[0,1,2].map(i => <div key={i} className="h-28 bg-white rounded-xl border border-slate-200 animate-pulse" />)}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-slate-200 py-16 flex flex-col items-center gap-3 text-slate-400">
+        <div className="bg-white rounded-xl border border-slate-200 py-16 flex flex-col items-center gap-3 text-slate-400">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           <span className="text-[14px] font-medium">Заявок не найдено</span>
         </div>
       ) : (
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
           {filtered.map(o => (
-            <div key={o.id} className={`bg-white rounded-2xl border overflow-hidden transition-shadow hover:shadow-md ${o.status === "new" ? "border-red-200" : "border-slate-200"}`}>
+            <div key={o.id} className={`bg-white rounded-xl border overflow-hidden transition-shadow hover:shadow-md ${o.status === "new" ? "border-red-200" : "border-slate-200"}`}>
               <div className="flex flex-col sm:flex-row gap-4 p-5">
                 {/* Left */}
                 <div className="flex-1 flex flex-col gap-2">

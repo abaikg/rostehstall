@@ -42,7 +42,7 @@ export default function AdminDashboard() {
   if (loading) return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {[0,1,2,3].map(i => <div key={i} className="h-28 bg-white rounded-2xl border border-slate-200 animate-pulse" />)}
+        {[0,1,2,3].map(i => <div key={i} className="h-28 bg-white rounded-xl border border-slate-200 animate-pulse" />)}
       </div>
     </div>
   );
@@ -64,7 +64,7 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {statCards.map((c) => (
           <Link key={c.label} href={c.href}
-            className={`flex flex-col gap-3 p-5 rounded-2xl border ${c.color} hover:shadow-md transition-all group`}>
+            className={`flex flex-col gap-3 p-5 rounded-xl border ${c.color} hover:shadow-md transition-all group`}>
             <div className="flex items-center justify-between">
               {c.icon}
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-slate-300 group-hover:text-slate-500 transition-colors" strokeLinecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
@@ -79,7 +79,7 @@ export default function AdminDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Последние заявки */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 overflow-hidden">
+        <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 overflow-hidden">
           <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
             <h2 className="text-[15px] font-bold text-slate-900">Последние заявки</h2>
             <Link href="/admin/orders" className="text-[12px] font-semibold text-blue-600 hover:underline">Все заявки →</Link>
@@ -108,7 +108,7 @@ export default function AdminDashboard() {
 
         {/* Быстрые действия */}
         <div className="flex flex-col gap-3">
-          <div className="bg-white rounded-2xl border border-slate-200 p-5">
+          <div className="bg-white rounded-xl border border-slate-200 p-5">
             <h2 className="text-[14px] font-bold text-slate-900 mb-4">Быстрые действия</h2>
             <div className="flex flex-col gap-2">
               {[

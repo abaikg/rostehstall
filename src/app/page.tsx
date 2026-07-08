@@ -7,6 +7,8 @@ import { useOrderModal } from "@/context/ModalContext";
 import { CONTACTS } from "@/lib/constants";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { faqPageJsonLd, jsonLdGraph } from "@/lib/seo";
+import { getCategoryPath } from "@/lib/catalogRoutes";
+import { trackLead } from "@/lib/analytics";
 
 /* ── Иконки ── */
 const ArrowRight = ({ size = 16 }: { size?: number }) => (
@@ -29,6 +31,57 @@ const PhoneCallIcon = () => (
     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 5.49 5.49l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
   </svg>
 );
+const WhatsAppIconSmall = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
+  </svg>
+);
+
+/* ── Иконки категорий (упрощённые, белым по плитке) ── */
+const CategoryTileIcon = ({ type }: { type: string }) => {
+  const cls = "w-8 h-8 sm:w-9 sm:h-9";
+  switch (type) {
+    case "rebar": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M6 4v16M18 4v16M6 7h12M6 11h12M6 15h12"/></svg>;
+    case "coil": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/></svg>;
+    case "rod": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><circle cx="8" cy="16" r="4"/><path d="M11 13 L20 4"/></svg>;
+    case "sheet": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="6" width="16" height="3.5" rx="0.5"/><rect x="4" y="12" width="16" height="3.5" rx="0.5"/><rect x="4" y="18" width="11" height="1.8" rx="0.5"/></svg>;
+    case "angle": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M5 4 V20 H19"/></svg>;
+    case "channel": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M6 4 V20 H18 V4"/></svg>;
+    case "welding": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M4 20 L15 9"/><path d="M13 5 L19 11 L16 14"/><path d="M17 17 L20 14 M14 20 L17 17"/></svg>;
+    case "mesh": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"><line x1="5" y1="4" x2="5" y2="20"/><line x1="10" y1="4" x2="10" y2="20"/><line x1="14" y1="4" x2="14" y2="20"/><line x1="19" y1="4" x2="19" y2="20"/><line x1="5" y1="6" x2="19" y2="6"/><line x1="5" y1="11" x2="19" y2="11"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="5" y1="19" x2="19" y2="19"/></svg>;
+    case "pipe": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/></svg>;
+    case "nail": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M12 4 V17"/><path d="M6 4 H18"/><path d="M12 17 L9 21 M12 17 L15 21"/></svg>;
+    case "valve": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12 h5 M14 12 h5"/><circle cx="12" cy="12" r="3"/><path d="M9 6 h6 M9 18 h6"/></svg>;
+    case "wire": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M3 8 Q7 4 11 8 Q15 12 19 8 Q21 6 22 8"/><path d="M3 15 Q7 11 11 15 Q15 19 19 15 Q21 13 22 15"/></svg>;
+    case "ibeam": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M6 4 H18 M6 20 H18 M12 4 V20"/></svg>;
+    case "fastener": return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="7" r="3.5"/><path d="M12 10.5 V20"/><path d="M8 15 H16"/></svg>;
+    default: return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><rect x="4" y="9" width="16" height="10" rx="1"/><path d="M8 9 V7 a4 4 0 0 1 8 0 v2"/></svg>;
+  }
+};
+
+interface HomeCategory {
+  name: string;
+  icon: string;
+  categoryName: string; // точное имя из CATEGORY_LIST — для ссылки на страницу категории
+}
+
+/* ── Категории для быстрого перехода — точки входа как в прайсе конкурентов ── */
+const HOME_CATEGORIES: HomeCategory[] = [
+  { name: "Арматура", icon: "rebar", categoryName: "Сортовой прокат" },
+  { name: "Катанка", icon: "coil", categoryName: "Сортовой прокат" },
+  { name: "Круг", icon: "rod", categoryName: "Сортовой прокат" },
+  { name: "Листовой металл", icon: "sheet", categoryName: "Листовой прокат" },
+  { name: "Угол", icon: "angle", categoryName: "Фасонный прокат" },
+  { name: "Швеллер", icon: "channel", categoryName: "Фасонный прокат" },
+  { name: "Электроды", icon: "welding", categoryName: "Сварочные материалы" },
+  { name: "Сетка МАК", icon: "mesh", categoryName: "Металлические сетки" },
+  { name: "Трубы", icon: "pipe", categoryName: "Трубный прокат" },
+  { name: "Гвозди", icon: "nail", categoryName: "Метизы" },
+  { name: "Задвижки и фланцы", icon: "valve", categoryName: "Трубопроводная арматура" },
+  { name: "Проволока", icon: "wire", categoryName: "Провода и кабельная продукция" },
+  { name: "Двутавр", icon: "ibeam", categoryName: "Фасонный прокат" },
+  { name: "Гайки, болты, шайбы", icon: "fastener", categoryName: "Крепежные элементы" },
+];
 
 /* ── FAQ главной: живой блок + FAQPage-разметка для сниппетов в поиске ── */
 const HOME_FAQ = [
@@ -64,39 +117,6 @@ const HOME_FAQ = [
   },
 ];
 
-/* ── Данные ── */
-const STATS = [
-  { value: "5 000+", label: "Успешных поставок", sub: "за всё время" },
-  { value: "1 200+", label: "Постоянных клиентов", sub: "строительные и промышленные" },
-  { value: "3+", label: "года на рынке", sub: "в Кыргызстане" },
-  { value: "1000+", label: "Позиций на складе", sub: "всегда в наличии" },
-];
-
-/* Реальные преимущества с rostehstal.kg */
-const FEATURES = [
-  {
-    dark: true,
-    title: "Широкий ассортимент",
-    desc: "Стальные листы, трубы, профили, арматура, уголки, швеллеры, балки — всё для строительных и промышленных проектов любого масштаба, всегда в наличии на складе в Бишкеке.",
-    items: ["Чёрный и цветной прокат", "Нержавеющий металл", "Трубопроводная арматура", "Метизы и сварочные материалы"],
-    cta: true,
-  },
-  {
-    title: "Конкурентные цены",
-    desc: "Прямые контракты с заводами-производителями России, Казахстана и Китая. Стабильные партнёрские отношения позволяют предлагать заводскую цену без наценок дистрибьюторов.",
-  },
-  {
-    title: "Соблюдение сроков",
-    desc: "Оперативная доставка металла на строительный объект в оговорённые сроки — в день оплаты.",
-  },
-  {
-    blue: true,
-    wide: true,
-    title: "Инновационный подход",
-    desc: "Внедряем современные стандарты качества, систему ЭДО и онлайн-инструменты для клиентов. Постоянно растём — вместе с вашим бизнесом.",
-  },
-];
-
 const STEPS = [
   { n: "01", title: "Оставьте заявку", desc: "Укажите нужный металл, размер и объём. Займёт 2 минуты." },
   { n: "02", title: "Получите расчёт", desc: "Отдел продаж пришлёт КП с ценой и сроком за 30 минут." },
@@ -117,18 +137,9 @@ const HERO_SLIDES = [
   "/images/hero/hero-clean-stock.jpg",
 ];
 
-const VIDEO_ID = "dQw4w9WgXcQ"; // замените на реальный YouTube ID
-
-const PlayIcon = () => (
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-    <path d="M8 5.14v14l11-7-11-7z" />
-  </svg>
-);
-
 /* ── Страница ── */
 export default function HomePage() {
   const { openModal } = useOrderModal();
-  const [videoPlaying, setVideoPlaying] = useState(false); // для секции видео
   const [heroSlide, setHeroSlide] = useState(0);
   const popularProducts = POPULAR_PRODUCT_SLUGS
     .map((slug) => products.find((product) => product.slug === slug))
@@ -147,7 +158,7 @@ export default function HomePage() {
       <JsonLd id="home-faq-jsonld" data={jsonLdGraph([faqPageJsonLd(HOME_FAQ)])} />
 
       {/* ═══════════ HERO ═══════════ */}
-      <section className="relative isolate pt-12 sm:pt-20 pb-20 sm:pb-28 overflow-hidden">
+      <section className="relative isolate flex min-h-[620px] sm:min-h-[720px] lg:min-h-[820px] items-center overflow-hidden py-24 sm:py-32 lg:py-40">
         <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
           {HERO_SLIDES.map((slide, index) => (
             <div
@@ -158,10 +169,10 @@ export default function HomePage() {
               style={{ backgroundImage: `url(${slide})` }}
             />
           ))}
-          <div className="absolute inset-0 backdrop-blur-[1px]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-blue-50/74 to-white/94" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_65%_at_50%_12%,rgba(191,219,254,0.68),rgba(239,246,255,0.48)_42%,transparent_72%)]" />
-          <div className="absolute left-1/2 top-6 h-56 w-[min(760px,92vw)] -translate-x-1/2 rounded-full bg-blue-400/18 blur-3xl" />
+          <div className="absolute inset-0 backdrop-blur-[0.5px]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/72 via-blue-50/46 to-white/76" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_65%_at_50%_12%,rgba(191,219,254,0.34),rgba(239,246,255,0.22)_42%,transparent_72%)]" />
+          <div className="absolute left-1/2 top-6 h-56 w-[min(760px,92vw)] -translate-x-1/2 rounded-full bg-blue-400/10 blur-2xl" />
           <div className="absolute inset-x-0 bottom-5 flex justify-center gap-2">
             {HERO_SLIDES.map((slide, index) => (
               <span
@@ -175,25 +186,37 @@ export default function HomePage() {
         </div>
 
         <div className="container">
-          <div className="flex flex-col items-center text-center max-w-4xl mx-auto gap-6">
+          <div className="flex max-w-[1280px] translate-y-4 flex-col items-start gap-6 text-left sm:translate-y-8 lg:translate-y-12">
 
-
-            <h1 className="text-[28px] xs:text-[32px] sm:text-[44px] md:text-[54px] lg:text-[66px] font-bold tracking-tighter text-gray-950 leading-[1.1] sm:leading-[1.05] drop-shadow-sm">
-              Крупнейшая металлобаза<br className="hidden sm:block" />
-              <span className="text-brand-primary">
-                {" "}по металлопрокату в Кыргызстане
+            <span
+              className="text-[12px] sm:text-[14px] font-bold uppercase tracking-normal text-gray-900"
+              style={{ textShadow: "0 2px 14px rgba(255,255,255,0.95), 0 1px 2px rgba(255,255,255,0.9)" }}
+            >
+              ПОСТАВКИ МЕТАЛЛОПРОКАТА В КЫРГЫЗСТАНЕ
+            </span>
+            <h1
+              className="text-[28px] xs:text-[32px] sm:text-[42px] md:text-[46px] lg:text-[48px] xl:text-[54px] 2xl:text-[64px] font-bold tracking-normal text-gray-950 leading-[1.1] sm:leading-[1.05]"
+              style={{ textShadow: "0 3px 18px rgba(255,255,255,0.96), 0 1px 2px rgba(255,255,255,0.92)" }}
+            >
+              <span className="block xl:whitespace-nowrap">КРУПНЕЙШАЯ МЕТАЛЛОБАЗА</span>
+              <span className="block text-brand-primary xl:whitespace-nowrap">
+                ПО МЕТАЛЛОПРОКАТУ В КЫРГЫЗСТАНЕ
               </span>
             </h1>
 
-            <p className="text-[14px] sm:text-[16px] md:text-[18px] text-gray-700 max-w-2xl leading-relaxed font-semibold drop-shadow-sm">
-              Стальные листы, трубы, профили, арматура и спецсталь — широкий ассортимент металлопродукции высокого качества для строительных и промышленных предприятий.
+            <p
+              className="max-w-2xl text-[14px] sm:text-[16px] md:text-[18px] text-gray-800 leading-relaxed font-bold"
+              style={{ textShadow: "0 2px 12px rgba(255,255,255,0.95), 0 1px 2px rgba(255,255,255,0.9)" }}
+            >
+              <span className="block">Стальные листы, трубы, профили, арматура и спецсталь —</span>
+              <span className="block">широкий ассортимент металлопродукции высокого качества для строительных и промышленных предприятий.</span>
             </p>
 
             {/* CTA кнопки */}
-            <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 mt-2 w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row flex-wrap justify-start gap-3 mt-2 w-full sm:w-auto">
               <Link
                 href="/catalog"
-                className="inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-semibold text-[14px] sm:text-[15px] px-6 sm:px-7 py-3.5 rounded-full shadow-md hover:shadow-lg transition-all duration-200"
+                className="inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-semibold text-[14px] sm:text-[15px] px-6 sm:px-7 py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
               >
                 Перейти в каталог <ArrowRight />
               </Link>
@@ -201,196 +224,67 @@ export default function HomePage() {
                 href={`https://${CONTACTS.whatsapp}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#22c05c] active:scale-[0.98] text-white font-semibold text-[14px] sm:text-[15px] px-6 sm:px-7 py-3.5 rounded-full shadow-sm hover:shadow-md transition-all duration-200"
+                className="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#22c05c] active:scale-[0.98] text-white font-semibold text-[14px] sm:text-[15px] px-6 sm:px-7 py-3.5 rounded-xl shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <WhatsAppIcon /> Написать в WhatsApp
               </a>
               <Link
                 href="/calculator"
-                className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 active:scale-[0.98] text-gray-800 font-semibold text-[14px] sm:text-[15px] px-6 sm:px-7 py-3.5 rounded-full border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200"
+                className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 active:scale-[0.98] text-gray-800 font-semibold text-[14px] sm:text-[15px] px-6 sm:px-7 py-3.5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200"
               >
                 Калькулятор
               </Link>
             </div>
 
-            {/* Trust */}
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-2 text-[13px] font-semibold text-gray-500">
-              {["3 года на рынке", "Доставка в день оплаты", "ЭДО и онлайн-расчёт"].map((t) => (
-                <span key={t} className="flex items-center gap-1.5">
-                  <span className="text-green-500"><CheckIcon /></span> {t}
+          </div>
+
+        </div>
+      </section>
+
+      {/* ═══════════ КАТЕГОРИИ ═══════════ */}
+      <section className="py-14 sm:py-20">
+        <div className="container flex flex-col gap-6 sm:gap-8">
+          <div className="flex max-w-xl flex-col items-start gap-2 text-left">
+            <span className="text-[11px] sm:text-[12px] font-bold uppercase tracking-normal text-brand-primary">Ассортимент</span>
+            <h2 className="text-[22px] sm:text-[28px] md:text-[36px] font-bold uppercase tracking-normal text-gray-900 leading-tight">
+              Металлопрокат по категориям
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+            {HOME_CATEGORIES.map((cat) => (
+              <Link
+                key={cat.name}
+                href={getCategoryPath(cat.categoryName)}
+                className="group relative flex aspect-square flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a3f7a] to-[#0d1f42] p-4 text-center shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+              >
+                <div className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white/5 blur-xl" />
+                <span className="text-white/90 transition-colors group-hover:text-white">
+                  <CategoryTileIcon type={cat.icon} />
                 </span>
-              ))}
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* ═══════════ STATS ═══════════ */}
-      <section className="py-14 sm:py-16 bg-white border-y border-gray-100">
-        <div className="container">
-          <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-y lg:divide-y-0 divide-gray-100 border border-gray-100 rounded-2xl overflow-hidden">
-            {STATS.map((s, i) => (
-              <div key={i} className="flex flex-col gap-1 p-4 sm:p-6 lg:p-8 bg-white hover:bg-gray-50/60 transition-colors">
-                <span className="text-[24px] sm:text-[32px] lg:text-[38px] font-bold tracking-tighter text-gray-900 leading-none">{s.value}</span>
-                <span className="text-[12px] sm:text-[13px] font-bold text-gray-900 mt-1">{s.label}</span>
-                <span className="text-[11px] sm:text-[12px] text-gray-400 font-medium">{s.sub}</span>
-              </div>
+                <span className="px-1 text-[12px] sm:text-[13px] font-bold uppercase leading-snug text-white">
+                  {cat.name}
+                </span>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    trackLead("whatsapp");
+                    window.open(
+                      `https://${CONTACTS.whatsapp}?text=${encodeURIComponent(`Здравствуйте! Интересует: ${cat.name}. Подскажите цену и наличие.`)}`,
+                      "_blank",
+                      "noopener,noreferrer"
+                    );
+                  }}
+                  aria-label={`Написать в WhatsApp: ${cat.name}`}
+                  className="group/wa absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-white px-2.5 py-1.5 text-[9px] font-bold uppercase tracking-tight text-gray-900 shadow-sm transition-colors hover:bg-green-500 hover:text-white"
+                >
+                  <span className="text-green-600 transition-colors group-hover/wa:text-white"><WhatsAppIconSmall /></span>
+                  Написать WhatsApp
+                </button>
+              </Link>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════ ВИДЕО + ГАЛЕРЕЯ ═══════════ */}
-      <section className="py-20 sm:py-24">
-        <div className="container flex flex-col gap-14">
-
-          {/* Заголовок */}
-          <div className="flex flex-col gap-2">
-            <span className="text-[11px] font-bold uppercase tracking-widest text-brand-primary">О компании</span>
-            <h2 className="text-[22px] sm:text-[28px] md:text-[36px] font-bold tracking-tight text-gray-900">
-              Посмотрите, как мы работаем
-            </h2>
-          </div>
-
-          {/* Видео + текст */}
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-center">
-
-            {/* Видео */}
-            <div className="lg:col-span-3">
-              <div className="relative aspect-video rounded-2xl overflow-hidden bg-gray-900 shadow-2xl shadow-gray-900/20">
-                {!videoPlaying ? (
-                  <>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src="/images/profile-pipes.png"
-                      alt="Видео о компании Ростехсталь"
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gray-900/40" />
-                    <button
-                      onClick={() => setVideoPlaying(true)}
-                      className="absolute inset-0 flex flex-col items-center justify-center gap-4 group"
-                      aria-label="Смотреть видео"
-                    >
-                      <div className="w-20 h-20 rounded-full bg-white/95 group-hover:bg-white flex items-center justify-center shadow-2xl shadow-black/30 group-hover:scale-110 transition-all duration-300 text-brand-primary pl-1">
-                        <PlayIcon />
-                      </div>
-                      <span className="text-white font-semibold text-[15px] drop-shadow">Смотреть видео о компании</span>
-                    </button>
-                  </>
-                ) : (
-                  <iframe
-                    src={`https://www.youtube.com/embed/${VIDEO_ID}?autoplay=1&rel=0`}
-                    title="Ростехсталь — видео о компании"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="absolute inset-0 w-full h-full"
-                  />
-                )}
-              </div>
-            </div>
-
-            {/* Текст */}
-            <div className="lg:col-span-2 flex flex-col gap-6">
-              <h3 className="text-[22px] sm:text-[26px] font-bold text-gray-900 tracking-tight leading-snug">
-                Ростехсталь — ведущая металлобаза Кыргызстана
-              </h3>
-              <p className="text-[15px] text-gray-500 leading-relaxed">
-                Мы поставляем металлопрокат для строительных и промышленных предприятий по всему Кыргызстану.
-              </p>
-              <ul className="flex flex-col gap-3">
-                {[
-                  "Прямые поставки с заводов России, Казахстана и Китая",
-                  "Быстрая доставка по всему Кыргызстану",
-                  "Индивидуальные условия для крупных заказчиков",
-                ].map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-[14px] text-gray-600 font-medium">
-                    <span className="mt-0.5 w-5 h-5 rounded-full bg-brand-primary/10 text-brand-primary flex items-center justify-center shrink-0">
-                      <CheckIcon />
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <button
-                onClick={openModal}
-                className="mt-2 inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-semibold text-[14px] px-6 py-3 rounded-full shadow-md hover:shadow-lg transition-all w-fit"
-              >
-                Оставить заявку <ArrowRight />
-              </button>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* ═══════════ FEATURES BENTO ═══════════ */}
-      <section className="py-20 sm:py-24">
-        <div className="container flex flex-col gap-10">
-
-          <div className="flex flex-col gap-2">
-            <span className="text-[11px] font-bold uppercase tracking-widest text-brand-primary">Почему выбирают нас</span>
-            <h2 className="text-[22px] sm:text-[28px] md:text-[36px] font-bold tracking-tight text-gray-900">
-              Надёжный партнёр для вашего бизнеса
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
-            {/* Большая тёмная карточка — Широкий ассортимент */}
-            <div className="md:col-span-2 lg:col-span-1 lg:row-span-2 bg-[#0d1117] text-white rounded-3xl p-8 flex flex-col gap-5 min-h-[280px] lg:min-h-0">
-              <div className="w-11 h-11 rounded-2xl bg-white/10 flex items-center justify-center text-white text-[13px] font-bold">01</div>
-              <div className="flex flex-col gap-3 flex-1">
-                <h3 className="text-[20px] font-bold tracking-tight">Широкий ассортимент</h3>
-                <p className="text-[14px] text-gray-400 leading-relaxed">
-                  Стальные листы, трубы, профили, арматура, уголки, швеллеры — всё для строительных и промышленных проектов. Более 500 позиций в наличии и под заказ.
-                </p>
-                <ul className="mt-2 flex flex-col gap-2">
-                  {["Чёрный и цветной прокат", "Нержавеющий металл", "Трубопроводная арматура", "Метизы и спецсталь"].map(item => (
-                    <li key={item} className="flex items-center gap-2 text-[13px] text-gray-400 font-medium">
-                      <span className="text-green-400 shrink-0"><CheckIcon /></span> {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <button
-                onClick={openModal}
-                className="mt-auto inline-flex items-center gap-2 text-[13px] font-semibold text-white/60 hover:text-white transition-colors"
-              >
-                Получить расчёт <ArrowRight size={14} />
-              </button>
-            </div>
-
-            {/* Конкурентные цены */}
-            <div className="bg-gray-50 border border-gray-200/60 rounded-3xl p-7 flex flex-col gap-4">
-              <div className="w-11 h-11 rounded-2xl bg-white shadow-sm border border-gray-100 flex items-center justify-center text-brand-primary text-[13px] font-bold">02</div>
-              <h3 className="text-[17px] font-bold text-gray-900 tracking-tight">Конкурентные цены</h3>
-              <p className="text-[14px] text-gray-500 leading-relaxed">
-                Прямые контракты с заводами РФ, Казахстана и Китая. Заводская цена без наценок дистрибьюторов.
-              </p>
-            </div>
-
-            {/* Соблюдение сроков */}
-            <div className="bg-gray-50 border border-gray-200/60 rounded-3xl p-7 flex flex-col gap-4">
-              <div className="w-11 h-11 rounded-2xl bg-white shadow-sm border border-gray-100 flex items-center justify-center text-brand-primary text-[13px] font-bold">03</div>
-              <h3 className="text-[17px] font-bold text-gray-900 tracking-tight">Соблюдение сроков</h3>
-              <p className="text-[14px] text-gray-500 leading-relaxed">
-                Оперативная доставка металлопроката по всему Кыргызстану в день оплаты.
-              </p>
-            </div>
-
-            {/* Широкая карточка — Инновационный подход */}
-            <div className="md:col-span-2 bg-blue-600 text-white rounded-3xl p-7 flex flex-col sm:flex-row items-start sm:items-center gap-6">
-              <div className="w-11 h-11 rounded-2xl bg-white/20 flex items-center justify-center text-white text-[13px] font-bold shrink-0">04</div>
-              <div className="flex flex-col gap-2">
-                <h3 className="text-[17px] font-bold tracking-tight">Инновационный подход</h3>
-                <p className="text-[14px] text-blue-100 leading-relaxed max-w-lg">
-                  Современные стандарты качества, система ЭДО, онлайн-калькулятор и быстрый расчёт КП.
-                </p>
-              </div>
-            </div>
-
           </div>
         </div>
       </section>
@@ -401,12 +295,10 @@ export default function HomePage() {
 
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 pb-6 border-b border-gray-200">
             <div className="flex flex-col gap-2">
-              <span className="text-[11px] font-bold uppercase tracking-widest text-brand-primary">Складской ассортимент</span>
-              <h2 className="text-[22px] sm:text-[28px] md:text-[36px] font-bold tracking-tight text-gray-900">Популярные позиции</h2>
+              <h2 className="text-[22px] sm:text-[28px] md:text-[36px] font-bold uppercase tracking-normal text-gray-900">
+                СВЯЖИТЕСЬ С МЕНЕДЖЕРОМ НАПРЯМУЮ
+              </h2>
             </div>
-            <Link href="/catalog" className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-gray-500 hover:text-gray-900 transition-colors">
-              Весь каталог <ArrowRight size={14} />
-            </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -418,33 +310,37 @@ export default function HomePage() {
       </section>
 
       {/* ═══════════ КАК МЫ РАБОТАЕМ ═══════════ */}
-      <section className="py-20 sm:py-24">
-        <div className="container flex flex-col gap-10">
+      <section className="py-14 sm:py-24">
+        <div className="container flex flex-col gap-7 sm:gap-10">
 
-          <div className="flex flex-col gap-2 max-w-lg">
-            <span className="text-[11px] font-bold uppercase tracking-widest text-brand-primary">Как мы работаем</span>
-            <h2 className="text-[22px] sm:text-[28px] md:text-[36px] font-bold tracking-tight text-gray-900">
+          <div className="flex max-w-lg flex-col items-start gap-2 text-left">
+            <span className="text-[11px] sm:text-[12px] font-bold uppercase tracking-normal text-brand-primary">Как мы работаем</span>
+            <h2 className="text-[24px] sm:text-[28px] md:text-[36px] font-bold uppercase tracking-normal text-gray-900 leading-tight">
               От заявки до объекта — 4 шага
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {STEPS.map((step, i) => (
-              <div key={i} className="relative flex flex-col gap-4 p-6 sm:p-7 bg-white border border-gray-200 rounded-2xl">
+              <div key={i} className="relative flex flex-row items-start gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm shadow-gray-200/40 sm:flex-col sm:gap-4 sm:p-7 sm:shadow-none">
                 {i < STEPS.length - 1 && (
                   <div className="hidden lg:block absolute top-10 left-full w-4 border-t-2 border-dashed border-gray-200 z-10" />
                 )}
-                <span className="text-[13px] font-bold text-brand-primary">{step.n}</span>
-                <h3 className="text-[15px] font-bold text-gray-900 leading-snug">{step.title}</h3>
-                <p className="text-[13px] text-gray-500 leading-relaxed">{step.desc}</p>
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-[13px] font-bold text-brand-primary sm:h-auto sm:w-auto sm:bg-transparent">
+                  {step.n}
+                </span>
+                <div className="flex min-w-0 flex-col gap-1.5 sm:gap-4">
+                  <h3 className="text-[15px] font-bold text-gray-950 leading-snug">{step.title}</h3>
+                  <p className="text-[13px] text-gray-600 leading-relaxed">{step.desc}</p>
+                </div>
               </div>
             ))}
           </div>
 
-          <div className="flex flex-wrap justify-center gap-3 pt-2">
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 pt-1 sm:pt-2">
             <button
               onClick={openModal}
-              className="inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-semibold text-[14px] px-7 py-3.5 rounded-full shadow-md hover:shadow-lg transition-all"
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-bold text-[13px] sm:text-[14px] px-7 py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all"
             >
               <PhoneCallIcon /> Получить расчёт
             </button>
@@ -452,7 +348,7 @@ export default function HomePage() {
               href={`https://${CONTACTS.whatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#22c05c] active:scale-[0.98] text-white font-semibold text-[14px] px-7 py-3.5 rounded-full shadow-md hover:shadow-lg transition-all"
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 bg-[#25D366] hover:bg-[#22c05c] active:scale-[0.98] text-white font-bold text-[13px] sm:text-[14px] px-7 py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all"
             >
               <WhatsAppIcon /> {CONTACTS.whatsappPhone}
             </a>
@@ -461,19 +357,19 @@ export default function HomePage() {
       </section>
 
       {/* ═══════════ FAQ (SEO: FAQPage schema) ═══════════ */}
-      <section className="py-14 sm:py-20 border-t border-gray-100">
-        <div className="container flex flex-col gap-8">
-          <div className="flex flex-col gap-2 max-w-2xl">
-            <span className="text-[11px] font-bold uppercase tracking-widest text-brand-primary">Частые вопросы</span>
-            <h2 className="text-[22px] sm:text-[28px] md:text-[34px] font-bold tracking-tight text-gray-900">
+      <section className="py-12 sm:py-20 border-t border-gray-100">
+        <div className="container flex flex-col gap-6 sm:gap-8">
+          <div className="flex max-w-2xl flex-col items-start gap-2 text-left">
+            <span className="text-[11px] sm:text-[12px] font-bold uppercase tracking-normal text-brand-primary">Частые вопросы</span>
+            <h2 className="text-[24px] sm:text-[28px] md:text-[34px] font-bold uppercase tracking-normal text-gray-900 leading-tight">
               Вопросы о покупке металлопроката в Бишкеке
             </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             {HOME_FAQ.map((faq) => (
-              <div key={faq.question} className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col gap-2.5">
-                <h3 className="text-[15px] font-bold text-gray-900 leading-snug">{faq.question}</h3>
-                <p className="text-[13px] sm:text-[14px] text-gray-500 leading-relaxed">{faq.answer}</p>
+              <div key={faq.question} className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 flex flex-col gap-2.5 shadow-sm shadow-gray-200/40 sm:shadow-none">
+                <h3 className="text-[15px] sm:text-[16px] font-bold text-gray-950 leading-snug">{faq.question}</h3>
+                <p className="text-[13px] sm:text-[14px] text-gray-600 leading-relaxed">{faq.answer}</p>
               </div>
             ))}
           </div>
@@ -483,30 +379,30 @@ export default function HomePage() {
       {/* ═══════════ DARK CTA ═══════════ */}
       <section className="py-6 sm:py-8 pb-24">
         <div className="container">
-          <div className="relative overflow-hidden bg-[#0d1117] rounded-2xl sm:rounded-3xl lg:rounded-[40px] p-6 sm:p-10 lg:p-14 xl:p-16 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-10">
+          <div className="relative overflow-hidden bg-[#0d1117] rounded-xl sm:rounded-xl lg:rounded-xl p-5 sm:p-10 lg:p-14 xl:p-16 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-7 lg:gap-10">
             <div className="pointer-events-none absolute inset-0">
               <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4" />
               <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-brand-primary/10 rounded-full blur-[60px] translate-y-1/2 -translate-x-1/4" />
             </div>
 
-            <div className="flex flex-col gap-4 max-w-2xl z-10 text-center lg:text-left">
-              <h2 className="text-[22px] sm:text-[32px] md:text-[38px] lg:text-[44px] font-bold tracking-tight text-white leading-tight">
+            <div className="flex flex-col gap-4 max-w-2xl z-10 text-left">
+              <h2 className="text-[24px] sm:text-[32px] md:text-[38px] lg:text-[44px] font-bold uppercase tracking-normal text-white leading-tight">
                 Нужен расчёт под ваш проект?
               </h2>
-              <p className="text-[13px] sm:text-[15px] md:text-[16px] text-gray-400 leading-relaxed">
+              <p className="text-[13px] sm:text-[15px] md:text-[16px] text-gray-300 leading-relaxed">
                 Оставьте заявку — отдел продаж рассчитает точный объём и стоимость за 30 минут. Работаем с предприятиями КР.
               </p>
-              <div className="flex flex-wrap gap-3 justify-center lg:justify-start text-[13px] text-gray-600 font-medium">
-                <span className="flex items-center gap-1.5"><span className="text-green-400"><CheckIcon /></span> Расчёт КП</span>
-                <span className="flex items-center gap-1.5"><span className="text-green-400"><CheckIcon /></span> Ответ за 30 минут</span>
-                <span className="flex items-center gap-1.5"><span className="text-green-400"><CheckIcon /></span> Скидки от объёма</span>
+              <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 text-[13px] text-gray-200 font-semibold">
+                <span className="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 border border-white/10"><span className="text-green-400"><CheckIcon /></span> Расчёт КП</span>
+                <span className="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 border border-white/10"><span className="text-green-400"><CheckIcon /></span> Ответ за 30 минут</span>
+                <span className="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 border border-white/10"><span className="text-green-400"><CheckIcon /></span> Скидки от объёма</span>
               </div>
             </div>
 
-            <div className="z-10 flex flex-col items-center lg:items-end gap-3 shrink-0 w-full lg:w-auto">
+            <div className="z-10 flex flex-col items-stretch lg:items-end gap-3 shrink-0 w-full lg:w-auto">
               <button
                 onClick={openModal}
-                className="w-full lg:w-auto inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-semibold text-[15px] px-8 py-4 rounded-full shadow-xl shadow-brand-primary/25 hover:shadow-brand-primary/40 transition-all"
+                className="w-full lg:w-auto inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-bold text-[13px] sm:text-[15px] uppercase tracking-normal px-6 sm:px-8 py-4 rounded-xl shadow-xl shadow-brand-primary/25 hover:shadow-brand-primary/40 transition-all"
               >
                 Получить коммерческое предложение <ArrowRight />
               </button>
@@ -514,11 +410,11 @@ export default function HomePage() {
                 href={`https://${CONTACTS.whatsapp}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full lg:w-auto inline-flex items-center justify-center gap-2 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#4ade80] font-semibold text-[14px] px-8 py-3.5 rounded-full border border-[#25D366]/20 transition-all"
+                className="w-full lg:w-auto inline-flex items-center justify-center gap-2 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#4ade80] font-bold text-[13px] sm:text-[14px] uppercase tracking-normal px-6 sm:px-8 py-3.5 rounded-xl border border-[#25D366]/20 transition-all"
               >
                 <WhatsAppIcon /> Написать в WhatsApp
               </a>
-              <span className="text-[12px] text-gray-600">
+              <span className="text-left lg:text-right text-[12px] text-gray-400 leading-relaxed">
                 {CONTACTS.address}
               </span>
             </div>

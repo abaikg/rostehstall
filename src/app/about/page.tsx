@@ -86,7 +86,7 @@ export default function AboutPage() {
 
           <div className="flex flex-col lg:flex-row lg:items-end gap-8 lg:gap-16">
             <div className="flex flex-col gap-5 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/10 text-white/80 text-[11px] font-bold uppercase tracking-widest w-fit">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/10 border border-white/10 text-white/80 text-[11px] font-bold uppercase tracking-widest w-fit">
                 Более 3 лет в Кыргызстане
               </div>
               <h1 className="text-[26px] sm:text-[36px] md:text-[48px] font-bold tracking-tight leading-tight">
@@ -98,13 +98,13 @@ export default function AboutPage() {
               <div className="flex flex-wrap gap-3 pt-1">
                 <button
                   onClick={openModal}
-                  className="inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-semibold text-[14px] px-6 py-3 rounded-full shadow-lg shadow-brand-primary/25 transition-all"
+                  className="inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-semibold text-[14px] px-6 py-3 rounded-xl shadow-lg shadow-brand-primary/25 transition-all"
                 >
                   Связаться с нами
                 </button>
                 <Link
                   href="/contacts"
-                  className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 text-white font-semibold text-[14px] px-6 py-3 rounded-full border border-white/10 transition-all"
+                  className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 text-white font-semibold text-[14px] px-6 py-3 rounded-xl border border-white/10 transition-all"
                 >
                   Контакты
                 </Link>
@@ -114,7 +114,7 @@ export default function AboutPage() {
             {/* Stats */}
             <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:ml-auto shrink-0">
               {STATS.map((s, i) => (
-                <div key={i} className="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 flex flex-col gap-1 min-w-[130px]">
+                <div key={i} className="bg-white/5 border border-white/10 rounded-xl px-5 py-4 flex flex-col gap-1 min-w-[130px]">
                   <span className="text-[28px] sm:text-[34px] font-bold text-white tracking-tight leading-none">{s.value}</span>
                   <span className="text-[12px] text-white/50 font-medium">{s.label}</span>
                 </div>
@@ -163,23 +163,23 @@ export default function AboutPage() {
 
             {/* Visual card grid */}
             <div className="grid grid-cols-2 gap-3">
-              <div className="col-span-2 bg-gradient-to-br from-brand-primary to-blue-700 rounded-2xl p-6 text-white flex flex-col gap-2">
+              <div className="col-span-2 bg-gradient-to-br from-brand-primary to-blue-700 rounded-xl p-6 text-white flex flex-col gap-2">
                 <span className="text-[42px] font-bold tracking-tight leading-none">50 000+</span>
                 <span className="text-[14px] text-white/70 font-medium">тонн металлопроката поставлено клиентам</span>
               </div>
-              <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 flex flex-col gap-1.5">
+              <div className="bg-gray-50 border border-gray-100 rounded-xl p-5 flex flex-col gap-1.5">
                 <span className="text-[28px] font-bold text-gray-900">8 000</span>
                 <span className="text-[12px] text-gray-500 font-medium">м² складских площадей</span>
               </div>
-              <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 flex flex-col gap-1.5">
+              <div className="bg-gray-50 border border-gray-100 rounded-xl p-5 flex flex-col gap-1.5">
                 <span className="text-[28px] font-bold text-gray-900">24 ч</span>
                 <span className="text-[12px] text-gray-500 font-medium">срок доставки по Бишкеку</span>
               </div>
-              <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 flex flex-col gap-1.5">
+              <div className="bg-gray-50 border border-gray-100 rounded-xl p-5 flex flex-col gap-1.5">
                 <span className="text-[28px] font-bold text-gray-900">30 мин</span>
                 <span className="text-[12px] text-gray-500 font-medium">обработка заявки</span>
               </div>
-              <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 flex flex-col gap-1.5">
+              <div className="bg-gray-50 border border-gray-100 rounded-xl p-5 flex flex-col gap-1.5">
                 <span className="text-[28px] font-bold text-gray-900">5 заводов</span>
                 <span className="text-[12px] text-gray-500 font-medium">прямые контракты</span>
               </div>
@@ -199,7 +199,7 @@ export default function AboutPage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {VALUES.map((v, i) => (
-              <div key={i} className="group bg-white border border-gray-200 hover:border-brand-primary/30 hover:shadow-md rounded-2xl p-6 flex flex-col gap-4 transition-all duration-200">
+              <div key={i} className="group bg-white border border-gray-200 hover:border-brand-primary/30 hover:shadow-md rounded-xl p-6 flex flex-col gap-4 transition-all duration-200">
                 <div className="w-11 h-11 rounded-xl bg-brand-primary/10 text-brand-primary flex items-center justify-center group-hover:bg-brand-primary group-hover:text-white transition-all duration-200">
                   {v.icon}
                 </div>
@@ -225,7 +225,7 @@ export default function AboutPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {MILESTONES.map((m, i) => (
-              <div key={i} className="relative bg-white border border-gray-200 hover:border-gray-300 hover:shadow-sm rounded-2xl p-6 flex flex-col gap-3 transition-all duration-200 overflow-hidden">
+              <div key={i} className="relative bg-white border border-gray-200 hover:border-gray-300 hover:shadow-sm rounded-xl p-6 flex flex-col gap-3 transition-all duration-200 overflow-hidden">
                 <div className="pointer-events-none absolute top-0 right-0 text-[80px] font-black text-gray-50 leading-none select-none pr-2 pt-1">{m.year}</div>
                 <span className="text-[13px] font-bold text-brand-primary">{m.year}</span>
                 <h3 className="text-[15px] font-bold text-gray-900">{m.title}</h3>
@@ -238,7 +238,7 @@ export default function AboutPage() {
 
       {/* ── CTA ── */}
       <div className="container pt-16">
-        <div className="relative overflow-hidden bg-[#0d1117] rounded-2xl sm:rounded-3xl p-6 sm:p-10 lg:p-14 flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-8">
+        <div className="relative overflow-hidden bg-[#0d1117] rounded-xl sm:rounded-xl p-6 sm:p-10 lg:p-14 flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-8">
           <div className="pointer-events-none absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4" />
           <div className="pointer-events-none absolute bottom-0 left-0 w-64 h-64 bg-brand-primary/10 rounded-full blur-[60px] translate-y-1/2 -translate-x-1/4" />
           <div className="flex flex-col gap-3 z-10 text-center sm:text-left">
@@ -252,13 +252,13 @@ export default function AboutPage() {
           <div className="z-10 flex flex-col sm:flex-row gap-3 w-full sm:w-auto shrink-0">
             <button
               onClick={openModal}
-              className="inline-flex items-center justify-center bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-semibold text-[14px] px-7 py-3.5 rounded-full shadow-lg shadow-brand-primary/25 transition-all"
+              className="inline-flex items-center justify-center bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-semibold text-[14px] px-7 py-3.5 rounded-xl shadow-lg shadow-brand-primary/25 transition-all"
             >
               Оставить заявку
             </button>
             <Link
               href="/contacts"
-              className="inline-flex items-center justify-center bg-white/10 hover:bg-white/15 text-white font-semibold text-[14px] px-7 py-3.5 rounded-full border border-white/10 transition-all"
+              className="inline-flex items-center justify-center bg-white/10 hover:bg-white/15 text-white font-semibold text-[14px] px-7 py-3.5 rounded-xl border border-white/10 transition-all"
             >
               Контакты
             </Link>

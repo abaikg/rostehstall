@@ -234,7 +234,7 @@ export default function ContactsPage() {
           <div className="flex flex-col gap-6">
 
             {/* Телефоны */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col gap-5">
+            <div className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col gap-5">
               <h2 className="text-[13px] font-bold uppercase tracking-widest text-gray-400">Отдел продаж</h2>
               <div className="flex flex-col gap-4">
                 <a href={`tel:${CONTACTS.phoneRaw}`}
@@ -262,7 +262,7 @@ export default function ContactsPage() {
             </div>
 
             {/* Офис */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col gap-5">
+            <div className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col gap-5">
               <h2 className="text-[13px] font-bold uppercase tracking-widest text-gray-400">Офис и склад</h2>
               <div className="flex flex-col gap-4">
                 <div className="flex items-start gap-3">
@@ -302,7 +302,7 @@ export default function ContactsPage() {
             </div>
 
             {/* Мессенджеры */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col gap-4">
+            <div className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col gap-4">
               <h2 className="text-[13px] font-bold uppercase tracking-widest text-gray-400">Мессенджеры</h2>
               <div className="flex gap-3">
                 <a href="https://t.me/rostehstal" target="_blank" rel="noopener noreferrer"
@@ -322,7 +322,7 @@ export default function ContactsPage() {
           <div className="flex flex-col gap-6">
 
             {/* Форма */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-6 sm:p-7">
+            <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-7">
               <div className="flex flex-col gap-1 mb-6">
                 <h2 className="text-[18px] font-bold text-gray-900">Написать нам</h2>
                 <p className="text-[13px] text-gray-500">Ответим в течение 30 минут в рабочее время</p>
@@ -331,7 +331,7 @@ export default function ContactsPage() {
             </div>
 
             {/* Карта */}
-            <div className="relative bg-gray-100 border border-gray-200 rounded-2xl overflow-hidden h-52 flex items-center justify-center">
+            <div className="relative bg-gray-100 border border-gray-200 rounded-xl overflow-hidden h-52 flex items-center justify-center">
               <iframe
                 srcDoc={TWO_GIS_MAP_HTML}
                 width="100%"
@@ -343,7 +343,7 @@ export default function ContactsPage() {
                 href={TWO_GIS_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="absolute bottom-3 right-3 z-30 inline-flex items-center gap-1.5 bg-white border border-gray-200 shadow-sm rounded-full px-3 py-1.5 text-[12px] font-semibold text-gray-700 hover:text-brand-primary transition-colors"
+                className="absolute bottom-3 right-3 z-30 inline-flex items-center gap-1.5 bg-white border border-gray-200 shadow-sm rounded-xl px-3 py-1.5 text-[12px] font-semibold text-gray-700 hover:text-brand-primary transition-colors"
               >
                 <PinIcon /> Открыть в 2ГИС
               </a>
@@ -355,7 +355,7 @@ export default function ContactsPage() {
 
       {/* ── CTA полоса ── */}
       <div className="container">
-        <div className="bg-[#0d1117] rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 flex flex-col lg:flex-row items-center justify-between gap-6 relative overflow-hidden">
+        <div className="bg-[#0d1117] rounded-xl sm:rounded-xl p-6 sm:p-8 lg:p-10 flex flex-col lg:flex-row items-center justify-between gap-6 relative overflow-hidden">
           <div className="pointer-events-none absolute top-0 right-0 w-72 h-72 bg-blue-600/10 rounded-full blur-[60px] -translate-y-1/2 translate-x-1/4" />
           <div className="flex flex-col gap-2 z-10 text-center lg:text-left">
             <p className="text-[18px] sm:text-[22px] font-bold text-white">Нужна быстрая консультация?</p>
@@ -367,11 +367,11 @@ export default function ContactsPage() {
           </div>
           <div className="flex flex-col sm:flex-row gap-3 z-10 w-full lg:w-auto shrink-0">
             <a href={`tel:${CONTACTS.phoneRaw}`}
-              className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/15 border border-white/10 text-white font-semibold text-[13px] px-5 py-3 rounded-full transition-all">
+              className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/15 border border-white/10 text-white font-semibold text-[13px] px-5 py-3 rounded-xl transition-all">
               <PhoneIcon /> Позвонить
             </a>
             <button onClick={openModal}
-              className="inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-semibold text-[13px] px-5 py-3 rounded-full shadow-lg shadow-brand-primary/25 transition-all">
+              className="inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-semibold text-[13px] px-5 py-3 rounded-xl shadow-lg shadow-brand-primary/25 transition-all">
               Оставить заявку
             </button>
           </div>

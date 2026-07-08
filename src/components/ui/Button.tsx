@@ -17,7 +17,7 @@ export const Button = ({
   asChild = false,
   ...props
 }: ButtonProps) => {
-  const baseStyles = "inline-flex items-center justify-center font-medium transition-colors duration-150 cursor-pointer disabled:opacity-50 disabled:pointer-events-none rounded-md";
+  const baseStyles = "inline-flex items-center justify-center font-medium transition-colors duration-150 cursor-pointer disabled:opacity-50 disabled:pointer-events-none rounded-xl";
   
   const variants = {
     primary: "bg-brand-primary text-white hover:bg-brand-primary/90 border border-transparent",

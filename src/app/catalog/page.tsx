@@ -82,7 +82,7 @@ export default function CatalogPage() {
             </h1>
             <button
               onClick={openModal}
-              className="inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold text-[13px] px-5 py-2.5 rounded-full shadow-sm transition-all active:scale-[0.98]"
+              className="inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold text-[13px] px-5 py-2.5 rounded-xl shadow-sm transition-all active:scale-[0.98]"
             >
               Запросить прайс-лист
             </button>
@@ -98,7 +98,7 @@ export default function CatalogPage() {
           <aside className="hidden md:flex flex-col gap-0.5 w-56 lg:w-64 shrink-0 sticky top-[80px]">
             <button
               onClick={() => selectCategory("all")}
-              className={`group flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-semibold text-left transition-all ${
+              className={`group flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] font-semibold text-left transition-all ${
                 activeCategory === "all"
                   ? "bg-brand-primary text-white"
                   : "text-gray-700 hover:bg-gray-100"
@@ -120,7 +120,7 @@ export default function CatalogPage() {
                     event.preventDefault();
                     selectCategory(cat.name);
                   }}
-                  className={`group flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium text-left transition-all ${
+                  className={`group flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] font-medium text-left transition-all ${
                     active
                       ? "bg-brand-primary/10 text-brand-primary font-semibold"
                       : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
@@ -195,7 +195,7 @@ export default function CatalogPage() {
                   <div className="flex justify-center pt-2">
                     <button
                       onClick={() => setVisibleCount((n) => n + PAGE_SIZE)}
-                      className="inline-flex items-center gap-2 px-7 py-3 bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 text-[14px] font-semibold text-gray-700 rounded-full transition-all shadow-sm"
+                      className="inline-flex items-center gap-2 px-7 py-3 bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 text-[14px] font-semibold text-gray-700 rounded-xl transition-all shadow-sm"
                     >
                       Показать ещё
                       <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -206,7 +206,7 @@ export default function CatalogPage() {
                 )}
               </>
             ) : (
-              <div className="py-20 text-center bg-gray-50 border border-gray-200 rounded-2xl">
+              <div className="py-20 text-center bg-gray-50 border border-gray-200 rounded-xl">
                 <p className="text-[15px] font-semibold text-gray-500 mb-3">В этой категории нет товаров</p>
                 <button onClick={() => selectCategory("all")} className="text-brand-primary font-semibold text-[13px] hover:underline">
                   Показать все позиции
@@ -220,16 +220,16 @@ export default function CatalogPage() {
 
       {/* ── CTA полоса ── */}
       <div className="container mt-10">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-5 p-5 sm:p-7 lg:p-8 bg-gray-50 border border-gray-200 rounded-2xl">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-5 p-5 sm:p-7 lg:p-8 bg-gray-50 border border-gray-200 rounded-xl">
           <div className="flex flex-col gap-1 text-center sm:text-left">
             <p className="text-[15px] sm:text-[16px] font-bold text-gray-900">Не нашли нужную позицию?</p>
             <p className="text-[13px] text-gray-500">Оставьте заявку — менеджер подберёт размер и марку за 30 минут.</p>
           </div>
           <div className="flex flex-col xs:flex-row gap-2.5 sm:gap-3 w-full sm:w-auto shrink-0">
-            <button onClick={openModal} className="inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold text-[13px] px-5 py-2.5 rounded-full shadow-sm transition-all">
+            <button onClick={openModal} className="inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold text-[13px] px-5 py-2.5 rounded-xl shadow-sm transition-all">
               Оставить заявку
             </button>
-            <Link href="/contacts" className="inline-flex items-center justify-center gap-2 bg-white text-gray-700 font-semibold text-[13px] px-5 py-2.5 rounded-full border border-gray-200 hover:bg-gray-50 transition-all">
+            <Link href="/contacts" className="inline-flex items-center justify-center gap-2 bg-white text-gray-700 font-semibold text-[13px] px-5 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 transition-all">
               Контакты
             </Link>
           </div>

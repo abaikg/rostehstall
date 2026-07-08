@@ -134,13 +134,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           <div className="flex gap-2.5 flex-wrap">
             <Link
               href="/calculator"
-              className="inline-flex items-center justify-center bg-white text-gray-700 font-semibold text-[13px] px-5 py-2.5 rounded-full border border-gray-200 hover:bg-gray-50 transition-all"
+              className="inline-flex items-center justify-center bg-white text-gray-700 font-semibold text-[13px] px-5 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 transition-all"
             >
               Калькулятор
             </Link>
             <Link
               href="/contacts"
-              className="inline-flex items-center justify-center bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold text-[13px] px-5 py-2.5 rounded-full shadow-sm transition-all"
+              className="inline-flex items-center justify-center bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold text-[13px] px-5 py-2.5 rounded-xl shadow-sm transition-all"
             >
               Получить расчёт
             </Link>
@@ -154,7 +154,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             ))}
           </div>
         ) : (
-          <div className="py-20 text-center bg-gray-50 border border-gray-200 rounded-2xl">
+          <div className="py-20 text-center bg-gray-50 border border-gray-200 rounded-xl">
             <p className="text-[15px] font-semibold text-gray-500 mb-3">В этой категории нет товаров</p>
             <Link href="/catalog" className="text-brand-primary font-semibold text-[13px] hover:underline">
               Показать все позиции
@@ -174,7 +174,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                     {seo.popular.map((item) => (
                       <span
                         key={item}
-                        className="inline-flex items-center bg-blue-50 text-brand-primary font-semibold text-[13px] px-3.5 py-1.5 rounded-full border border-blue-100"
+                        className="inline-flex items-center bg-blue-50 text-brand-primary font-semibold text-[13px] px-3.5 py-1.5 rounded-xl border border-blue-100"
                       >
                         {item}
                       </span>
@@ -207,13 +207,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               <div className="flex flex-wrap gap-2.5 pt-1">
                 <Link
                   href="/calculator"
-                  className="inline-flex items-center justify-center bg-white text-gray-700 font-semibold text-[13px] px-5 py-2.5 rounded-full border border-gray-200 hover:bg-gray-50 transition-all"
+                  className="inline-flex items-center justify-center bg-white text-gray-700 font-semibold text-[13px] px-5 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 transition-all"
                 >
                   Рассчитать в калькуляторе
                 </Link>
                 <Link
                   href="/contacts"
-                  className="inline-flex items-center justify-center bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold text-[13px] px-5 py-2.5 rounded-full shadow-sm transition-all"
+                  className="inline-flex items-center justify-center bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold text-[13px] px-5 py-2.5 rounded-xl shadow-sm transition-all"
                 >
                   Узнать цену и наличие
                 </Link>
@@ -232,7 +232,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {faqs.map((faq) => (
-                <div key={faq.question} className="bg-white border border-gray-200 rounded-2xl p-5 flex flex-col gap-2">
+                <div key={faq.question} className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-2">
                   <h3 className="text-[14px] font-bold text-gray-900 leading-snug">{faq.question}</h3>
                   <p className="text-[13px] text-gray-500 leading-relaxed">{faq.answer}</p>
                 </div>

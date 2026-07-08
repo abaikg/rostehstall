@@ -36,7 +36,7 @@ function Sidebar() {
       {/* Brand */}
       <div className="px-5 py-5 border-b border-white/[0.07]">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center shrink-0 shadow-md shadow-blue-600/40">
+          <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center shrink-0 shadow-md shadow-blue-600/40">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
               <rect x="3" y="3" width="8" height="8" rx="1.5" fill="white" opacity="0.95"/>
               <rect x="13" y="3" width="8" height="8" rx="1.5" fill="white" opacity="0.45"/>

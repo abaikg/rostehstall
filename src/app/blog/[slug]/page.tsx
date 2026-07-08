@@ -85,7 +85,7 @@ function ArticleContent({ content, onHeadings }: { content: string; onHeadings: 
       if (tableRows.length < 2) { tableRows = []; inTable = false; return; }
       const [header, , ...body] = tableRows;
       elements.push(
-        <div key={key++} className="my-8 overflow-x-auto rounded-2xl border border-gray-200">
+        <div key={key++} className="my-8 overflow-x-auto rounded-xl border border-gray-200">
           <table className="w-full text-[14px] border-collapse min-w-[420px]">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200">
@@ -221,7 +221,7 @@ function RelatedCard({ post, compact = false }: { post: BlogPost; compact?: bool
     return (
       <Link href={`/blog/${post.slug}`}
         className="group flex gap-3 items-start p-2.5 rounded-xl hover:bg-gray-50 transition-all">
-        <div className="w-16 h-14 rounded-lg overflow-hidden bg-gray-100 shrink-0">
+        <div className="w-16 h-14 rounded-xl overflow-hidden bg-gray-100 shrink-0">
           {!imgErr && <img src={src} alt={post.title} onError={() => setImgErr(true)} className="w-full h-full object-cover" />}
         </div>
         <div className="flex flex-col gap-1 min-w-0">
@@ -237,7 +237,7 @@ function RelatedCard({ post, compact = false }: { post: BlogPost; compact?: bool
 
   return (
     <Link href={`/blog/${post.slug}`}
-      className="group bg-white border border-gray-200 hover:border-gray-300 hover:shadow-lg rounded-2xl overflow-hidden flex flex-col transition-all duration-200">
+      className="group bg-white border border-gray-200 hover:border-gray-300 hover:shadow-lg rounded-xl overflow-hidden flex flex-col transition-all duration-200">
       <div className="relative bg-gradient-to-br from-slate-100 to-slate-200 aspect-[16/10] overflow-hidden">
         {!imgErr && <img src={src} alt={post.title} onError={() => setImgErr(true)}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />}
@@ -274,7 +274,7 @@ function ShareButtons({ post, vertical = false }: { post: BlogPost; vertical?: b
     ? "flex flex-col gap-2"
     : "flex items-center gap-2 flex-wrap";
   const btnCls = "inline-flex items-center justify-center gap-2 w-10 h-10 rounded-full border transition-all";
-  const labelBtnCls = "inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-[12px] border transition-all";
+  const labelBtnCls = "inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-[12px] border transition-all";
 
   if (vertical) {
     return (
@@ -375,12 +375,12 @@ export default function BlogPostPage() {
   if (!post) {
     return (
       <div className="container py-24 flex flex-col items-center gap-4 text-center">
-        <div className="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-300">
+        <div className="w-16 h-16 rounded-xl bg-gray-100 flex items-center justify-center text-gray-300">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         </div>
         <p className="text-[20px] font-bold text-gray-900">Статья не найдена</p>
         <p className="text-[14px] text-gray-500">Возможно, материал был удалён или ссылка неверна</p>
-        <Link href="/blog" className="mt-2 inline-flex items-center gap-2 bg-brand-primary text-white font-semibold text-[14px] px-6 py-3 rounded-full hover:bg-brand-primary/90 transition-all">
+        <Link href="/blog" className="mt-2 inline-flex items-center gap-2 bg-brand-primary text-white font-semibold text-[14px] px-6 py-3 rounded-xl hover:bg-brand-primary/90 transition-all">
           <ArrowLeft /> Вернуться в блог
         </Link>
       </div>
@@ -425,7 +425,7 @@ export default function BlogPostPage() {
                 <Link href="/blog" className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-gray-400 hover:text-gray-700 transition-colors">
                   <ArrowLeft /> Все статьи
                 </Link>
-                <span className="px-3 py-1.5 bg-brand-primary/10 text-brand-primary text-[11px] font-bold rounded-full uppercase tracking-widest">
+                <span className="px-3 py-1.5 bg-brand-primary/10 text-brand-primary text-[11px] font-bold rounded-xl uppercase tracking-widest">
                   {post.category}
                 </span>
               </div>
@@ -459,7 +459,7 @@ export default function BlogPostPage() {
             </header>
 
             {/* ── Cover image ── */}
-            <div className="relative bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl sm:rounded-3xl overflow-hidden aspect-[16/9] mt-6 sm:mt-8 shadow-lg shadow-gray-200/50">
+            <div className="relative bg-gradient-to-br from-slate-100 to-slate-200 rounded-xl sm:rounded-xl overflow-hidden aspect-[16/9] mt-6 sm:mt-8 shadow-lg shadow-gray-200/50">
               {!imgErr ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -484,8 +484,8 @@ export default function BlogPostPage() {
               </div>
 
               {/* Author bio card */}
-              <div className="mt-8 p-5 sm:p-7 bg-gradient-to-br from-blue-50/50 to-gray-50 border border-gray-200/60 rounded-2xl sm:rounded-3xl flex items-start gap-4 sm:gap-5">
-                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-brand-primary to-blue-500 flex items-center justify-center text-white text-[18px] sm:text-[20px] font-bold shadow-md shadow-brand-primary/20 shrink-0">
+              <div className="mt-8 p-5 sm:p-7 bg-gradient-to-br from-blue-50/50 to-gray-50 border border-gray-200/60 rounded-xl sm:rounded-xl flex items-start gap-4 sm:gap-5">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br from-brand-primary to-blue-500 flex items-center justify-center text-white text-[18px] sm:text-[20px] font-bold shadow-md shadow-brand-primary/20 shrink-0">
                   {post.author.name.split(" ").map(s => s[0]).slice(0, 2).join("")}
                 </div>
                 <div className="flex flex-col gap-1 min-w-0">
@@ -505,13 +505,13 @@ export default function BlogPostPage() {
 
             {/* Table of contents */}
             {headings.length > 1 && (
-              <div className="bg-white border border-gray-200 rounded-2xl p-5 flex flex-col gap-2">
+              <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-2">
                 <p className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-1">Содержание</p>
                 <ul className="flex flex-col gap-0.5 max-h-[50vh] overflow-y-auto">
                   {headings.map((h) => (
                     <li key={h.id}>
                       <a href={`#${h.id}`}
-                        className={`block py-1.5 px-3 rounded-lg text-[13px] leading-snug transition-all border-l-2 ${
+                        className={`block py-1.5 px-3 rounded-xl text-[13px] leading-snug transition-all border-l-2 ${
                           activeId === h.id
                             ? "border-brand-primary text-brand-primary font-semibold bg-blue-50/60"
                             : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
@@ -525,13 +525,13 @@ export default function BlogPostPage() {
             )}
 
             {/* Share */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-5 flex flex-col gap-3">
+            <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-3">
               <p className="text-[11px] font-bold uppercase tracking-widest text-gray-400">Поделиться</p>
               <ShareButtons post={post} />
             </div>
 
             {/* CTA */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-brand-primary to-blue-500 rounded-2xl p-6 flex flex-col gap-4 text-white shadow-lg shadow-brand-primary/20">
+            <div className="relative overflow-hidden bg-gradient-to-br from-brand-primary to-blue-500 rounded-xl p-6 flex flex-col gap-4 text-white shadow-lg shadow-brand-primary/20">
               <div className="absolute -top-12 -right-12 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
               <div className="relative">
                 <p className="text-[16px] font-bold leading-snug mb-2">Нужна помощь с выбором металлопроката?</p>
@@ -546,7 +546,7 @@ export default function BlogPostPage() {
 
             {/* Related compact */}
             {relatedFinal.length > 0 && (
-              <div className="bg-white border border-gray-200 rounded-2xl p-4 flex flex-col gap-1">
+              <div className="bg-white border border-gray-200 rounded-xl p-4 flex flex-col gap-1">
                 <p className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-2 px-2">Похожие статьи</p>
                 {relatedFinal.slice(0, 3).map((p) => <RelatedCard key={p.id} post={p} compact />)}
               </div>
@@ -558,14 +558,14 @@ export default function BlogPostPage() {
 
       {/* ── Mobile CTA ── */}
       <div className="container mt-12 lg:hidden">
-        <div className="relative overflow-hidden bg-gradient-to-br from-brand-primary to-blue-500 rounded-3xl p-6 sm:p-8 flex flex-col gap-4 text-white shadow-lg shadow-brand-primary/20">
+        <div className="relative overflow-hidden bg-gradient-to-br from-brand-primary to-blue-500 rounded-xl p-6 sm:p-8 flex flex-col gap-4 text-white shadow-lg shadow-brand-primary/20">
           <div className="absolute -top-16 -right-16 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
           <div className="relative flex flex-col gap-2">
             <p className="text-[18px] sm:text-[22px] font-bold leading-snug">Нужна помощь с выбором металлопроката?</p>
             <p className="text-[14px] text-blue-100 leading-relaxed">Менеджер рассчитает стоимость и подберёт нужную марку за 30 минут.</p>
           </div>
           <button onClick={openModal}
-            className="relative self-start inline-flex items-center justify-center gap-2 bg-white text-brand-primary font-bold text-[14px] px-6 py-3 rounded-full hover:bg-blue-50 transition-all">
+            className="relative self-start inline-flex items-center justify-center gap-2 bg-white text-brand-primary font-bold text-[14px] px-6 py-3 rounded-xl hover:bg-blue-50 transition-all">
             Оставить заявку
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </button>

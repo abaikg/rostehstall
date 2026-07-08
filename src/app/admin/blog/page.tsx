@@ -57,17 +57,17 @@ export default function AdminBlogPage() {
       {/* Cards */}
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {[0,1,2,3].map(i => <div key={i} className="h-36 bg-white rounded-2xl border border-slate-200 animate-pulse" />)}
+          {[0,1,2,3].map(i => <div key={i} className="h-36 bg-white rounded-xl border border-slate-200 animate-pulse" />)}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-slate-200 py-16 flex flex-col items-center gap-3 text-slate-400">
+        <div className="bg-white rounded-xl border border-slate-200 py-16 flex flex-col items-center gap-3 text-slate-400">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
           <span className="text-[14px] font-medium">Статей не найдено</span>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {filtered.map(p => (
-            <div key={p.id} className="bg-white rounded-2xl border border-slate-200 p-5 flex flex-col gap-3 hover:shadow-md transition-shadow">
+            <div key={p.id} className="bg-white rounded-xl border border-slate-200 p-5 flex flex-col gap-3 hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between gap-3">
                 <span className={`shrink-0 px-2.5 py-1 rounded-full text-[11px] font-bold ${categoryColors[p.category] ?? "bg-slate-100 text-slate-600"}`}>
                   {p.category}
@@ -82,15 +82,15 @@ export default function AdminBlogPage() {
                 <span className="text-[11px] text-slate-400">{p.author.name} · {p.readTime} мин</span>
                 <div className="flex items-center gap-1.5">
                   <Link href={`/blog/${p.slug}`} target="_blank"
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors" title="Просмотр">
+                    className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors" title="Просмотр">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                   </Link>
                   <Link href={`/admin/blog/${p.id}`}
-                    className="p-1.5 rounded-lg text-blue-500 hover:text-blue-700 hover:bg-blue-50 transition-colors" title="Редактировать">
+                    className="p-1.5 rounded-xl text-blue-500 hover:text-blue-700 hover:bg-blue-50 transition-colors" title="Редактировать">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                   </Link>
                   <button onClick={() => del(p.id, p.title)}
-                    className="p-1.5 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 transition-colors" title="Удалить">
+                    className="p-1.5 rounded-xl text-red-400 hover:text-red-600 hover:bg-red-50 transition-colors" title="Удалить">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
                   </button>
                 </div>

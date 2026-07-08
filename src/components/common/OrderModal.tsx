@@ -81,7 +81,7 @@ export const OrderModal = () => {
       />
 
       {/* Panel */}
-      <div className="relative z-10 w-full max-w-[480px] bg-white rounded-2xl shadow-2xl animate-reveal overflow-hidden">
+      <div className="relative z-10 w-full max-w-[480px] bg-white rounded-xl shadow-2xl animate-reveal overflow-hidden">
 
         {/* ── Успешная отправка ── */}
         {done ? (
@@ -113,7 +113,7 @@ export const OrderModal = () => {
               </h2>
               <button
                 onClick={handleClose}
-                className="text-gray-300 hover:text-gray-600 transition-colors p-1 -mt-0.5 -mr-1 rounded-full hover:bg-gray-100"
+                className="text-gray-300 hover:text-gray-600 transition-colors p-1 -mt-0.5 -mr-1 rounded-xl hover:bg-gray-100"
                 aria-label="Закрыть"
               >
                 <XIcon />

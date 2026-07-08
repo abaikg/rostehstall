@@ -102,7 +102,7 @@ export default function NewBlogPostPage() {
         <div className="flex flex-col gap-3">
 
           {/* Cover image */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col gap-3">
+          <div className="bg-white rounded-xl border border-slate-200 p-4 flex flex-col gap-3">
             <p className={lbl}>Обложка статьи</p>
 
             <div
@@ -119,7 +119,7 @@ export default function NewBlogPostPage() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={form.coverImgQuery} alt="cover" className="w-full object-cover" style={{ minHeight: 160, maxHeight: 200 }} />
                   <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <span className="text-white text-[12px] font-semibold bg-black/50 px-3 py-1.5 rounded-lg">Заменить обложку</span>
+                    <span className="text-white text-[12px] font-semibold bg-black/50 px-3 py-1.5 rounded-xl">Заменить обложку</span>
                   </div>
                 </>
               ) : (
@@ -138,7 +138,7 @@ export default function NewBlogPostPage() {
 
             {isImageUrl && (
               <button type="button" onClick={() => set("coverImgQuery", "")}
-                className="flex items-center justify-center gap-1.5 text-[12px] text-red-400 hover:text-red-600 font-medium py-1.5 rounded-lg hover:bg-red-50 transition-colors">
+                className="flex items-center justify-center gap-1.5 text-[12px] text-red-400 hover:text-red-600 font-medium py-1.5 rounded-xl hover:bg-red-50 transition-colors">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
                 Удалить обложку
               </button>
@@ -154,7 +154,7 @@ export default function NewBlogPostPage() {
           </div>
 
           {/* Meta */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col gap-3">
+          <div className="bg-white rounded-xl border border-slate-200 p-4 flex flex-col gap-3">
             <p className={lbl}>Метаданные</p>
 
             <div className="flex flex-col gap-1">
@@ -206,7 +206,7 @@ export default function NewBlogPostPage() {
         <div className="flex flex-col gap-3">
 
           {/* Main fields */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col gap-3">
+          <div className="bg-white rounded-xl border border-slate-200 p-4 flex flex-col gap-3">
             <p className={lbl}>Основная информация</p>
 
             <div className="flex flex-col gap-1">
@@ -231,11 +231,11 @@ export default function NewBlogPostPage() {
           </div>
 
           {/* Content editor */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col gap-3 flex-1">
+          <div className="bg-white rounded-xl border border-slate-200 p-4 flex flex-col gap-3 flex-1">
             <div className="flex items-center justify-between">
               <p className={lbl}>Текст статьи (Markdown)</p>
               <button type="button" onClick={() => setPreview(p => !p)}
-                className={`text-[11px] font-semibold px-2.5 py-1 rounded-lg transition-colors ${
+                className={`text-[11px] font-semibold px-2.5 py-1 rounded-xl transition-colors ${
                   preview ? "bg-blue-100 text-blue-700" : "bg-slate-100 text-slate-500 hover:bg-slate-200"
                 }`}>
                 {preview ? "← Редактор" : "Превью →"}
@@ -255,7 +255,7 @@ export default function NewBlogPostPage() {
                 ].map(btn => (
                   <button key={btn.label} type="button"
                     onClick={() => set("content", (form.content || "") + btn.insert)}
-                    className={`px-2 py-1 text-[11px] rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors ${btn.bold ? "font-black" : "font-semibold"}`}>
+                    className={`px-2 py-1 text-[11px] rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors ${btn.bold ? "font-black" : "font-semibold"}`}>
                     {btn.label}
                   </button>
                 ))}

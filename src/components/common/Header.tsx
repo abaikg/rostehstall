@@ -53,15 +53,15 @@ export const Header = () => {
 
           {/* Desktop Navigation — pill container */}
           <nav className="hidden md:flex items-center">
-            <div className="flex items-center gap-0.5 bg-gray-50 border border-gray-200/70 rounded-full p-1">
+            <div className="flex items-center gap-0.5 bg-gray-50 border border-gray-200/70 rounded-xl p-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-4 lg:px-5 py-2 rounded-full text-[13px] font-semibold transition-all duration-200 whitespace-nowrap ${
+                  className={`px-4 lg:px-5 py-2 rounded-xl text-[12px] font-bold uppercase tracking-normal transition-all duration-200 whitespace-nowrap ${
                     pathname === link.href
-                      ? "bg-white text-gray-900 shadow-sm ring-1 ring-gray-200/60"
-                      : "text-gray-500 hover:text-gray-800 hover:bg-white/60"
+                      ? "bg-white text-gray-950 shadow-sm ring-1 ring-gray-200/60"
+                      : "text-gray-700 hover:text-gray-950 hover:bg-white/70"
                   }`}
                 >
                   {link.label}
@@ -89,14 +89,14 @@ export const Header = () => {
             {/* CTA — sm+ */}
             <button
               onClick={openModal}
-              className="hidden sm:flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.97] text-white text-[13px] font-semibold px-5 py-2.5 rounded-full transition-all duration-200 shadow-sm hover:shadow-md"
+              className="hidden sm:flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.97] text-white text-[13px] font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md"
             >
               Оставить заявку
             </button>
 
             {/* Hamburger — md- */}
             <button
-              className="md:hidden flex flex-col justify-center items-center gap-[5px] w-10 h-10 rounded-full bg-gray-50 border border-gray-200 hover:bg-gray-100 active:scale-95 transition-all duration-200"
+              className="md:hidden flex flex-col justify-center items-center gap-[5px] w-10 h-10 rounded-xl bg-gray-50 border border-gray-200 hover:bg-gray-100 active:scale-95 transition-all duration-200"
               onClick={() => setMobileMenuOpen((v) => !v)}
               aria-label={mobileMenuOpen ? "Закрыть меню" : "Открыть меню"}
               aria-expanded={mobileMenuOpen}
@@ -142,18 +142,18 @@ export const Header = () => {
           {/* spacer matching header height */}
           <div className="h-[60px] sm:h-[68px]" />
 
-          <div className="px-4 pb-6 pt-1">
+          <div className="px-4 pb-6 pt-2">
             {/* Nav links */}
-            <nav className="flex flex-col gap-0.5 mb-5">
+            <nav className="flex flex-col gap-1.5 mb-5">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center px-4 py-3.5 rounded-xl text-[15px] font-semibold transition-all duration-150 ${
+                  className={`flex items-center px-4 py-3.5 rounded-xl text-[13px] font-bold uppercase tracking-normal transition-all duration-150 ${
                     pathname === link.href
-                      ? "bg-blue-50 text-brand-primary"
-                      : "text-gray-700 hover:bg-gray-50"
+                      ? "bg-blue-50 text-brand-primary ring-1 ring-blue-100"
+                      : "text-gray-800 hover:bg-gray-50 hover:text-gray-950"
                   }`}
                 >
                   {link.label}
@@ -165,13 +165,13 @@ export const Header = () => {
             <div className="border-t border-gray-100 pt-5 flex flex-col gap-3">
               <a
                 href={`tel:${CONTACTS.phoneRaw}`}
-                className="flex items-center justify-center py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 font-bold text-[16px] tracking-tight hover:bg-gray-100 transition-colors"
+                className="flex items-center justify-center py-3.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-950 font-bold text-[17px] tracking-normal hover:bg-gray-100 transition-colors"
               >
                 {CONTACTS.phone}
               </a>
               <button
                 onClick={() => { openModal(); setMobileMenuOpen(false); }}
-                className="flex items-center justify-center bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold py-3.5 rounded-xl text-[15px] transition-colors active:scale-[0.98]"
+                className="flex items-center justify-center bg-brand-primary hover:bg-brand-primary/90 text-white font-bold uppercase tracking-normal py-3.5 rounded-xl text-[13px] transition-colors active:scale-[0.98]"
               >
                 Оставить заявку
               </button>

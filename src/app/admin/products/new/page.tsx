@@ -106,7 +106,7 @@ export default function NewProductPage() {
       <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-4">
         {/* Left: Image */}
         <div className="flex flex-col gap-3">
-          <div className="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col gap-3">
+          <div className="bg-white rounded-xl border border-slate-200 p-4 flex flex-col gap-3">
             <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Изображение</p>
 
             <div
@@ -123,7 +123,7 @@ export default function NewProductPage() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={form.image} alt="preview" className="w-full h-full object-cover" style={{ minHeight: 180, maxHeight: 220 }} />
                   <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <span className="text-white text-[12px] font-semibold bg-black/50 px-3 py-1.5 rounded-lg">Заменить фото</span>
+                    <span className="text-white text-[12px] font-semibold bg-black/50 px-3 py-1.5 rounded-xl">Заменить фото</span>
                   </div>
                 </>
               ) : (
@@ -144,7 +144,7 @@ export default function NewProductPage() {
 
             {form.image && (
               <button type="button" onClick={() => set("image", "")}
-                className="flex items-center justify-center gap-1.5 text-[12px] text-red-400 hover:text-red-600 font-medium py-1.5 rounded-lg hover:bg-red-50 transition-colors">
+                className="flex items-center justify-center gap-1.5 text-[12px] text-red-400 hover:text-red-600 font-medium py-1.5 rounded-xl hover:bg-red-50 transition-colors">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
                 Удалить фото
               </button>
@@ -158,7 +158,7 @@ export default function NewProductPage() {
           </div>
 
           {/* Meta */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col gap-3">
+          <div className="bg-white rounded-xl border border-slate-200 p-4 flex flex-col gap-3">
             <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Параметры</p>
             <div className="flex flex-col gap-1">
               <label className={lbl}>Цена</label>
@@ -181,7 +181,7 @@ export default function NewProductPage() {
         {/* Right: Main fields */}
         <div className="flex flex-col gap-3">
           {/* Basic info */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col gap-3">
+          <div className="bg-white rounded-xl border border-slate-200 p-4 flex flex-col gap-3">
             <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Основная информация</p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -213,7 +213,7 @@ export default function NewProductPage() {
           </div>
 
           {/* Specs */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col gap-3">
+          <div className="bg-white rounded-xl border border-slate-200 p-4 flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Характеристики</p>
               <span className="text-[11px] text-slate-400">{(form.specs || []).length} позиций</span>
@@ -223,10 +223,10 @@ export default function NewProductPage() {
               <div className="flex flex-col gap-1.5">
                 {(form.specs || []).map((s: Spec, i) => (
                   <div key={i} className="grid grid-cols-[1fr_1fr_28px] gap-2 items-center group">
-                    <div className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[12px] font-semibold text-slate-700 truncate">{s.label}</div>
-                    <div className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[12px] text-slate-500 truncate">{s.value}</div>
+                    <div className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-[12px] font-semibold text-slate-700 truncate">{s.label}</div>
+                    <div className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-[12px] text-slate-500 truncate">{s.value}</div>
                     <button type="button" onClick={() => removeSpec(i)}
-                      className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-300 hover:text-red-500 hover:bg-red-50 transition-colors opacity-0 group-hover:opacity-100">
+                      className="w-7 h-7 flex items-center justify-center rounded-xl text-slate-300 hover:text-red-500 hover:bg-red-50 transition-colors opacity-0 group-hover:opacity-100">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
                   </div>
@@ -249,7 +249,7 @@ export default function NewProductPage() {
           </div>
 
           {/* Features */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col gap-3">
+          <div className="bg-white rounded-xl border border-slate-200 p-4 flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Преимущества</p>
               <span className="text-[11px] text-slate-400">{(form.features || []).length} позиций</span>
@@ -262,7 +262,7 @@ export default function NewProductPage() {
                     <div className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0" />
                     <span className="flex-1 text-[13px] text-slate-700 py-1.5">{f}</span>
                     <button type="button" onClick={() => removeFeature(i)}
-                      className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-300 hover:text-red-500 hover:bg-red-50 transition-colors opacity-0 group-hover:opacity-100">
+                      className="w-7 h-7 flex items-center justify-center rounded-xl text-slate-300 hover:text-red-500 hover:bg-red-50 transition-colors opacity-0 group-hover:opacity-100">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
                   </div>

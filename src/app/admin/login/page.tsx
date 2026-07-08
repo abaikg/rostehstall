@@ -53,7 +53,7 @@ export default function AdminLoginPage() {
         </div>
 
         {/* Карточка */}
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
+        <div className="bg-white/5 border border-white/10 rounded-xl p-8 backdrop-blur-sm">
           <h1 className="text-white font-bold text-[22px] mb-1">Вход</h1>
           <p className="text-gray-400 text-[13px] mb-6">Введите пароль для доступа к панели</p>
 
