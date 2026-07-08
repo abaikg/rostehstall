@@ -1,8 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { products, Product } from "@/data/catalog";
-import { ProductCard } from "@/components/features/catalog/ProductCard";
 import { useOrderModal } from "@/context/ModalContext";
 import { CONTACTS } from "@/lib/constants";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -100,13 +98,6 @@ const STEPS = [
   { n: "04", title: "Получите металл", desc: "Доставим на объект собственным транспортом в день оплаты." },
 ];
 
-const POPULAR_PRODUCT_SLUGS = [
-  "truba-profilnaya-40x40x2",
-  "armatura-a500s-12mm",
-  "list-gk-3mm-st3",
-  "ugolok-stalnoy-50x50x5",
-];
-
 const HERO_SLIDES = [
   "/images/hero/hero-metal-yard.jpg",
   "/images/hero/hero-warehouse-rebar.jpg",
@@ -117,9 +108,6 @@ const HERO_SLIDES = [
 export default function HomePage() {
   const { openModal } = useOrderModal();
   const [heroSlide, setHeroSlide] = useState(0);
-  const popularProducts = POPULAR_PRODUCT_SLUGS
-    .map((slug) => products.find((product) => product.slug === slug))
-    .filter((product): product is Product => Boolean(product));
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -240,9 +228,9 @@ export default function HomePage() {
                   loading="lazy"
                   className="absolute inset-0 h-full w-full scale-110 object-cover blur-[3px] transition-transform duration-300 group-hover:scale-125"
                 />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-brand-primary/45 via-brand-primary/65 to-brand-dark/85" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-brand-primary/30 via-brand-primary/50 to-brand-dark/70" />
 
-                <span className="relative z-10 max-w-[80%] text-[14px] sm:text-[15px] font-bold uppercase leading-snug text-white drop-shadow-sm">
+                <span className="relative z-10 max-w-[85%] text-[17px] sm:text-[19px] font-bold uppercase leading-snug text-white drop-shadow-sm">
                   {cat.name}
                 </span>
 
@@ -270,26 +258,6 @@ export default function HomePage() {
                   </span>
                 </button>
               </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════ ПРОДУКТЫ ═══════════ */}
-      <section className="py-20 sm:py-24 bg-gray-50/50">
-        <div className="container flex flex-col gap-10">
-
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 pb-6 border-b border-gray-200">
-            <div className="flex flex-col gap-2">
-              <h2 className="text-[22px] sm:text-[28px] md:text-[36px] font-bold uppercase tracking-normal text-gray-900">
-                СВЯЖИТЕСЬ С МЕНЕДЖЕРОМ НАПРЯМУЮ
-              </h2>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {popularProducts.map((product) => (
-              <ProductCard key={product.id} product={product} hideSize hideMeta />
             ))}
           </div>
         </div>
