@@ -227,9 +227,8 @@ export default function HomePage() {
       <section className="py-14 sm:py-20">
         <div className="container flex flex-col gap-6 sm:gap-8">
           <div className="flex max-w-xl flex-col items-start gap-2 text-left">
-            <span className="text-[11px] sm:text-[12px] font-bold uppercase tracking-normal text-brand-primary">Ассортимент</span>
             <h2 className="text-[22px] sm:text-[28px] md:text-[36px] font-bold uppercase tracking-normal text-gray-900 leading-tight">
-              Металлопрокат по категориям
+              СВЯЖИТЕСЬ С МЕНЕДЖЕРОМ НАПРЯМУЮ
             </h2>
           </div>
 
