@@ -238,9 +238,9 @@ export default function HomePage() {
                   src={cat.photo}
                   alt={`${cat.name} в Бишкеке — Ростехсталь`}
                   loading="lazy"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="absolute inset-0 h-full w-full scale-110 object-cover blur-[3px] transition-transform duration-300 group-hover:scale-125"
                 />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#1a5c8a]/30 via-[#164d74]/45 to-[#0d3355]/65" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#1a5c8a]/45 via-[#164d74]/60 to-[#0d3355]/78" />
 
                 <span className="relative z-10 max-w-[80%] text-[14px] sm:text-[15px] font-bold uppercase leading-snug text-white drop-shadow-sm">
                   {cat.name}
