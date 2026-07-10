@@ -6,6 +6,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { categorySeo } from "@/data/categorySeo";
 import { getCategoryBySlug, getIndexedCategories, getProductsForCategory } from "@/lib/catalogRoutes";
 import { getProducts } from "@/lib/db";
+import { getProductImage } from "@/lib/productImages";
 import {
   absoluteUrl,
   breadcrumbJsonLd,
@@ -43,6 +44,39 @@ function getCategoryFaq(category: string) {
         "Для подходящих позиций доступна резка металла под проектные размеры. Уточните параметры у менеджера при оформлении заявки.",
     },
   ];
+}
+
+// Общие фото склада/продукции — добавляют разнообразия к фото самого товара
+// раздела (у многих подкатегорий все товары используют одно и то же фото).
+const GENERIC_STOCK_PHOTOS = [
+  "/images/hero/hero-metal-yard.jpg",
+  "/images/hero/hero-warehouse-rebar.jpg",
+  "/images/hero/hero-clean-stock.jpg",
+  "/images/products/structural-profiles.png",
+];
+
+function buildCategoryGallery(categoryProducts: ReturnType<typeof getProductsForCategory>) {
+  const photos: string[] = [];
+  const seen = new Set<string>();
+
+  const addPhoto = (src?: string) => {
+    if (!src || seen.has(src)) return;
+    seen.add(src);
+    photos.push(src);
+  };
+
+  // Сначала — реальное фото товаров раздела (могут повторяться у похожих позиций)
+  for (const product of categoryProducts) {
+    if (photos.length >= 4) break;
+    addPhoto(getProductImage(product));
+  }
+  // Затем — общие фото склада, чтобы добрать до 4 и разбавить повторы
+  for (const photo of GENERIC_STOCK_PHOTOS) {
+    if (photos.length >= 4) break;
+    addPhoto(photo);
+  }
+
+  return photos;
 }
 
 export function generateStaticParams() {
@@ -86,6 +120,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   // подкатегории отдельного текста нет.
   const parentCategoryName = categoryProducts[0]?.category ?? category.name;
   const seo = categorySeo[category.name] ?? categorySeo[parentCategoryName];
+  const galleryPhotos = buildCategoryGallery(categoryProducts);
   const jsonLd = jsonLdGraph([
     breadcrumbJsonLd([
       { name: "Главная", path: "/" },
@@ -283,6 +318,32 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </div>
           </div>
         </section>
+
+        {galleryPhotos.length > 0 && (
+          <section className="mt-10 border-t border-gray-100 pt-10">
+            <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-2">
+                <span className="text-[11px] font-bold uppercase tracking-widest text-brand-primary">Фото</span>
+                <h2 className="text-[22px] font-bold tracking-tight text-gray-900 sm:text-[28px]">
+                  {category.name} на складе Ростехсталь
+                </h2>
+              </div>
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+                {galleryPhotos.map((photo) => (
+                  <div key={photo} className="aspect-square overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={photo}
+                      alt={`${category.name} в Бишкеке — фото со склада Ростехсталь`}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
