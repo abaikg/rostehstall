@@ -47,8 +47,9 @@ interface HomeCategory {
    реальный раздел. */
 const CURATED_HOME_CATEGORIES: { label: string; subcategory: string }[] = [
   { label: "Арматура", subcategory: "Арматура" },
-  { label: "Катанка", subcategory: "Круг" },
-  { label: "Круг", subcategory: "Круг" },
+  // Катанка и Круг сейчас ведут в один и тот же раздел (нет отдельного
+  // ассортимента катанки) — объединены в одну плитку, а не дублируются
+  { label: "Круг, катанка", subcategory: "Круг" },
   { label: "Листовой металл", subcategory: "Лист горячекатаный" },
   { label: "Угол", subcategory: "Уголок равнополочный" },
   { label: "Швеллер", subcategory: "Швеллер" },
@@ -274,11 +275,11 @@ export default function HomePage() {
                   <div className="absolute inset-0 bg-brand-primary/58" />
                 </div>
 
-                <span className="absolute left-1/2 top-[31%] z-10 flex max-w-[82%] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center">
-                  <span className="text-[18px] font-bold uppercase leading-tight text-white drop-shadow-sm sm:text-[20px]">
+                <span className="absolute left-1/2 top-[28%] z-10 flex w-[86%] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center">
+                  <span className="w-full truncate text-[16px] font-bold uppercase leading-tight text-white drop-shadow-sm sm:text-[19px]">
                     {cat.name}
                   </span>
-                  <span className="text-[11px] font-medium normal-case text-white/80 drop-shadow-sm sm:text-[12px]">
+                  <span className="w-full truncate text-[10px] font-medium normal-case text-white/80 drop-shadow-sm sm:text-[11px]">
                     {cat.name} в Бишкеке
                   </span>
                 </span>
