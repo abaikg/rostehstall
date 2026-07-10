@@ -106,20 +106,20 @@ export default function CatalogPage() {
               <Link
                 key={group.name}
                 href={getCategoryPath(group.name)}
-                className="group flex min-h-[104px] flex-col justify-between rounded-lg border border-gray-200 bg-white p-3 transition-all hover:border-brand-primary hover:bg-blue-50 sm:min-h-28 sm:p-4"
+                className="group flex min-h-[104px] flex-col justify-between rounded-lg bg-brand-primary p-3 shadow-sm transition-all hover:-translate-y-0.5 hover:bg-brand-dark hover:shadow-md sm:min-h-28 sm:p-4"
               >
                 <div className="flex items-start justify-between gap-2 sm:gap-3">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-brand-primary transition-colors group-hover:bg-white sm:h-9 sm:w-9">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/15 text-white transition-colors group-hover:bg-white/25 sm:h-9 sm:w-9">
                     <SectionIcon />
                   </span>
-                  <span className="shrink-0 rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-brand-primary transition-colors group-hover:bg-white sm:text-[11px]">
+                  <span className="shrink-0 rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-bold text-white transition-colors group-hover:bg-white/25 sm:text-[11px]">
                     {group.count}
                   </span>
                 </div>
                 <div className="mt-3 flex flex-col gap-1 sm:mt-4">
-                  <h2 className="line-clamp-2 text-[13px] font-bold uppercase leading-tight tracking-wide text-gray-900 sm:text-[15px]">{group.name}</h2>
+                  <h2 className="line-clamp-2 text-[13px] font-bold uppercase leading-tight tracking-wide text-white sm:text-[15px]">{group.name}</h2>
                   {group.sample && (
-                    <p className="line-clamp-1 text-[11px] text-gray-500 sm:text-[12px]">{group.sample.name}</p>
+                    <p className="line-clamp-1 text-[11px] text-white/70 sm:text-[12px]">{group.sample.name}</p>
                   )}
                 </div>
               </Link>

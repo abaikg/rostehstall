@@ -262,7 +262,7 @@ export default function HomePage() {
               <Link
                 key={cat.name}
                 href={cat.href}
-                className="group relative aspect-square overflow-hidden rounded-[14px] bg-brand-primary p-4 text-center shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg sm:p-5"
+                className="group relative aspect-square overflow-hidden rounded-[14px] bg-sky-400 p-4 text-center shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg sm:p-5"
               >
                 <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[14px] [clip-path:polygon(0_0,100%_0,100%_76%,64%_76%,64%_100%,0_100%)]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -270,9 +270,9 @@ export default function HomePage() {
                     src={cat.photo}
                     alt={`${cat.name} в Бишкеке — Ростехсталь`}
                     loading="lazy"
-                    className="h-full w-full scale-110 object-cover opacity-70 blur-[1px] mix-blend-multiply transition-transform duration-300 group-hover:scale-125"
+                    className="h-full w-full scale-110 object-cover opacity-55 blur-[1px] saturate-75 transition-transform duration-300 group-hover:scale-125"
                   />
-                  <div className="absolute inset-0 bg-brand-primary/58" />
+                  <div className="absolute inset-0 bg-sky-400/55" />
                 </div>
 
                 <span className="absolute left-1/2 top-[26%] z-10 flex w-[88%] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center">
@@ -297,7 +297,7 @@ export default function HomePage() {
                     );
                   }}
                   aria-label={`Написать в WhatsApp: ${cat.name}`}
-                  className="group/wa absolute bottom-0 right-0 z-10 flex h-[64px] w-[126px] flex-col items-center justify-center gap-0.5 rounded-[12px] border-[4px] border-brand-primary bg-white leading-none shadow-md transition-colors hover:border-brand-dark hover:bg-brand-primary"
+                  className="group/wa absolute bottom-0 right-0 z-10 flex h-[64px] w-[126px] flex-col items-center justify-center gap-0.5 rounded-[12px] border-[4px] border-sky-400 bg-white leading-none shadow-md transition-colors hover:border-brand-dark hover:bg-brand-primary"
                 >
                   <span className="absolute right-2 top-2 h-3 w-3 rounded-full bg-brand-dark transition-colors group-hover/wa:bg-white" />
                   <span className="text-[11px] font-extrabold uppercase tracking-normal text-brand-dark transition-colors group-hover/wa:text-white sm:text-[12px]">
