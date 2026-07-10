@@ -275,11 +275,11 @@ export default function HomePage() {
                   <div className="absolute inset-0 bg-brand-primary/58" />
                 </div>
 
-                <span className="absolute left-1/2 top-[28%] z-10 flex w-[86%] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center">
-                  <span className="w-full truncate text-[16px] font-bold uppercase leading-tight text-white drop-shadow-sm sm:text-[19px]">
+                <span className="absolute left-1/2 top-[26%] z-10 flex w-[88%] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center">
+                  <span className="line-clamp-2 w-full text-[14px] font-bold uppercase leading-tight text-white drop-shadow-sm sm:text-[18px]">
                     {cat.name}
                   </span>
-                  <span className="w-full truncate text-[10px] font-medium normal-case text-white/80 drop-shadow-sm sm:text-[11px]">
+                  <span className="w-full truncate text-[9px] font-medium normal-case text-white/80 drop-shadow-sm sm:text-[11px]">
                     {cat.name} в Бишкеке
                   </span>
                 </span>
