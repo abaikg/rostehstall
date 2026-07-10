@@ -7,6 +7,12 @@ export const metadata: Metadata = buildMetadata({
   description:
     "Каталог металлопроката Ростехсталь: арматура, профильная труба, листовой прокат, швеллер и другие позиции с доставкой по Кыргызстану.",
   path: "/catalog",
+  keywords: [
+    "каталог металлопроката Бишкек",
+    "каталог металлопроката Кыргызстан",
+    "прайс металлопроката Бишкек",
+    "металлопрокат ассортимент Бишкек",
+  ],
 });
 
 export default function CatalogLayout({ children }: { children: ReactNode }) {

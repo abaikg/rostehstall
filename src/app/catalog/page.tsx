@@ -1,10 +1,10 @@
-"use client";
-
-import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { Product } from "@/data/catalog";
-import { useOrderModal } from "@/context/ModalContext";
+import { CatalogCtaButton } from "@/components/features/catalog/CatalogCtaButton";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { getCategoryPath, getPublicProductGroup } from "@/lib/catalogRoutes";
+import { getProducts } from "@/lib/db";
+import { absoluteUrl, breadcrumbJsonLd, jsonLdGraph } from "@/lib/seo";
 
 type ProductGroup = {
   name: string;
@@ -19,46 +19,53 @@ const SectionIcon = () => (
   </svg>
 );
 
+function buildGroups(products: Product[]): ProductGroup[] {
+  const map = new Map<string, ProductGroup>();
+
+  for (const product of products) {
+    const name = getPublicProductGroup(product);
+    const current = map.get(name);
+
+    map.set(name, {
+      name,
+      count: (current?.count ?? 0) + 1,
+      sample: current?.sample ?? product,
+    });
+  }
+
+  return Array.from(map.values());
+}
+
 export default function CatalogPage() {
-  const { openModal } = useOrderModal();
-  const [products, setProducts] = useState<Product[]>([]);
+  const products = getProducts();
+  const groups = buildGroups(products);
 
-  useEffect(() => {
-    let cancelled = false;
-
-    fetch("/api/products")
-      .then((res) => (res.ok ? res.json() : []))
-      .then((items: Product[]) => {
-        if (!cancelled) setProducts(items);
-      })
-      .catch(() => {
-        if (!cancelled) setProducts([]);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  const groups = useMemo<ProductGroup[]>(() => {
-    const map = new Map<string, ProductGroup>();
-
-    for (const product of products) {
-      const name = getPublicProductGroup(product);
-      const current = map.get(name);
-
-      map.set(name, {
-        name,
-        count: (current?.count ?? 0) + 1,
-        sample: current?.sample ?? product,
-      });
-    }
-
-    return Array.from(map.values());
-  }, [products]);
+  const jsonLd = jsonLdGraph([
+    breadcrumbJsonLd([
+      { name: "Главная", path: "/" },
+      { name: "Каталог", path: "/catalog" },
+    ]),
+    {
+      "@type": "CollectionPage",
+      "@id": `${absoluteUrl("/catalog")}#catalog`,
+      name: "Каталог металлопроката в Бишкеке",
+      url: absoluteUrl("/catalog"),
+      mainEntity: {
+        "@type": "ItemList",
+        itemListElement: groups.map((group, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: group.name,
+          url: absoluteUrl(getCategoryPath(group.name)),
+        })),
+      },
+    },
+  ]);
 
   return (
     <div className="flex flex-col pb-24">
+      <JsonLd id="catalog-jsonld" data={jsonLd} />
+
       <div className="border-b border-gray-100 pb-8 pt-8 sm:pt-12">
         <div className="container flex flex-col gap-4">
           <nav className="flex items-center gap-1.5 text-[12px] font-semibold text-gray-400">
@@ -78,12 +85,9 @@ export default function CatalogPage() {
                 Разделы каталога собраны по подкатегориям. Откройте нужный раздел, чтобы посмотреть товары таблицей.
               </p>
             </div>
-            <button
-              onClick={openModal}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-primary px-5 py-2.5 text-[13px] font-semibold text-white shadow-sm transition-all hover:bg-brand-primary/90 active:scale-[0.98] sm:w-auto"
-            >
+            <CatalogCtaButton className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-primary px-5 py-2.5 text-[13px] font-semibold text-white shadow-sm transition-all hover:bg-brand-primary/90 active:scale-[0.98] sm:w-auto">
               Запросить прайс-лист
-            </button>
+            </CatalogCtaButton>
           </div>
         </div>
       </div>
@@ -123,7 +127,7 @@ export default function CatalogPage() {
           </div>
         ) : (
           <div className="rounded-lg border border-gray-200 bg-gray-50 py-20 text-center">
-            <p className="mb-3 text-[15px] font-semibold text-gray-500">Товары загружаются</p>
+            <p className="mb-3 text-[15px] font-semibold text-gray-500">В каталоге пока нет товаров</p>
           </div>
         )}
       </div>
@@ -135,9 +139,9 @@ export default function CatalogPage() {
             <p className="text-[13px] text-gray-500">Оставьте заявку, менеджер подберет размер и марку за 30 минут.</p>
           </div>
           <div className="flex w-full shrink-0 flex-col gap-2.5 sm:w-auto sm:flex-row sm:gap-3">
-            <button onClick={openModal} className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-primary px-5 py-2.5 text-[13px] font-semibold text-white shadow-sm transition-all hover:bg-brand-primary/90">
+            <CatalogCtaButton className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-primary px-5 py-2.5 text-[13px] font-semibold text-white shadow-sm transition-all hover:bg-brand-primary/90">
               Оставить заявку
-            </button>
+            </CatalogCtaButton>
             <Link href="/contacts" className="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-[13px] font-semibold text-gray-700 transition-all hover:bg-gray-50">
               Контакты
             </Link>
