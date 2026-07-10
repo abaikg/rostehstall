@@ -242,6 +242,17 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               </div>
             </div>
 
+            {categoryProducts.length > 0 ? (
+              <ProductTable products={categoryProducts} />
+            ) : (
+              <div className="rounded-lg border border-gray-200 bg-gray-50 py-20 text-center">
+                <p className="mb-3 text-[15px] font-semibold text-gray-500">В этом разделе нет товаров</p>
+                <Link href="/catalog" className="text-[13px] font-semibold text-brand-primary hover:underline">
+                  Показать все разделы
+                </Link>
+              </div>
+            )}
+
             {galleryPhotos.length > 0 && (
               <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
                 {galleryPhotos.map((photo) => (
@@ -255,17 +266,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                     />
                   </div>
                 ))}
-              </div>
-            )}
-
-            {categoryProducts.length > 0 ? (
-              <ProductTable products={categoryProducts} />
-            ) : (
-              <div className="rounded-lg border border-gray-200 bg-gray-50 py-20 text-center">
-                <p className="mb-3 text-[15px] font-semibold text-gray-500">В этом разделе нет товаров</p>
-                <Link href="/catalog" className="text-[13px] font-semibold text-brand-primary hover:underline">
-                  Показать все разделы
-                </Link>
               </div>
             )}
           </div>
