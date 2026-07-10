@@ -257,9 +257,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
         {seo && (
           <section className="mt-10 border-t border-gray-100 pt-10">
-            <div className="flex max-w-3xl flex-col gap-7">
+            <div className="flex flex-col gap-7">
               {seo.popular && seo.popular.length > 0 && (
-                <div className="flex flex-col gap-3">
+                <div className="flex max-w-3xl flex-col gap-3">
                   <h2 className="text-[20px] font-bold tracking-tight text-gray-900 sm:text-[26px]">
                     {category.name} в Бишкеке - ходовые позиции
                   </h2>
@@ -276,26 +276,28 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 </div>
               )}
 
-              {seo.sections.map((sec) => (
-                <div key={sec.heading} className="flex flex-col gap-3">
-                  <h3 className="text-[16px] font-bold text-gray-900 sm:text-[18px]">{sec.heading}</h3>
-                  {sec.paragraphs?.map((paragraph) => (
-                    <p key={paragraph} className="text-[14px] leading-relaxed text-gray-600 sm:text-[15px]">
-                      {paragraph}
-                    </p>
-                  ))}
-                  {sec.bullets && sec.bullets.length > 0 && (
-                    <ul className="flex flex-col gap-2">
-                      {sec.bullets.map((bullet) => (
-                        <li key={bullet} className="flex items-start gap-2.5 text-[14px] leading-relaxed text-gray-600 sm:text-[15px]">
-                          <span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
-                          <span>{bullet}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              ))}
+              <div className="grid grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+                {seo.sections.map((sec) => (
+                  <div key={sec.heading} className="flex flex-col gap-3">
+                    <h3 className="text-[16px] font-bold text-gray-900 sm:text-[18px]">{sec.heading}</h3>
+                    {sec.paragraphs?.map((paragraph) => (
+                      <p key={paragraph} className="text-[14px] leading-relaxed text-gray-600 sm:text-[15px]">
+                        {paragraph}
+                      </p>
+                    ))}
+                    {sec.bullets && sec.bullets.length > 0 && (
+                      <ul className="flex flex-col gap-2">
+                        {sec.bullets.map((bullet) => (
+                          <li key={bullet} className="flex items-start gap-2.5 text-[14px] leading-relaxed text-gray-600 sm:text-[15px]">
+                            <span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+                            <span>{bullet}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </section>
         )}
