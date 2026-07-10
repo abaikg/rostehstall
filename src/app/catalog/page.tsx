@@ -69,7 +69,7 @@ export default function CatalogPage() {
             <span className="text-gray-700">Каталог</span>
           </nav>
 
-          <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
             <div className="flex flex-col gap-2">
               <h1 className="text-[22px] font-bold tracking-tight text-gray-900 sm:text-[28px] md:text-[36px]">
                 Каталог товаров
@@ -80,7 +80,7 @@ export default function CatalogPage() {
             </div>
             <button
               onClick={openModal}
-              className="inline-flex items-center gap-2 rounded-lg bg-brand-primary px-5 py-2.5 text-[13px] font-semibold text-white shadow-sm transition-all hover:bg-brand-primary/90 active:scale-[0.98]"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-primary px-5 py-2.5 text-[13px] font-semibold text-white shadow-sm transition-all hover:bg-brand-primary/90 active:scale-[0.98] sm:w-auto"
             >
               Запросить прайс-лист
             </button>
@@ -97,25 +97,25 @@ export default function CatalogPage() {
         </div>
 
         {groups.length > 0 ? (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {groups.map((group) => (
               <Link
                 key={group.name}
                 href={getCategoryPath(group.name)}
-                className="group flex min-h-28 flex-col justify-between rounded-lg border border-gray-200 bg-white p-4 transition-all hover:border-brand-primary hover:bg-blue-50"
+                className="group flex min-h-[104px] flex-col justify-between rounded-lg border border-gray-200 bg-white p-3 transition-all hover:border-brand-primary hover:bg-blue-50 sm:min-h-28 sm:p-4"
               >
-                <div className="flex items-start justify-between gap-3">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-brand-primary transition-colors group-hover:bg-white">
+                <div className="flex items-start justify-between gap-2 sm:gap-3">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-brand-primary transition-colors group-hover:bg-white sm:h-9 sm:w-9">
                     <SectionIcon />
                   </span>
-                  <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[11px] font-bold text-brand-primary transition-colors group-hover:bg-white">
+                  <span className="shrink-0 rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-brand-primary transition-colors group-hover:bg-white sm:text-[11px]">
                     {group.count}
                   </span>
                 </div>
-                <div className="mt-4 flex flex-col gap-1">
-                  <h2 className="text-[15px] font-bold uppercase tracking-wide text-gray-900">{group.name}</h2>
+                <div className="mt-3 flex flex-col gap-1 sm:mt-4">
+                  <h2 className="line-clamp-2 text-[13px] font-bold uppercase leading-tight tracking-wide text-gray-900 sm:text-[15px]">{group.name}</h2>
                   {group.sample && (
-                    <p className="line-clamp-1 text-[12px] text-gray-500">{group.sample.name}</p>
+                    <p className="line-clamp-1 text-[11px] text-gray-500 sm:text-[12px]">{group.sample.name}</p>
                   )}
                 </div>
               </Link>
