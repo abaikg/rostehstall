@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { products } from "@/data/catalog";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { getCategoryPath } from "@/lib/catalogRoutes";
+import { getCategoryPath, getPublicProductGroup } from "@/lib/catalogRoutes";
+import { getProducts } from "@/lib/db";
 import { getProductImage } from "@/lib/productImages";
 import {
   breadcrumbJsonLd,
@@ -19,6 +19,7 @@ type ProductLayoutProps = {
 
 export async function generateMetadata({ params }: Omit<ProductLayoutProps, "children">): Promise<Metadata> {
   const { slug } = await params;
+  const products = getProducts();
   const product = products.find((item) => item.slug === slug);
 
   if (!product) {
@@ -29,27 +30,31 @@ export async function generateMetadata({ params }: Omit<ProductLayoutProps, "chi
     });
   }
 
+  const productGroup = getPublicProductGroup(product);
+
   return buildMetadata({
     title: `${product.name} в Бишкеке — Ростехсталь`,
     description: productMetaDescription(product),
     path: `/catalog/${product.slug}`,
     image: getProductImage(product),
-    keywords: [product.name, product.category, `${product.category} Бишкек`],
+    keywords: [product.name, productGroup, `${productGroup} Бишкек`],
   });
 }
 
 export default async function ProductLayout({ children, params }: ProductLayoutProps) {
   const { slug } = await params;
+  const products = getProducts();
   const product = products.find((item) => item.slug === slug);
 
   if (!product) return children;
 
+  const productGroup = getPublicProductGroup(product);
   const jsonLd = jsonLdGraph([
     productJsonLd(product),
     breadcrumbJsonLd([
       { name: "Главная", path: "/" },
       { name: "Каталог", path: "/catalog" },
-      { name: product.category, path: getCategoryPath(product.category) },
+      { name: productGroup, path: getCategoryPath(productGroup) },
       { name: product.name, path: `/catalog/${product.slug}` },
     ]),
   ]);

@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ProductCard } from "@/components/features/catalog/ProductCard";
+import { ProductTable } from "@/components/features/catalog/ProductTable";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { getCategoryBySlug, getIndexedCategories, getProductsForCategory } from "@/lib/catalogRoutes";
 import { categorySeo } from "@/data/categorySeo";
+import { getCategoryBySlug, getIndexedCategories, getProductsForCategory } from "@/lib/catalogRoutes";
+import { getProducts } from "@/lib/db";
 import {
-  breadcrumbJsonLd,
   absoluteUrl,
+  breadcrumbJsonLd,
   buildMetadata,
   categoryMetaDescription,
   faqPageJsonLd,
@@ -29,12 +30,12 @@ function getCategoryFaq(category: string) {
     {
       question: `Как заказать ${category.toLowerCase()} в Ростехсталь?`,
       answer:
-        "Выберите позиции в каталоге или отправьте заявку через форму. Менеджер уточнит размер, марку стали, объём и подготовит коммерческое предложение.",
+        "Выберите позиции в таблице или отправьте заявку через форму. Менеджер уточнит размер, марку стали, объем и подготовит коммерческое предложение.",
     },
     {
       question: "Можно ли оформить доставку по Кыргызстану?",
       answer:
-        "Да, Ростехсталь организует доставку металлопроката по Бишкеку и регионам Кыргызстана с учётом тоннажа и сроков поставки.",
+        "Да, Ростехсталь организует доставку металлопроката по Бишкеку и регионам Кыргызстана с учетом тоннажа и сроков поставки.",
     },
     {
       question: "Выполняется ли резка металла под размер?",
@@ -45,23 +46,24 @@ function getCategoryFaq(category: string) {
 }
 
 export function generateStaticParams() {
-  return getIndexedCategories().map((category) => ({ slug: category.slug }));
+  return getIndexedCategories(getProducts()).map((category) => ({ slug: category.slug }));
 }
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const category = getCategoryBySlug(slug);
+  const products = getProducts();
+  const category = getCategoryBySlug(slug, products);
 
   if (!category) {
     return buildMetadata({
-      title: "Категория не найдена — Ростехсталь",
-      description: "Категория каталога Ростехсталь не найдена. Перейдите в общий каталог металлопроката.",
+      title: "Раздел не найден - Ростехсталь",
+      description: "Раздел каталога Ростехсталь не найден. Перейдите в общий каталог металлопроката.",
       path: `/catalog/category/${slug}`,
     });
   }
 
   return buildMetadata({
-    title: `${category.name} в Бишкеке — Ростехсталь`,
+    title: `${category.name} в Бишкеке - Ростехсталь`,
     description: categoryMetaDescription(category.name),
     path: category.path,
     keywords: [category.name, `${category.name} Бишкек`, `${category.name} Кыргызстан`],
@@ -70,13 +72,20 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params;
-  const category = getCategoryBySlug(slug);
+  const products = getProducts();
+  const category = getCategoryBySlug(slug, products);
 
   if (!category) notFound();
 
-  const categoryProducts = getProductsForCategory(category.name);
+  const categoryProducts = getProductsForCategory(category.name, products);
+  const catalogSections = getIndexedCategories(products);
   const faqs = getCategoryFaq(category.name);
-  const seo = categorySeo[category.name];
+  // Разделы каталога — это узкие подкатегории (Арматура, Круг, Швеллер…), а
+  // categorySeo написан для широких товарных групп (Сортовой прокат и т.п.).
+  // Показываем текст широкой группы на всех её подкатегориях, если для самой
+  // подкатегории отдельного текста нет.
+  const parentCategoryName = categoryProducts[0]?.category ?? category.name;
+  const seo = categorySeo[category.name] ?? categorySeo[parentCategoryName];
   const jsonLd = jsonLdGraph([
     breadcrumbJsonLd([
       { name: "Главная", path: "/" },
@@ -105,76 +114,125 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     <div className="flex flex-col pb-24">
       <JsonLd id="category-jsonld" data={jsonLd} />
 
-      <div className="pt-8 sm:pt-12 pb-8 border-b border-gray-100">
+      <div className="border-b border-gray-100 pb-8 pt-8 sm:pt-12">
         <div className="container flex flex-col gap-4">
-          <nav className="flex items-center gap-1.5 text-[12px] font-semibold text-gray-400">
-            <Link href="/" className="hover:text-gray-700 transition-colors">Главная</Link>
+          <nav className="flex flex-wrap items-center gap-1.5 text-[12px] font-semibold text-gray-400">
+            <Link href="/" className="transition-colors hover:text-gray-700">Главная</Link>
             <ChevronRight />
-            <Link href="/catalog" className="hover:text-gray-700 transition-colors">Каталог</Link>
+            <Link href="/catalog" className="transition-colors hover:text-gray-700">Каталог</Link>
             <ChevronRight />
             <span className="text-gray-700">{category.name}</span>
           </nav>
-          <div className="flex flex-col gap-3 max-w-3xl">
-            <h1 className="text-[24px] sm:text-[32px] md:text-[42px] font-bold tracking-tight text-gray-900">
+
+          <div className="flex max-w-3xl flex-col gap-3">
+            <h1 className="text-[24px] font-bold tracking-tight text-gray-900 sm:text-[32px] md:text-[42px]">
               {category.name}
             </h1>
-            <p className="text-[14px] sm:text-[16px] text-gray-500 leading-relaxed">
+            <p className="text-[14px] leading-relaxed text-gray-500 sm:text-[16px]">
               {seo?.lead ??
-                "Позиции категории на складе Ростехсталь в Бишкеке. Поможем подобрать размер, марку и доставку по Кыргызстану."}
+                "Позиции раздела на складе Ростехсталь в Бишкеке. Поможем подобрать размер, марку и доставку по Кыргызстану."}
             </p>
           </div>
         </div>
       </div>
 
-      <div className="container pt-8 sm:pt-10 flex flex-col gap-8">
-        <div className="flex items-center justify-between gap-4 flex-wrap">
-          <p className="text-[14px] text-gray-500">
-            <span className="font-semibold text-gray-900">{categoryProducts.length}</span> позиций в разделе
-          </p>
-          <div className="flex gap-2.5 flex-wrap">
-            <Link
-              href="/calculator"
-              className="inline-flex items-center justify-center bg-white text-gray-700 font-semibold text-[13px] px-5 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 transition-all"
-            >
-              Калькулятор
-            </Link>
-            <Link
-              href="/contacts"
-              className="inline-flex items-center justify-center bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold text-[13px] px-5 py-2.5 rounded-xl shadow-sm transition-all"
-            >
-              Получить расчёт
-            </Link>
+      <div className="container pt-8 sm:pt-10">
+        <div className="flex items-start gap-8">
+          <aside className="sticky top-[80px] hidden max-h-[calc(100vh-110px)] w-64 shrink-0 flex-col overflow-hidden rounded-lg border border-gray-200 bg-white md:flex lg:w-72">
+            <div className="bg-brand-primary px-4 py-3 text-white">
+              <p className="text-[13px] font-bold uppercase tracking-wide">Разделы каталога</p>
+            </div>
+            <nav className="flex-1 overflow-y-auto p-2">
+              {catalogSections.map((section) => {
+                const active = section.slug === category.slug;
+
+                return (
+                  <Link
+                    key={section.slug}
+                    href={section.path}
+                    className={`flex items-center justify-between gap-3 rounded-md px-3 py-2.5 text-[13px] transition-colors ${
+                      active
+                        ? "bg-brand-primary font-bold text-white"
+                        : "text-gray-700 hover:bg-blue-50 hover:text-brand-primary"
+                    }`}
+                  >
+                    <span className="leading-snug">{section.name}</span>
+                    <span className={`text-[11px] font-bold ${active ? "text-white/80" : "text-gray-400"}`}>
+                      {section.productCount}
+                    </span>
+                  </Link>
+                );
+              })}
+            </nav>
+          </aside>
+
+          <div className="flex min-w-0 flex-1 flex-col gap-8">
+            <nav className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 md:hidden">
+              {catalogSections.map((section) => {
+                const active = section.slug === category.slug;
+
+                return (
+                  <Link
+                    key={section.slug}
+                    href={section.path}
+                    className={`shrink-0 rounded-full border px-3 py-1.5 text-[12px] font-semibold ${
+                      active
+                        ? "border-brand-primary bg-brand-primary text-white"
+                        : "border-gray-200 bg-white text-gray-700"
+                    }`}
+                  >
+                    {section.name}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <p className="text-[14px] text-gray-500">
+                <span className="font-semibold text-gray-900">{categoryProducts.length}</span> позиций в разделе
+              </p>
+              <div className="flex flex-wrap gap-2.5">
+                <Link
+                  href="/calculator"
+                  className="inline-flex items-center justify-center rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-[13px] font-semibold text-gray-700 transition-all hover:bg-gray-50"
+                >
+                  Калькулятор
+                </Link>
+                <Link
+                  href="/contacts"
+                  className="inline-flex items-center justify-center rounded-lg bg-brand-primary px-5 py-2.5 text-[13px] font-semibold text-white shadow-sm transition-all hover:bg-brand-primary/90"
+                >
+                  Получить расчет
+                </Link>
+              </div>
+            </div>
+
+            {categoryProducts.length > 0 ? (
+              <ProductTable products={categoryProducts} />
+            ) : (
+              <div className="rounded-lg border border-gray-200 bg-gray-50 py-20 text-center">
+                <p className="mb-3 text-[15px] font-semibold text-gray-500">В этом разделе нет товаров</p>
+                <Link href="/catalog" className="text-[13px] font-semibold text-brand-primary hover:underline">
+                  Показать все разделы
+                </Link>
+              </div>
+            )}
           </div>
         </div>
 
-        {categoryProducts.length > 0 ? (
-          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {categoryProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        ) : (
-          <div className="py-20 text-center bg-gray-50 border border-gray-200 rounded-xl">
-            <p className="text-[15px] font-semibold text-gray-500 mb-3">В этой категории нет товаров</p>
-            <Link href="/catalog" className="text-brand-primary font-semibold text-[13px] hover:underline">
-              Показать все позиции
-            </Link>
-          </div>
-        )}
-
         {seo && (
-          <section className="mt-4 border-t border-gray-100 pt-10">
-            <div className="flex flex-col gap-7 max-w-3xl">
+          <section className="mt-10 border-t border-gray-100 pt-10">
+            <div className="flex max-w-3xl flex-col gap-7">
               {seo.popular && seo.popular.length > 0 && (
                 <div className="flex flex-col gap-3">
-                  <h2 className="text-[20px] sm:text-[26px] font-bold tracking-tight text-gray-900">
-                    {category.name} в Бишкеке — ходовые позиции
+                  <h2 className="text-[20px] font-bold tracking-tight text-gray-900 sm:text-[26px]">
+                    {category.name} в Бишкеке - ходовые позиции
                   </h2>
                   <div className="flex flex-wrap gap-2">
                     {seo.popular.map((item) => (
                       <span
                         key={item}
-                        className="inline-flex items-center bg-blue-50 text-brand-primary font-semibold text-[13px] px-3.5 py-1.5 rounded-xl border border-blue-100"
+                        className="inline-flex items-center rounded-lg border border-blue-100 bg-blue-50 px-3.5 py-1.5 text-[13px] font-semibold text-brand-primary"
                       >
                         {item}
                       </span>
@@ -185,56 +243,41 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
               {seo.sections.map((sec) => (
                 <div key={sec.heading} className="flex flex-col gap-3">
-                  <h3 className="text-[16px] sm:text-[18px] font-bold text-gray-900">{sec.heading}</h3>
-                  {sec.paragraphs?.map((p, i) => (
-                    <p key={i} className="text-[14px] sm:text-[15px] text-gray-600 leading-relaxed">
-                      {p}
+                  <h3 className="text-[16px] font-bold text-gray-900 sm:text-[18px]">{sec.heading}</h3>
+                  {sec.paragraphs?.map((paragraph) => (
+                    <p key={paragraph} className="text-[14px] leading-relaxed text-gray-600 sm:text-[15px]">
+                      {paragraph}
                     </p>
                   ))}
                   {sec.bullets && sec.bullets.length > 0 && (
                     <ul className="flex flex-col gap-2">
-                      {sec.bullets.map((b) => (
-                        <li key={b} className="flex items-start gap-2.5 text-[14px] sm:text-[15px] text-gray-600 leading-relaxed">
-                          <span className="mt-[9px] w-1.5 h-1.5 rounded-full bg-brand-primary shrink-0" />
-                          <span>{b}</span>
+                      {sec.bullets.map((bullet) => (
+                        <li key={bullet} className="flex items-start gap-2.5 text-[14px] leading-relaxed text-gray-600 sm:text-[15px]">
+                          <span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+                          <span>{bullet}</span>
                         </li>
                       ))}
                     </ul>
                   )}
                 </div>
               ))}
-
-              <div className="flex flex-wrap gap-2.5 pt-1">
-                <Link
-                  href="/calculator"
-                  className="inline-flex items-center justify-center bg-white text-gray-700 font-semibold text-[13px] px-5 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 transition-all"
-                >
-                  Рассчитать в калькуляторе
-                </Link>
-                <Link
-                  href="/contacts"
-                  className="inline-flex items-center justify-center bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold text-[13px] px-5 py-2.5 rounded-xl shadow-sm transition-all"
-                >
-                  Узнать цену и наличие
-                </Link>
-              </div>
             </div>
           </section>
         )}
 
-        <section className="mt-4 border-t border-gray-100 pt-10">
+        <section className="mt-10 border-t border-gray-100 pt-10">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
               <span className="text-[11px] font-bold uppercase tracking-widest text-brand-primary">Вопросы по разделу</span>
-              <h2 className="text-[22px] sm:text-[28px] font-bold tracking-tight text-gray-900">
+              <h2 className="text-[22px] font-bold tracking-tight text-gray-900 sm:text-[28px]">
                 Частые вопросы
               </h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               {faqs.map((faq) => (
-                <div key={faq.question} className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-2">
-                  <h3 className="text-[14px] font-bold text-gray-900 leading-snug">{faq.question}</h3>
-                  <p className="text-[13px] text-gray-500 leading-relaxed">{faq.answer}</p>
+                <div key={faq.question} className="flex flex-col gap-2 rounded-lg border border-gray-200 bg-white p-5">
+                  <h3 className="text-[14px] font-bold leading-snug text-gray-900">{faq.question}</h3>
+                  <p className="text-[13px] leading-relaxed text-gray-500">{faq.answer}</p>
                 </div>
               ))}
             </div>

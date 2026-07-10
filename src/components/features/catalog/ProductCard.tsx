@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { Product } from "@/data/catalog";
+import type { Product } from "@/data/catalog";
 import { getProductImage } from "@/lib/productImages";
+import { getPublicProductGroup } from "@/lib/catalogRoutes";
 import { CONTACTS } from "@/lib/constants";
 import { trackLead } from "@/lib/analytics";
 
@@ -30,6 +31,7 @@ export const ProductCard = ({ product, hideSize = false, hideMeta = false }: Pro
 
   const imgSrc = getProductImage(product);
   const productName = hideSize ? stripSizeFromName(product.name) : product.name;
+  const productGroup = getPublicProductGroup(product);
 
   // window.open обходит глобальный ConversionTracker — фиксируем цель сами
   const openWhatsApp = (e: React.SyntheticEvent) => {
@@ -81,10 +83,7 @@ export const ProductCard = ({ product, hideSize = false, hideMeta = false }: Pro
 
         {!hideMeta && (
           <div className="flex flex-wrap gap-1 mt-0.5">
-            <span className="text-[11px] text-gray-400 font-medium">{product.category}</span>
-            {product.tags?.slice(0, 1).map((t) => (
-              <span key={t} className="text-[11px] text-gray-400 font-medium before:content-[','] before:mr-1">{t}</span>
-            ))}
+            <span className="text-[11px] text-gray-400 font-medium">{productGroup}</span>
           </div>
         )}
 

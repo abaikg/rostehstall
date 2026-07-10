@@ -5,8 +5,10 @@ import { useOrderModal } from "@/context/ModalContext";
 import { CONTACTS } from "@/lib/constants";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { faqPageJsonLd, jsonLdGraph } from "@/lib/seo";
-import { getCategoryPath } from "@/lib/catalogRoutes";
+import { getCategoryPath, getPublicProductGroup } from "@/lib/catalogRoutes";
 import { trackLead } from "@/lib/analytics";
+import { getProductImage } from "@/lib/productImages";
+import type { Product } from "@/data/catalog";
 
 /* ── Иконки ── */
 const ArrowRight = ({ size = 16 }: { size?: number }) => (
@@ -31,31 +33,9 @@ const PhoneCallIcon = () => (
 );
 interface HomeCategory {
   name: string;
-  categoryName: string; // точное имя из CATEGORY_LIST — для ссылки на страницу категории
-  photo: string;        // локальное фото-заглушка (реальных фото на каждую категорию пока нет)
+  href: string;
+  photo: string;
 }
-
-/* ── Категории для быстрого перехода — ровная сетка фото-плиток одинакового
-   размера (без мозаики). Уникальных фото на каждую категорию нет, поэтому
-   переиспользуем 10 имеющихся снимков по смыслу (одна товарная группа —
-   один снимок), это не вводит в заблуждение, т.к. категории и правда
-   родственные (см. CATEGORY_LIST). ── */
-const HOME_CATEGORIES: HomeCategory[] = [
-  { name: "Арматура", categoryName: "Сортовой прокат", photo: "/images/rebar.png" },
-  { name: "Катанка", categoryName: "Сортовой прокат", photo: "/images/hero/hero-warehouse-rebar.jpg" },
-  { name: "Круг", categoryName: "Сортовой прокат", photo: "/images/profile-pipes.png" },
-  { name: "Листовой металл", categoryName: "Листовой прокат", photo: "/images/steel-sheet.png" },
-  { name: "Угол", categoryName: "Фасонный прокат", photo: "/images/products/structural-profiles.png" },
-  { name: "Швеллер", categoryName: "Фасонный прокат", photo: "/images/products/structural-profiles.png" },
-  { name: "Трубы", categoryName: "Трубный прокат", photo: "/images/seamless-pipes.png" },
-  { name: "Электроды", categoryName: "Сварочные материалы", photo: "/images/hero/hero-clean-stock.jpg" },
-  { name: "Сетка МАК", categoryName: "Металлические сетки", photo: "/images/products/aluminum-profiles.png" },
-  { name: "Гвозди", categoryName: "Метизы", photo: "/images/rebar.png" },
-  { name: "Задвижки и фланцы", categoryName: "Трубопроводная арматура", photo: "/images/products/cement-pipes.png" },
-  { name: "Проволока", categoryName: "Провода и кабельная продукция", photo: "/images/hero/hero-metal-yard.jpg" },
-  { name: "Двутавр", categoryName: "Фасонный прокат", photo: "/images/products/structural-profiles.png" },
-  { name: "Гайки, болты, шайбы", categoryName: "Крепежные элементы", photo: "/images/products/aluminum-profiles.png" },
-];
 
 /* ── FAQ главной: живой блок + FAQPage-разметка для сниппетов в поиске ── */
 const HOME_FAQ = [
@@ -108,6 +88,7 @@ const HERO_SLIDES = [
 export default function HomePage() {
   const { openModal } = useOrderModal();
   const [heroSlide, setHeroSlide] = useState(0);
+  const [homeCategories, setHomeCategories] = useState<HomeCategory[]>([]);
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -115,6 +96,37 @@ export default function HomePage() {
     }, 5000);
 
     return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch("/api/products")
+      .then((res) => (res.ok ? res.json() : []))
+      .then((products: Product[]) => {
+        if (cancelled) return;
+        const categoryCards = new Map<string, HomeCategory>();
+
+        for (const product of products) {
+          const group = getPublicProductGroup(product);
+          if (categoryCards.has(group)) continue;
+
+          categoryCards.set(group, {
+            name: group,
+            href: getCategoryPath(group),
+            photo: getProductImage(product),
+          });
+        }
+
+        setHomeCategories(Array.from(categoryCards.values()));
+      })
+      .catch(() => {
+        if (!cancelled) setHomeCategories([]);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
@@ -134,9 +146,9 @@ export default function HomePage() {
             />
           ))}
           <div className="absolute inset-0 backdrop-blur-[0.5px]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/72 via-blue-50/46 to-white/76" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_65%_at_50%_12%,rgba(191,219,254,0.34),rgba(239,246,255,0.22)_42%,transparent_72%)]" />
-          <div className="absolute left-1/2 top-6 h-56 w-[min(760px,92vw)] -translate-x-1/2 rounded-full bg-blue-400/10 blur-2xl" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/72 via-brand-primary/12 to-white/76" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_65%_at_50%_12%,rgba(37,99,235,0.24),rgba(59,130,246,0.14)_42%,transparent_72%)]" />
+          <div className="absolute left-1/2 top-4 h-64 w-[min(820px,94vw)] -translate-x-1/2 rounded-full bg-brand-primary/18 blur-3xl" />
           <div className="absolute inset-x-0 bottom-5 flex justify-center gap-2">
             {HERO_SLIDES.map((slide, index) => (
               <span
@@ -215,22 +227,24 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-            {HOME_CATEGORIES.map((cat) => (
+            {homeCategories.map((cat) => (
               <Link
                 key={cat.name}
-                href={getCategoryPath(cat.categoryName)}
-                className="group relative aspect-square flex flex-col items-start justify-start overflow-hidden rounded-2xl p-4 sm:p-5 text-left shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+                href={cat.href}
+                className="group relative aspect-square overflow-hidden rounded-[14px] bg-brand-primary p-4 text-center shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg sm:p-5"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={cat.photo}
-                  alt={`${cat.name} в Бишкеке — Ростехсталь`}
-                  loading="lazy"
-                  className="absolute inset-0 h-full w-full scale-110 object-cover blur-[3px] transition-transform duration-300 group-hover:scale-125"
-                />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-brand-primary/30 via-brand-primary/50 to-brand-dark/70" />
+                <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[14px] [clip-path:polygon(0_0,100%_0,100%_76%,64%_76%,64%_100%,0_100%)]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={cat.photo}
+                    alt={`${cat.name} в Бишкеке — Ростехсталь`}
+                    loading="lazy"
+                    className="h-full w-full scale-110 object-cover opacity-70 blur-[1px] mix-blend-multiply transition-transform duration-300 group-hover:scale-125"
+                  />
+                  <div className="absolute inset-0 bg-brand-primary/58" />
+                </div>
 
-                <span className="relative z-10 max-w-[85%] text-[17px] sm:text-[19px] font-bold uppercase leading-snug text-white drop-shadow-sm">
+                <span className="absolute left-1/2 top-[31%] z-10 max-w-[82%] -translate-x-1/2 -translate-y-1/2 text-center text-[18px] font-bold uppercase leading-tight text-white drop-shadow-sm sm:text-[20px]">
                   {cat.name}
                 </span>
 
@@ -247,13 +261,13 @@ export default function HomePage() {
                     );
                   }}
                   aria-label={`Написать в WhatsApp: ${cat.name}`}
-                  className="group/wa absolute bottom-3 right-3 z-10 flex flex-col items-center justify-center gap-0.5 rounded-xl border-2 border-gray-900 bg-white px-4 py-2.5 leading-none shadow-md transition-colors hover:border-green-600 hover:bg-green-500"
+                  className="group/wa absolute bottom-0 right-0 z-10 flex h-[64px] w-[126px] flex-col items-center justify-center gap-0.5 rounded-[12px] border-[4px] border-brand-primary bg-white leading-none shadow-md transition-colors hover:border-brand-dark hover:bg-brand-primary"
                 >
-                  <span className="absolute -top-1.5 -right-1.5 h-3.5 w-3.5 rounded-full bg-gray-900 transition-colors group-hover/wa:bg-white" />
-                  <span className="text-[11px] sm:text-[12px] font-extrabold uppercase tracking-tight text-gray-900 transition-colors group-hover/wa:text-white">
+                  <span className="absolute right-2 top-2 h-3 w-3 rounded-full bg-brand-dark transition-colors group-hover/wa:bg-white" />
+                  <span className="text-[11px] font-extrabold uppercase tracking-normal text-brand-dark transition-colors group-hover/wa:text-white sm:text-[12px]">
                     Написать
                   </span>
-                  <span className="text-[11px] sm:text-[12px] font-extrabold uppercase tracking-tight text-gray-900 transition-colors group-hover/wa:text-white">
+                  <span className="text-[11px] font-extrabold uppercase tracking-normal text-brand-dark transition-colors group-hover/wa:text-white sm:text-[12px]">
                     WhatsApp
                   </span>
                 </button>

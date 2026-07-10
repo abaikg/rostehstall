@@ -1,13 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { products } from "@/data/catalog";
+import type { Product } from "@/data/catalog";
 import { ProductCard } from "@/components/features/catalog/ProductCard";
 import { useOrderModal } from "@/context/ModalContext";
 import { CONTACTS } from "@/lib/constants";
 import { getProductImage } from "@/lib/productImages";
-import { getCategoryPath } from "@/lib/catalogRoutes";
+import { getCategoryPath, getPublicProductGroup } from "@/lib/catalogRoutes";
 
 const ChevronRight = () => (
   <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden>
@@ -39,12 +39,37 @@ export default function ProductPage() {
   const { openModal } = useOrderModal();
   const [imgErr, setImgErr] = useState(false);
   const [specsOpen, setSpecsOpen] = useState(true);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch("/api/products")
+      .then((res) => (res.ok ? res.json() : []))
+      .then((items: Product[]) => {
+        if (cancelled) return;
+        setProducts(items);
+        setLoaded(true);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setProducts([]);
+        setLoaded(true);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const product = products.find((p) => p.slug === slug);
+  if (!loaded) return null;
   if (!product) return <NotFound />;
 
+  const productGroup = getPublicProductGroup(product);
   const related = products
-    .filter((p) => p.slug !== product.slug && (p.category === product.category || p.tags?.some((t) => product.tags?.includes(t))))
+    .filter((p) => p.slug !== product.slug && getPublicProductGroup(p) === productGroup)
     .slice(0, 4);
 
   const imgSrc = getProductImage(product);
@@ -60,8 +85,8 @@ export default function ProductPage() {
             <ChevronRight />
             <Link href="/catalog" className="hover:text-gray-700 transition-colors">Каталог</Link>
             <ChevronRight />
-            <Link href={getCategoryPath(product.category)} className="hover:text-gray-700 transition-colors">
-              {product.category}
+            <Link href={getCategoryPath(productGroup)} className="hover:text-gray-700 transition-colors">
+              {productGroup}
             </Link>
             <ChevronRight />
             <span className="text-gray-700 line-clamp-1">{product.name}</span>
@@ -125,7 +150,7 @@ export default function ProductPage() {
             {/* Категория + бейдж */}
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-[11px] font-bold uppercase tracking-widest text-brand-primary">
-                {product.category}
+                {productGroup}
               </span>
               {product.tags?.map((t) => (
                 <span key={t} className="text-[11px] font-semibold text-gray-400 before:content-['·'] before:mr-2">{t}</span>

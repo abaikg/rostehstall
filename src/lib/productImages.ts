@@ -1,4 +1,4 @@
-import { Product } from "@/data/catalog";
+import type { Product } from "@/data/catalog";
 
 export const getProductImage = (product: Product) => {
   if (product.image) return product.image;

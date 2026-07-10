@@ -1,13 +1,14 @@
 import type { MetadataRoute } from "next";
 import { blogPosts } from "@/data/blog";
-import { products } from "@/data/catalog";
 import { getCategoryPath, getIndexedCategories } from "@/lib/catalogRoutes";
+import { getProducts } from "@/lib/db";
 import { absoluteUrl } from "@/lib/seo";
 import { getProductImage } from "@/lib/productImages";
 
 const buildDate = new Date();
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const products = getProducts();
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: absoluteUrl("/"), lastModified: buildDate, changeFrequency: "weekly", priority: 1 },
     { url: absoluteUrl("/catalog"), lastModified: buildDate, changeFrequency: "daily", priority: 0.95 },
@@ -19,7 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: absoluteUrl("/about"), lastModified: buildDate, changeFrequency: "monthly", priority: 0.65 },
   ];
 
-  const categoryRoutes: MetadataRoute.Sitemap = getIndexedCategories().map((category) => ({
+  const categoryRoutes: MetadataRoute.Sitemap = getIndexedCategories(products).map((category) => ({
     url: absoluteUrl(getCategoryPath(category.name)),
     lastModified: buildDate,
     changeFrequency: "weekly",

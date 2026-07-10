@@ -1,4 +1,4 @@
-import { CATEGORY_LIST, products } from "@/data/catalog";
+import { products as staticProducts, type Product } from "@/data/catalog";
 
 const CYRILLIC_TO_LATIN: Record<string, string> = {
   а: "a",
@@ -36,6 +36,10 @@ const CYRILLIC_TO_LATIN: Record<string, string> = {
   я: "ya",
 };
 
+export function getPublicProductGroup(product: Product) {
+  return product.subcategory || product.tags?.[0] || product.category;
+}
+
 export function slugifySegment(value: string) {
   return value
     .trim()
@@ -53,32 +57,26 @@ export function getCategoryPath(category: string) {
   return `/catalog/category/${getCategorySlug(category)}`;
 }
 
-export function getProductsForCategory(category: string) {
-  return products.filter((product) => product.category === category || product.tags?.includes(category));
+export function getProductsForCategory(category: string, products: Product[] = staticProducts) {
+  return products.filter((product) => getPublicProductGroup(product) === category);
 }
 
-export function getIndexedCategories() {
-  const productCategories = new Set<string>();
+export function getIndexedCategories(products: Product[] = staticProducts) {
+  const groups = new Map<string, number>();
 
   for (const product of products) {
-    productCategories.add(product.category);
-    product.tags?.forEach((tag) => productCategories.add(tag));
+    const name = getPublicProductGroup(product);
+    groups.set(name, (groups.get(name) ?? 0) + 1);
   }
 
-  const orderedCategories = CATEGORY_LIST.map((category) => category.name);
-  const categoryNames = [
-    ...orderedCategories,
-    ...Array.from(productCategories).filter((name) => !orderedCategories.includes(name)),
-  ];
-
-  return categoryNames.map((name) => ({
+  return Array.from(groups.entries()).map(([name, productCount]) => ({
     name,
     slug: getCategorySlug(name),
     path: getCategoryPath(name),
-    productCount: getProductsForCategory(name).length,
+    productCount,
   }));
 }
 
-export function getCategoryBySlug(slug: string) {
-  return getIndexedCategories().find((category) => category.slug === slug);
+export function getCategoryBySlug(slug: string, products: Product[] = staticProducts) {
+  return getIndexedCategories(products).find((category) => category.slug === slug);
 }
