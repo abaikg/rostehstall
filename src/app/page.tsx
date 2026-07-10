@@ -262,7 +262,7 @@ export default function HomePage() {
               <Link
                 key={cat.name}
                 href={cat.href}
-                className="group relative aspect-square overflow-hidden rounded-[14px] bg-sky-400 p-4 text-center shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg sm:p-5"
+                className="group relative aspect-square overflow-hidden rounded-[14px] bg-brand-primary p-4 text-center shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg sm:p-5"
               >
                 <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[14px] [clip-path:polygon(0_0,100%_0,100%_76%,64%_76%,64%_100%,0_100%)]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -272,7 +272,7 @@ export default function HomePage() {
                     loading="lazy"
                     className="h-full w-full scale-110 object-cover opacity-55 blur-[1px] saturate-75 transition-transform duration-300 group-hover:scale-125"
                   />
-                  <div className="absolute inset-0 bg-sky-400/55" />
+                  <div className="absolute inset-0 bg-brand-primary/55" />
                 </div>
 
                 <span className="absolute left-1/2 top-[26%] z-10 flex w-[88%] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center">
