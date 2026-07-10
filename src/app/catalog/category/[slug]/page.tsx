@@ -242,6 +242,22 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               </div>
             </div>
 
+            {galleryPhotos.length > 0 && (
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+                {galleryPhotos.map((photo) => (
+                  <div key={photo} className="aspect-square overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={photo}
+                      alt={`${category.name} в Бишкеке — фото со склада Ростехсталь`}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
             {categoryProducts.length > 0 ? (
               <ProductTable products={categoryProducts} />
             ) : (
@@ -321,31 +337,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           </div>
         </section>
 
-        {galleryPhotos.length > 0 && (
-          <section className="mt-10 border-t border-gray-100 pt-10">
-            <div className="flex flex-col gap-6">
-              <div className="flex flex-col gap-2">
-                <span className="text-[11px] font-bold uppercase tracking-widest text-brand-primary">Фото</span>
-                <h2 className="text-[22px] font-bold tracking-tight text-gray-900 sm:text-[28px]">
-                  {category.name} на складе Ростехсталь
-                </h2>
-              </div>
-              <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-                {galleryPhotos.map((photo) => (
-                  <div key={photo} className="aspect-square overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={photo}
-                      alt={`${category.name} в Бишкеке — фото со склада Ростехсталь`}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
       </div>
     </div>
   );
