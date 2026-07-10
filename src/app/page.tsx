@@ -37,6 +37,31 @@ interface HomeCategory {
   photo: string;
 }
 
+/* ── Кураторский список плиток на главной (как у metallobaza.kg) ──
+   Подписи фиксированные (под запрос клиента), но фото и ссылка берутся из
+   реального товара подходящей подкатегории — так плитка ведёт на настоящий
+   раздел с наличием, а не на заглушку. Для ярлыков без точного совпадения
+   в текущем ассортименте (Катанка, Листовой металл, Угол, Сетка МАК, Трубы,
+   Задвижки и фланцы, Двутавр, Гайки/болты/шайбы — это либо более широкие
+   категории, либо ещё не заведённые в каталог позиции) подставлен ближайший
+   реальный раздел. */
+const CURATED_HOME_CATEGORIES: { label: string; subcategory: string }[] = [
+  { label: "Арматура", subcategory: "Арматура" },
+  { label: "Катанка", subcategory: "Круг" },
+  { label: "Круг", subcategory: "Круг" },
+  { label: "Листовой металл", subcategory: "Лист горячекатаный" },
+  { label: "Угол", subcategory: "Уголок равнополочный" },
+  { label: "Швеллер", subcategory: "Швеллер" },
+  { label: "Электроды", subcategory: "Электроды сварочные" },
+  { label: "Сетка МАК", subcategory: "Сетка сварная" },
+  { label: "Трубы", subcategory: "Бесшовные трубы" },
+  { label: "Гвозди", subcategory: "Гвозди" },
+  { label: "Задвижки и фланцы", subcategory: "Задвижки стальные" },
+  { label: "Проволока", subcategory: "Проволока" },
+  { label: "Двутавр", subcategory: "Балка двутавровая (обычная)" },
+  { label: "Гайки, болты, шайбы", subcategory: "Болты" },
+];
+
 /* ── FAQ главной: живой блок + FAQPage-разметка для сниппетов в поиске ── */
 const HOME_FAQ = [
   {
@@ -105,20 +130,25 @@ export default function HomePage() {
       .then((res) => (res.ok ? res.json() : []))
       .then((products: Product[]) => {
         if (cancelled) return;
-        const categoryCards = new Map<string, HomeCategory>();
 
+        // Первый товар каждой реальной подкатегории — источник фото и ссылки
+        const bySubcategory = new Map<string, Product>();
         for (const product of products) {
           const group = getPublicProductGroup(product);
-          if (categoryCards.has(group)) continue;
-
-          categoryCards.set(group, {
-            name: group,
-            href: getCategoryPath(group),
-            photo: getProductImage(product),
-          });
+          if (!bySubcategory.has(group)) bySubcategory.set(group, product);
         }
 
-        setHomeCategories(Array.from(categoryCards.values()));
+        const cards = CURATED_HOME_CATEGORIES.map(({ label, subcategory }) => {
+          const product = bySubcategory.get(subcategory);
+          if (!product) return null;
+          return {
+            name: label,
+            href: getCategoryPath(subcategory),
+            photo: getProductImage(product),
+          };
+        }).filter((card): card is HomeCategory => card !== null);
+
+        setHomeCategories(cards);
       })
       .catch(() => {
         if (!cancelled) setHomeCategories([]);
@@ -244,8 +274,13 @@ export default function HomePage() {
                   <div className="absolute inset-0 bg-brand-primary/58" />
                 </div>
 
-                <span className="absolute left-1/2 top-[31%] z-10 max-w-[82%] -translate-x-1/2 -translate-y-1/2 text-center text-[18px] font-bold uppercase leading-tight text-white drop-shadow-sm sm:text-[20px]">
-                  {cat.name}
+                <span className="absolute left-1/2 top-[31%] z-10 flex max-w-[82%] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center">
+                  <span className="text-[18px] font-bold uppercase leading-tight text-white drop-shadow-sm sm:text-[20px]">
+                    {cat.name}
+                  </span>
+                  <span className="text-[11px] font-medium normal-case text-white/80 drop-shadow-sm sm:text-[12px]">
+                    {cat.name} в Бишкеке
+                  </span>
                 </span>
 
                 <button
