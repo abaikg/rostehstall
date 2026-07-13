@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { getCategoryPath, getPublicProductGroup } from "@/lib/catalogRoutes";
 import { getProducts } from "@/lib/db";
@@ -22,13 +23,9 @@ export async function generateMetadata({ params }: Omit<ProductLayoutProps, "chi
   const products = getProducts();
   const product = products.find((item) => item.slug === slug);
 
-  if (!product) {
-    return buildMetadata({
-      title: "Товар не найден — Ростехсталь",
-      description: "Страница товара не найдена. Перейдите в каталог металлопроката Ростехсталь.",
-      path: `/catalog/${slug}`,
-    });
-  }
+  // Метаданные считаются до отправки первого байта — notFound() здесь
+  // даёт настоящий HTTP 404 (внутри стриминга страницы статус уже не сменить)
+  if (!product) notFound();
 
   const productGroup = getPublicProductGroup(product);
 

@@ -88,13 +88,8 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const products = getProducts();
   const category = getCategoryBySlug(slug, products);
 
-  if (!category) {
-    return buildMetadata({
-      title: "Раздел не найден - Ростехсталь",
-      description: "Раздел каталога Ростехсталь не найден. Перейдите в общий каталог металлопроката.",
-      path: `/catalog/category/${slug}`,
-    });
-  }
+  // notFound() до отправки первого байта — настоящий HTTP 404 вместо 200
+  if (!category) notFound();
 
   return buildMetadata({
     title: `${category.name} в Бишкеке - Ростехсталь`,

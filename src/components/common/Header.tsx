@@ -24,10 +24,6 @@ export const Header = () => {
     return () => { document.body.style.overflow = ""; };
   }, [mobileMenuOpen]);
 
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [pathname]);
-
   return (
     <>
       <header
@@ -88,7 +84,7 @@ export const Header = () => {
 
             {/* CTA — sm+ */}
             <button
-              onClick={openModal}
+              onClick={() => openModal()}
               className="hidden sm:flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.97] text-white text-[13px] font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md"
             >
               Оставить заявку

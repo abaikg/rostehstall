@@ -537,7 +537,7 @@ export default function BlogPostPage() {
                 <p className="text-[16px] font-bold leading-snug mb-2">Нужна помощь с выбором металлопроката?</p>
                 <p className="text-[13px] text-blue-100 leading-relaxed">Менеджер рассчитает стоимость и подберёт нужную марку за 30 минут.</p>
               </div>
-              <button onClick={openModal}
+              <button onClick={() => openModal()}
                 className="relative inline-flex items-center justify-center gap-2 bg-white text-brand-primary font-bold text-[13px] px-5 py-3 rounded-xl hover:bg-blue-50 active:scale-[0.98] transition-all">
                 Оставить заявку
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -564,7 +564,7 @@ export default function BlogPostPage() {
             <p className="text-[18px] sm:text-[22px] font-bold leading-snug">Нужна помощь с выбором металлопроката?</p>
             <p className="text-[14px] text-blue-100 leading-relaxed">Менеджер рассчитает стоимость и подберёт нужную марку за 30 минут.</p>
           </div>
-          <button onClick={openModal}
+          <button onClick={() => openModal()}
             className="relative self-start inline-flex items-center justify-center gap-2 bg-white text-brand-primary font-bold text-[14px] px-6 py-3 rounded-xl hover:bg-blue-50 transition-all">
             Оставить заявку
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/></svg>

@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { useMetalCalculator } from "@/hooks/useMetalCalculator";
 import { useCalcHistory, CalcHistoryEntry } from "@/hooks/useCalcHistory";
-import { CALCULATOR_PRESETS } from "@/lib/metal-calculator/config/presets";
 import { MATERIAL_LIST, getGradesByMaterial } from "@/lib/metal-calculator/config/materials";
 import { PRODUCT_LIST, PRODUCTS } from "@/lib/metal-calculator/config/products";
 import { getSections, isSectionProduct } from "@/lib/metal-calculator/config/sections";
@@ -13,10 +12,13 @@ import { ProductDiagram } from "./ProductDiagram";
 import { useOrderModal } from "@/context/ModalContext";
 
 interface MetalCalculatorProps {
+  /** Пресеты позиций, сгенерированные на сервере из актуального каталога */
+  presets?: CalculatorPreset[];
+  /** id пресета для автозаполнения при открытии (диплинк с карточки товара) */
+  initialPresetId?: string;
   defaultMaterial?: MaterialCode;
   defaultProduct?: ProductCode;
   onCalculated?: (result: number) => void;
-  onSubmitRequest?: (data: unknown) => void;
 }
 
 const MATERIAL_LABELS: Partial<Record<MaterialCode, string>> = {
@@ -24,27 +26,9 @@ const MATERIAL_LABELS: Partial<Record<MaterialCode, string>> = {
   stainless: "Нержавейка",
 };
 
-const formatNumber = (value?: number) => value?.toString().replace(".", ",") ?? "";
-
-const getPresetShortLabel = (preset: CalculatorPreset) => {
-  const { productCode, presetValues } = preset;
-
-  if (productCode === "rebar") return `Ø${formatNumber(presetValues.diameter)}`;
-  if (productCode === "rod") return `Ø${formatNumber(presetValues.diameter)} A-I`;
-  if (productCode === "pipe_profile") {
-    return `${formatNumber(presetValues.sideA)}×${formatNumber(presetValues.sideB)}×${formatNumber(presetValues.thickness)}`;
-  }
-  if (productCode === "pipe_round") {
-    return `Ø${formatNumber(presetValues.diameter)}×${formatNumber(presetValues.thickness)}`;
-  }
-  if (productCode === "sheet") return `${formatNumber(presetValues.thickness)} мм`;
-  if (productCode === "angle") {
-    return `${formatNumber(presetValues.sideA)}×${formatNumber(presetValues.sideB)}×${formatNumber(presetValues.thickness)}`;
-  }
-  if (productCode === "channel") return `№${formatNumber((presetValues.sideA ?? 0) / 10)}`;
-
-  return preset.title;
-};
+// Подпись позиции в селекте: название из каталога + справочный вес
+const getPresetOptionLabel = (preset: CalculatorPreset) =>
+  preset.weightDisplay ? `${preset.title} — ${preset.weightDisplay}` : preset.title;
 
 const SORTAMENT_ORDER: ProductCode[] = [
   "rebar",
@@ -79,6 +63,8 @@ const fmtNum = (value?: number) =>
   value === undefined || Number.isNaN(value) ? "?" : value.toLocaleString("ru-RU", { maximumFractionDigits: 2 });
 
 export const MetalCalculator = ({
+  presets = [],
+  initialPresetId,
   defaultMaterial,
   defaultProduct,
   onCalculated,
@@ -98,7 +84,12 @@ export const MetalCalculator = ({
     calculate,
     applyPreset,
     restoreInputs,
-  } = useMetalCalculator({ defaultMaterial, defaultProduct, onCalculated });
+  } = useMetalCalculator({
+    defaultMaterial,
+    defaultProduct,
+    initialPreset: initialPresetId ? presets.find((preset) => preset.id === initialPresetId) : undefined,
+    onCalculated,
+  });
 
   const { entries: history, addEntry, removeEntry, clearHistory } = useCalcHistory();
   const [historyOpen, setHistoryOpen] = useState(false);
@@ -158,18 +149,18 @@ export const MetalCalculator = ({
 
   const productConfig = PRODUCTS[inputs.product];
   const gradeList = getGradesByMaterial(inputs.material);
-  const activePreset = CALCULATOR_PRESETS.find((preset) => preset.id === activePresetId);
+  const activePreset = presets.find((preset) => preset.id === activePresetId);
   const title = activePreset?.title ?? productConfig.label;
   const gradeLabel = inputs.material === "steel" ? "Марка стали" : "Марка / сплав";
   const presetGroups = SORTAMENT_ORDER.map((productCode) => ({
     product: PRODUCTS[productCode],
-    items: CALCULATOR_PRESETS.filter((preset) => preset.productCode === productCode),
+    items: presets.filter((preset) => preset.productCode === productCode),
   })).filter((group) => group.items.length > 0);
   const remainingPresetGroups = PRODUCT_LIST
     .filter((product) => !SORTAMENT_ORDER.includes(product.code))
     .map((product) => ({
       product,
-      items: CALCULATOR_PRESETS.filter((preset) => preset.productCode === product.code),
+      items: presets.filter((preset) => preset.productCode === product.code),
     }))
     .filter((group) => group.items.length > 0);
   const allPresetGroups = [...presetGroups, ...remainingPresetGroups];
@@ -179,7 +170,10 @@ export const MetalCalculator = ({
       allPresetGroups.push({ product: PRODUCTS[productCode], items: [] });
     }
   });
-  const activeGroupItems = CALCULATOR_PRESETS.filter((preset) => preset.productCode === inputs.product);
+  // Позиции текущего сортамента и выбранного металла из живого каталога
+  const activeGroupItems = presets.filter(
+    (preset) => preset.productCode === inputs.product && preset.materialCode === inputs.material
+  );
   const activePresetValue = activePresetId && activeGroupItems.some((preset) => preset.id === activePresetId)
     ? activePresetId
     : "";
@@ -193,7 +187,7 @@ export const MetalCalculator = ({
       return;
     }
 
-    const firstPreset = CALCULATOR_PRESETS.find((preset) => preset.productCode === productCode);
+    const firstPreset = presets.find((preset) => preset.productCode === productCode);
 
     if (firstPreset) {
       applyPreset(firstPreset);
@@ -355,13 +349,13 @@ export const MetalCalculator = ({
 
           {isTableProduct
             ? sectionSelect(true)
-            : activeGroupItems.length > 0 && inputs.product !== "rebar" && (
+            : activeGroupItems.length > 0 && (
             <label className="flex flex-col gap-1">
               <span className="text-[13px] font-bold text-gray-950">Позиция</span>
               <select
                 value={activePresetValue}
                 onChange={(event) => {
-                  const preset = CALCULATOR_PRESETS.find((item) => item.id === event.target.value);
+                  const preset = presets.find((item) => item.id === event.target.value);
                   if (preset) applyPreset(preset);
                 }}
                 className="h-10 w-full rounded-xl bg-gray-50 px-3 text-[13px] font-medium text-gray-900 outline-none focus:bg-white focus:ring-4 focus:ring-brand-primary/10"
@@ -369,7 +363,7 @@ export const MetalCalculator = ({
                 {!activePresetValue && <option value="">Выберите позицию</option>}
                 {activeGroupItems.map((preset) => (
                   <option key={preset.id} value={preset.id}>
-                    {getPresetShortLabel(preset)}
+                    {getPresetOptionLabel(preset)}
                   </option>
                 ))}
               </select>
@@ -519,13 +513,13 @@ export const MetalCalculator = ({
 
             {isTableProduct ? (
               <div className="mb-3 sm:mb-4">{sectionSelect(false)}</div>
-            ) : activeGroupItems.length > 0 && inputs.product !== "rebar" && (
+            ) : activeGroupItems.length > 0 && (
               <div className="mb-3 flex flex-col gap-1.5 sm:mb-4">
                 <label className="text-[13px] font-bold text-gray-900">Позиция</label>
                 <select
                   value={activePresetValue}
                   onChange={(event) => {
-                    const preset = CALCULATOR_PRESETS.find((item) => item.id === event.target.value);
+                    const preset = presets.find((item) => item.id === event.target.value);
                     if (preset) applyPreset(preset);
                   }}
                   className="h-10 w-full rounded-xl bg-gray-50 px-3 text-[14px] font-semibold text-gray-900 outline-none transition-colors focus:bg-white focus:ring-4 focus:ring-brand-primary/10"
@@ -533,7 +527,7 @@ export const MetalCalculator = ({
                   {!activePresetValue && <option value="">Выберите позицию</option>}
                   {activeGroupItems.map((preset) => (
                     <option key={preset.id} value={preset.id}>
-                      {getPresetShortLabel(preset)}
+                      {getPresetOptionLabel(preset)}
                     </option>
                   ))}
                 </select>

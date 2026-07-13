@@ -39,6 +39,14 @@ export const calculateWeight = (inputs: CalculationInputs): number => {
     return sectionConfig.kgm * (density / STEEL_DENSITY) * (values.length || 0);
   }
 
+  // Справочный вес позиции из каталога — авторитетнее приближённой формулы
+  if (inputs.presetKgm) {
+    return inputs.presetKgm * (values.length || 0);
+  }
+  if (inputs.presetKgsm && product === "sheet") {
+    return inputs.presetKgsm * ((values.width || 0) / 1000) * (values.length || 0);
+  }
+
   const formula = formulaMap[product];
 
   if (!formula) return 0;

@@ -343,7 +343,7 @@ export default function HomePage() {
 
           <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 pt-1 sm:pt-2">
             <button
-              onClick={openModal}
+              onClick={() => openModal()}
               className="inline-flex w-full sm:w-auto items-center justify-center gap-2 bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-bold text-[13px] sm:text-[14px] px-7 py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all"
             >
               <PhoneCallIcon /> Получить расчёт
@@ -405,7 +405,7 @@ export default function HomePage() {
 
             <div className="z-10 flex flex-col items-stretch lg:items-end gap-3 shrink-0 w-full lg:w-auto">
               <button
-                onClick={openModal}
+                onClick={() => openModal()}
                 className="w-full lg:w-auto inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-bold text-[13px] sm:text-[15px] uppercase tracking-normal px-6 sm:px-8 py-4 rounded-xl shadow-xl shadow-brand-primary/25 hover:shadow-brand-primary/40 transition-all"
               >
                 Получить коммерческое предложение <ArrowRight />

@@ -42,7 +42,7 @@ export const FilterSidebar = () => {
           </div>
 
           <Button 
-            onClick={openModal} 
+            onClick={() => openModal()} 
             variant="primary" 
             className="w-full py-6 text-sm"
           >

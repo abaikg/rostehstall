@@ -182,7 +182,7 @@ export default function BlogPage() {
           </div>
           <div className="z-10 w-full sm:w-auto shrink-0">
             <button
-              onClick={openModal}
+              onClick={() => openModal()}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold text-[14px] px-7 py-3.5 rounded-xl shadow-lg shadow-brand-primary/25 transition-all"
             >
               Оставить заявку

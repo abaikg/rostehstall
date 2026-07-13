@@ -97,7 +97,7 @@ export default function AboutPage() {
               </p>
               <div className="flex flex-wrap gap-3 pt-1">
                 <button
-                  onClick={openModal}
+                  onClick={() => openModal()}
                   className="inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-semibold text-[14px] px-6 py-3 rounded-xl shadow-lg shadow-brand-primary/25 transition-all"
                 >
                   Связаться с нами
@@ -251,7 +251,7 @@ export default function AboutPage() {
           </div>
           <div className="z-10 flex flex-col sm:flex-row gap-3 w-full sm:w-auto shrink-0">
             <button
-              onClick={openModal}
+              onClick={() => openModal()}
               className="inline-flex items-center justify-center bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-semibold text-[14px] px-7 py-3.5 rounded-xl shadow-lg shadow-brand-primary/25 transition-all"
             >
               Оставить заявку

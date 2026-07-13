@@ -370,7 +370,7 @@ export default function ContactsPage() {
               className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/15 border border-white/10 text-white font-semibold text-[13px] px-5 py-3 rounded-xl transition-all">
               <PhoneIcon /> Позвонить
             </a>
-            <button onClick={openModal}
+            <button onClick={() => openModal()}
               className="inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-semibold text-[13px] px-5 py-3 rounded-xl shadow-lg shadow-brand-primary/25 transition-all">
               Оставить заявку
             </button>

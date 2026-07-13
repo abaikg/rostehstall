@@ -19,6 +19,8 @@ import { getSection, getSections, isSectionProduct } from "@/lib/metal-calculato
 interface UseMetalCalculatorProps {
   defaultMaterial?: MaterialCode;
   defaultProduct?: ProductCode;
+  /** Пресет из каталога, применяемый при открытии (диплинк /calculator?item=…) */
+  initialPreset?: CalculatorPreset | null;
   onCalculated?: (result: number) => void;
 }
 
@@ -38,27 +40,60 @@ const emptyResult = (mode: CalculatorMode): CalculationResult => ({
   isCalculated: false,
 });
 
+// Состояние инпутов после применения пресета из каталога
+const inputsFromPreset = (preset: CalculatorPreset, prev?: CalculationInputs): CalculationInputs => {
+  const section = preset.sectionCode
+    ? getSection(preset.productCode, preset.sectionCode)
+    : undefined;
+
+  return {
+    material: preset.materialCode,
+    grade: preset.gradeCode ?? getDefaultGrade(preset.materialCode),
+    product: preset.productCode,
+    mode: prev?.mode ?? "weight_by_dimensions",
+    section: section?.code,
+    presetKgm: preset.kgm,
+    presetKgsm: preset.kgsm,
+    values: {
+      ...DEFAULT_VALUES,
+      length: prev?.values.length ?? 1,
+      weight: prev?.values.weight ?? 100,
+      ...(section ? { sideA: section.h, sideB: section.b, thickness: section.s } : {}),
+      ...preset.presetValues,
+    },
+  };
+};
+
 export const useMetalCalculator = ({
   defaultMaterial = "steel",
   defaultProduct = "sheet",
+  initialPreset,
   onCalculated,
 }: UseMetalCalculatorProps = {}) => {
-  const [inputs, setInputs] = useState<CalculationInputs>({
-    material: defaultMaterial,
-    grade: getDefaultGrade(defaultMaterial),
-    product: defaultProduct,
-    mode: "weight_by_dimensions",
-    values: DEFAULT_VALUES,
-  });
-  const [activePresetId, setActivePresetId] = useState<string | null>(null);
+  const [inputs, setInputs] = useState<CalculationInputs>(() =>
+    initialPreset
+      ? inputsFromPreset(initialPreset)
+      : {
+          material: defaultMaterial,
+          grade: getDefaultGrade(defaultMaterial),
+          product: defaultProduct,
+          mode: "weight_by_dimensions",
+          values: DEFAULT_VALUES,
+        }
+  );
+  const [activePresetId, setActivePresetId] = useState<string | null>(initialPreset?.id ?? null);
   const [submittedResult, setSubmittedResult] = useState<CalculationResult>(() => emptyResult("weight_by_dimensions"));
 
   const handleInputChange = useCallback((key: InputFieldKey, value: number) => {
-    setActivePresetId(null);
+    // Правка длины/веса не меняет саму позицию — справочный вес сохраняем
+    const keepsPosition = key === "length" || key === "weight";
+    if (!keepsPosition) setActivePresetId(null);
     setInputs((prev) => ({
       ...prev,
       // Ручная правка размеров переводит табличный прокат в режим формулы
-      section: key === "length" || key === "weight" ? prev.section : undefined,
+      section: keepsPosition ? prev.section : undefined,
+      presetKgm: keepsPosition ? prev.presetKgm : undefined,
+      presetKgsm: keepsPosition ? prev.presetKgsm : undefined,
       values: { ...prev.values, [key]: value },
     }));
   }, []);
@@ -67,10 +102,12 @@ export const useMetalCalculator = ({
     setActivePresetId(null);
     setInputs((prev) => {
       const sectionConfig = getSection(prev.product, code);
-      if (!sectionConfig) return { ...prev, section: undefined };
+      if (!sectionConfig) return { ...prev, section: undefined, presetKgm: undefined, presetKgsm: undefined };
       return {
         ...prev,
         section: code,
+        presetKgm: undefined,
+        presetKgsm: undefined,
         // Размеры из таблицы — для схемы и полей формы
         values: {
           ...prev.values,
@@ -94,12 +131,20 @@ export const useMetalCalculator = ({
         grade: getDefaultGrade(material),
         product: leavesSteel ? "sheet" : prev.product,
         section: leavesSteel ? undefined : prev.section,
+        // Другой металл — каталожный вес позиции больше не применим
+        presetKgm: undefined,
+        presetKgsm: undefined,
       };
     });
   }, []);
 
   const setGrade = useCallback((grade: MaterialGradeCode) => {
-    setInputs((prev) => ({ ...prev, grade }));
+    setInputs((prev) => {
+      // Марка не изменилась — ничего не сбрасываем
+      if (prev.grade === grade) return prev;
+      // Другая марка — каталожный вес позиции больше не применим, считаем по формуле
+      return { ...prev, grade, presetKgm: undefined, presetKgsm: undefined };
+    });
   }, []);
 
   const setProduct = useCallback((product: ProductCode) => {
@@ -112,6 +157,8 @@ export const useMetalCalculator = ({
         product,
         grade: getDefaultGrade(prev.material),
         section: defaultSection?.code,
+        presetKgm: undefined,
+        presetKgsm: undefined,
         values: defaultSection
           ? { ...prev.values, sideA: defaultSection.h, sideB: defaultSection.b, thickness: defaultSection.s }
           : prev.values,
@@ -130,19 +177,7 @@ export const useMetalCalculator = ({
     }
 
     setActivePresetId(preset.id);
-    setInputs((prev) => ({
-      ...prev,
-      material: preset.materialCode,
-      grade: preset.gradeCode ?? getDefaultGrade(preset.materialCode),
-      product: preset.productCode,
-      section: undefined,
-      values: {
-        ...DEFAULT_VALUES,
-        length: prev.values.length ?? 1,
-        weight: prev.values.weight ?? 100,
-        ...preset.presetValues,
-      },
-    }));
+    setInputs((prev) => inputsFromPreset(preset, prev));
   }, []);
 
   // Восстановление сохранённого расчёта (история)

@@ -40,7 +40,8 @@ yarn-error.log*
 /storage/
 
 # local dev logs
-.codex-dev-current.*.log
+.codex-dev*.log
+ts_errors.txt
 
 # vercel
 .vercel

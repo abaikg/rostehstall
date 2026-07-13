@@ -1,20 +1,25 @@
 "use client";
 import React, { createContext, useContext, useState } from "react";
 
+export interface OrderModalData {
+  productLabel?: string;
+  materialName?: string;
+}
+
 interface ModalContextType {
   isModalOpen: boolean;
-  openModal: (data?: any) => void;
+  openModal: (data?: OrderModalData) => void;
   closeModal: () => void;
-  modalData?: any;
+  modalData: OrderModalData | null;
 }
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
 export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalData, setModalData] = useState<any>(null);
+  const [modalData, setModalData] = useState<OrderModalData | null>(null);
 
-  const openModal = (data?: any) => {
+  const openModal = (data?: OrderModalData) => {
     if (data) setModalData(data);
     setIsModalOpen(true);
   };

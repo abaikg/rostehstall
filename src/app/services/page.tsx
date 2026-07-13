@@ -122,7 +122,7 @@ export default function ServicesPage() {
                 </div>
 
                 <button
-                  onClick={openModal}
+                  onClick={() => openModal()}
                   className="self-start inline-flex items-center gap-2 text-brand-primary font-semibold text-[13px] hover:gap-3 transition-all"
                 >
                   Заказать услугу
@@ -175,7 +175,7 @@ export default function ServicesPage() {
           </div>
           <div className="z-10 flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <button
-              onClick={openModal}
+              onClick={() => openModal()}
               className="inline-flex items-center justify-center bg-brand-primary hover:bg-brand-primary/90 active:scale-[0.98] text-white font-semibold text-[14px] px-7 py-3.5 rounded-xl shadow-lg shadow-brand-primary/25 transition-all"
             >
               Оставить заявку

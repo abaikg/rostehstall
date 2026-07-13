@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { notFound } from "next/navigation";
 import { blogPosts } from "@/data/blog";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { articleJsonLd, breadcrumbJsonLd, buildMetadata, jsonLdGraph, truncateMeta } from "@/lib/seo";
@@ -13,14 +14,8 @@ export async function generateMetadata({ params }: Omit<BlogPostLayoutProps, "ch
   const { slug } = await params;
   const post = blogPosts.find((item) => item.slug === slug);
 
-  if (!post) {
-    return buildMetadata({
-      title: "Статья не найдена — Ростехсталь",
-      description: "Материал блога Ростехсталь не найден. Перейдите в раздел со статьями о металлопрокате.",
-      path: `/blog/${slug}`,
-      type: "article",
-    });
-  }
+  // notFound() до отправки первого байта — настоящий HTTP 404 вместо 200
+  if (!post) notFound();
 
   return buildMetadata({
     title: `${post.title} — Ростехсталь`,
@@ -35,7 +30,8 @@ export default async function BlogPostLayout({ children, params }: BlogPostLayou
   const { slug } = await params;
   const post = blogPosts.find((item) => item.slug === slug);
 
-  if (!post) return children;
+  // Проверка в теле layout выполняется до отправки shell — настоящий HTTP 404
+  if (!post) notFound();
 
   const jsonLd = jsonLdGraph([
     articleJsonLd(post),
