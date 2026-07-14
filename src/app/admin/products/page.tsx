@@ -16,12 +16,22 @@ export default function AdminProductsPage() {
       .then(d => { setProducts(d); setLoading(false); });
   }, []);
 
+  const [subcategory, setSubcategory] = useState("all");
+
   const categories = useMemo(() => ["all", ...Array.from(new Set(products.map(p => p.category)))], [products]);
+  const subcategories = useMemo(() => [
+    "all",
+    ...Array.from(new Set(products
+      .filter(p => category === "all" || p.category === category)
+      .map(p => p.subcategory || "")
+      .filter(Boolean))),
+  ], [products, category]);
 
   const filtered = useMemo(() => products.filter(p =>
     (category === "all" || p.category === category) &&
+    (subcategory === "all" || p.subcategory === subcategory) &&
     (!search || p.name.toLowerCase().includes(search.toLowerCase()) || p.slug.includes(search.toLowerCase()))
-  ), [products, search, category]);
+  ), [products, search, category, subcategory]);
 
   async function del(id: number, name: string) {
     if (!confirm(`Удалить «${name}»?`)) return;
@@ -52,9 +62,13 @@ export default function AdminProductsPage() {
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Поиск по названию или slug..."
             className="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-[13px] outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-500/10" />
         </div>
-        <select value={category} onChange={e => setCategory(e.target.value)}
+        <select value={category} onChange={e => { setCategory(e.target.value); setSubcategory("all"); }}
           className="border border-slate-200 bg-white rounded-xl px-3 py-2 text-[13px] font-medium text-slate-700 outline-none focus:border-blue-400 cursor-pointer">
           {categories.map(c => <option key={c} value={c}>{c === "all" ? "Все категории" : c}</option>)}
+        </select>
+        <select value={subcategory} onChange={e => setSubcategory(e.target.value)}
+          className="border border-slate-200 bg-white rounded-xl px-3 py-2 text-[13px] font-medium text-slate-700 outline-none focus:border-blue-400 cursor-pointer">
+          {subcategories.map(c => <option key={c} value={c}>{c === "all" ? "Все подкатегории" : c}</option>)}
         </select>
       </div>
 
@@ -71,21 +85,21 @@ export default function AdminProductsPage() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-[40px_1fr_180px_120px_120px] gap-0 text-[11px] font-bold text-slate-400 uppercase tracking-wider px-5 py-3 border-b border-slate-100 bg-slate-50">
-              <span>#</span><span>Название</span><span>Категория</span><span>Slug</span><span className="text-right">Действия</span>
+            <div className="hidden md:grid grid-cols-[40px_1fr_170px_170px_120px] gap-0 text-[11px] font-bold text-slate-400 uppercase tracking-wider px-5 py-3 border-b border-slate-100 bg-slate-50">
+              <span>#</span><span>Название</span><span>Категория</span><span>Подкатегория</span><span className="text-right">Действия</span>
             </div>
             <div className="divide-y divide-slate-50">
               {filtered.map(p => (
-                <div key={p.id} className="grid grid-cols-[40px_1fr_180px_120px_120px] gap-0 items-center px-5 py-3.5 hover:bg-slate-50/60 transition-colors group">
+                <div key={p.id} className="grid grid-cols-[40px_1fr_100px] md:grid-cols-[40px_1fr_170px_170px_120px] gap-0 items-center px-5 py-3.5 hover:bg-slate-50/60 transition-colors group">
                   <span className="text-[12px] text-slate-400 font-mono">{p.id}</span>
                   <div className="min-w-0 flex items-center gap-2">
                     {p.isNew && <span className="shrink-0 px-1.5 py-0.5 bg-blue-100 text-blue-600 text-[9px] font-black rounded uppercase tracking-wider">New</span>}
                     <span className="text-[13px] font-semibold text-slate-800 truncate">{p.name}</span>
                   </div>
-                  <span className="text-[12px] text-slate-500 truncate pr-4">
+                  <span className="hidden md:block text-[12px] text-slate-500 truncate pr-4">
                     <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[11px] font-medium">{p.category}</span>
                   </span>
-                  <span className="text-[11px] text-slate-400 font-mono truncate pr-4">{p.slug}</span>
+                  <span className="hidden md:block text-[12px] text-slate-500 truncate pr-4">{p.subcategory || "—"}</span>
                   <div className="flex items-center justify-end gap-1.5">
                     <Link href={`/catalog/${p.slug}`} target="_blank"
                       className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors" title="Просмотр">

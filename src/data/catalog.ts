@@ -40,5 +40,3 @@ export const CATEGORY_LIST: { name: string; icon: string }[] = [
   { name: "Цветной металл", icon: "color-metal" },
   { name: "Листовой прокат", icon: "sheet" },
 ];
-
-export const productCategories = CATEGORY_LIST.map((category) => category.name);

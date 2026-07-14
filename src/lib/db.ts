@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs";
-import { products as staticProducts, type Product } from "@/data/catalog";
+import { products as staticProducts, CATEGORY_LIST, type Product } from "@/data/catalog";
 import { blogPosts as staticBlogPosts, type BlogPost } from "@/data/blog";
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -30,6 +30,21 @@ export function getProducts(): Product[] {
 }
 export function saveProducts(data: Product[]) {
   writeJson("products.json", data);
+}
+
+// ── Categories ───────────────────────────────────────────
+export interface Category {
+  name: string;
+  icon: string;
+}
+
+// Файл создаётся при первом чтении из статичного списка — дальше
+// категориями управляет админка (data/categories.json).
+export function getCategories(): Category[] {
+  return readJson("categories.json", CATEGORY_LIST);
+}
+export function saveCategories(data: Category[]) {
+  writeJson("categories.json", data);
 }
 
 // ── Blog ─────────────────────────────────────────────────

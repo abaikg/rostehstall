@@ -14,6 +14,9 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   const products = getProducts();
   const idx = products.findIndex((p) => p.id === Number(id));
   if (idx === -1) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  // Slug не должен конфликтовать с другими товарами
+  if (body.slug && products.some((p) => p.slug === body.slug && p.id !== Number(id)))
+    return NextResponse.json({ error: "Такой slug уже используется другим товаром" }, { status: 409 });
   products[idx] = { ...products[idx], ...body, id: Number(id) };
   saveProducts(products);
   return NextResponse.json(products[idx]);
